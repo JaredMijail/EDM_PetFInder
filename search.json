@@ -1,0 +1,575 @@
+[
+  {
+    "objectID": "proyecto/productos.html",
+    "href": "proyecto/productos.html",
+    "title": "Productos esperados",
+    "section": "",
+    "text": "Productos del proyecto:\n\nBase de datos enriquecida y reproducible (14 993 anuncios × 31 variables) con su script de construcción y su diccionario.\nSitio web metodológico (este repositorio) con contexto, dataset, análisis exploratorio y protocolo.\nModelos entrenados, código de evaluación e informe de resultados con interpretabilidad.\nInforme final y sustentación.\n\nEstructura del informe final (momento de ejecución del proyecto, según Briones (2002)):\n\n\n\n\n\n\n\nSección\nContenido previsto\n\n\n\n\nResumen ejecutivo (abstract)\nProblema, datos, método, resultado principal en kappa cuadrático y hallazgo central en cinco líneas\n\n\nIntroducción\nProblema de adopción, pertinencia, pregunta e hipótesis, aporte esperado\n\n\nMarco conceptual\nAntecedentes, marco teórico de señalización, definiciones operativas\n\n\nMetodología\nDiseño, base de datos, variables, procesamiento, técnicas, métricas y controles de calidad\n\n\nResultados\nDescriptivos de la respuesta y de las señales; comparación de modelos; importancia de variables (SHAP)\n\n\nBibliografía\nReferencias citadas en formato BibTeX\n\n\n\n\n\n\n\n\n\n Volver arribaReferencias\n\nBriones, Guillermo. 2002. Metodología de la investigación cuantitativa en las ciencias sociales. Módulo tres. Especialización en Teoría, Métodos y Técnicas de Investigación Social. Instituto Colombiano para el Fomento de la Educación Superior (ICFES) – ASCUN.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Productos esperados"
+    ]
+  },
+  {
+    "objectID": "proyecto/objetivos.html",
+    "href": "proyecto/objetivos.html",
+    "title": "Objetivos",
+    "section": "",
+    "text": "Objetivo general. Estimar y explicar la velocidad de adopción de las mascotas publicadas en la plataforma PetFinder.my mediante modelos de clasificación ordinal supervisada que integran señales tabulares, textuales y visuales del anuncio, evaluados fuera de muestra con kappa cuadrático ponderado.\nObjetivos específicos (clasificados según la tipología de Briones (2002)):\n\n\n\n\n\n\n\n\nTipo\nObjetivo específico\nProducto verificable\n\n\n\n\nDescriptivo\nCaracterizar la distribución de la velocidad de adopción y de los tres bloques de señales del anuncio\nTablas y figuras de la página de análisis exploratorio\n\n\nDescriptivo\nDocumentar el proceso de construcción y la calidad de la base enriquecida (cobertura, faltantes, duplicados)\nDiccionario de variables y auditoría de calidad\n\n\nClasificatorio\nConstruir modelos de clasificación ordinal con las tres fuentes de señal y predecir la velocidad de adopción de anuncios no vistos\nModelos entrenados y predicciones sobre el conjunto de prueba\n\n\nComparativo\nComparar el desempeño de los modelos entre sí y frente a los modelos de referencia, y comparar el aporte de cada bloque de señal\nTabla comparativa de métricas con intervalos por bootstrap\n\n\nRelacional\nDeterminar la asociación entre cada bloque de señales y la velocidad de adopción, y su dirección\nRanking de importancia (permutación y SHAP)\n\n\nExplicativo\nIdentificar las características del anuncio que se asocian con mayor probabilidad de no adopción\nAnálisis SHAP e implicaciones prácticas\n\n\n\n\n\n\n\n\n\n Volver arribaReferencias\n\nBriones, Guillermo. 2002. Metodología de la investigación cuantitativa en las ciencias sociales. Módulo tres. Especialización en Teoría, Métodos y Técnicas de Investigación Social. Instituto Colombiano para el Fomento de la Educación Superior (ICFES) – ASCUN.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Objetivos"
+    ]
+  },
+  {
+    "objectID": "proyecto/marco-conceptual.html",
+    "href": "proyecto/marco-conceptual.html",
+    "title": "Marco conceptual",
+    "section": "",
+    "text": "Los estudios previos que usan esta base y los que abordan la predicción de adopción de mascotas se resumen en la tabla siguiente (Zadeh et al. 2022; Sivakumar y Selvam 2024; Wang y Liu 2022; PetFinder.my 2019a, 2019b):\n\n\n\nTrabajos previos sobre predicción de adopción de mascotas y su relación con este proyecto\n\n\n\n\n\n\n\n\nEstudio\nDatos y enfoque\nHallazgos principales\nQué deja abierto\n\n\n\n\nZadeh et al. (2022)\n14 993 anuncios de PetFinder.my; regresión, árboles, bosques aleatorios, boosting y redes neuronales con minería de texto\nEdad, raza, cantidad de animales y estado de esterilización son los factores con mayor asociación; los modelos de boosting y de regresión son los que más se benefician de las variables textuales\nNo integra las variables visuales del anuncio ni interpreta el modelo; reporta el aporte del texto, no el de la foto\n\n\nSivakumar y Selvam (2024)\nFotografías de la plataforma; redes neuronales convolucionales sobre el puntaje de atractivo visual (‘pawpularity’)\nLa apariencia de la fotografía es predecible y se asocia con la atracción del anuncio\nPredice el atractivo de la foto, no la velocidad de adopción; no lo conecta con las variables tabulares\n\n\nWang y Liu (2022)\nRedes neuronales con imágenes y metadatos en la competencia de 2021\nLa combinación de imagen y metadatos supera a cada fuente por separado\nOptimiza un puntaje de competencia; sin discusión sustantiva ni interpretabilidad\n\n\nCompetencia Kaggle (2019)\nMiles de soluciones publicadas; evaluación con kappa cuadrático ponderado\nLos modelos de boosting con ingeniería de variables dominan la tabla de posiciones\nEl desempeño predictivo no se traduce en explicación del fenómeno: es un torneo, no una investigación\n\n\nVersiones del conjunto en Zenodo (2019)\nReplicaciones con ingeniería de variables detallada\nConfirman la dificultad del problema: el techo de desempeño es moderado\nSin discusión de validez externa ni de sesgos de la etiqueta",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Marco conceptual"
+    ]
+  },
+  {
+    "objectID": "proyecto/marco-conceptual.html#marco-de-antecedentes",
+    "href": "proyecto/marco-conceptual.html#marco-de-antecedentes",
+    "title": "Marco conceptual",
+    "section": "",
+    "text": "Los estudios previos que usan esta base y los que abordan la predicción de adopción de mascotas se resumen en la tabla siguiente (Zadeh et al. 2022; Sivakumar y Selvam 2024; Wang y Liu 2022; PetFinder.my 2019a, 2019b):\n\n\n\nTrabajos previos sobre predicción de adopción de mascotas y su relación con este proyecto\n\n\n\n\n\n\n\n\nEstudio\nDatos y enfoque\nHallazgos principales\nQué deja abierto\n\n\n\n\nZadeh et al. (2022)\n14 993 anuncios de PetFinder.my; regresión, árboles, bosques aleatorios, boosting y redes neuronales con minería de texto\nEdad, raza, cantidad de animales y estado de esterilización son los factores con mayor asociación; los modelos de boosting y de regresión son los que más se benefician de las variables textuales\nNo integra las variables visuales del anuncio ni interpreta el modelo; reporta el aporte del texto, no el de la foto\n\n\nSivakumar y Selvam (2024)\nFotografías de la plataforma; redes neuronales convolucionales sobre el puntaje de atractivo visual (‘pawpularity’)\nLa apariencia de la fotografía es predecible y se asocia con la atracción del anuncio\nPredice el atractivo de la foto, no la velocidad de adopción; no lo conecta con las variables tabulares\n\n\nWang y Liu (2022)\nRedes neuronales con imágenes y metadatos en la competencia de 2021\nLa combinación de imagen y metadatos supera a cada fuente por separado\nOptimiza un puntaje de competencia; sin discusión sustantiva ni interpretabilidad\n\n\nCompetencia Kaggle (2019)\nMiles de soluciones publicadas; evaluación con kappa cuadrático ponderado\nLos modelos de boosting con ingeniería de variables dominan la tabla de posiciones\nEl desempeño predictivo no se traduce en explicación del fenómeno: es un torneo, no una investigación\n\n\nVersiones del conjunto en Zenodo (2019)\nReplicaciones con ingeniería de variables detallada\nConfirman la dificultad del problema: el techo de desempeño es moderado\nSin discusión de validez externa ni de sesgos de la etiqueta",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Marco conceptual"
+    ]
+  },
+  {
+    "objectID": "proyecto/marco-conceptual.html#vacíos-que-aborda-este-proyecto",
+    "href": "proyecto/marco-conceptual.html#vacíos-que-aborda-este-proyecto",
+    "title": "Marco conceptual",
+    "section": "Vacíos que aborda este proyecto",
+    "text": "Vacíos que aborda este proyecto\nA partir de la tabla anterior se identifican cuatro vacíos concretos:\n\nIntegración de las tres señales en un solo modelo. Los antecedentes trabajan con texto o con imagen, y rara vez con las tres fuentes simultáneamente bajo un mismo protocolo de evaluación.\nMétrica adecuada al carácter ordinal de la respuesta. Predecir “31-90 días” cuando ocurrió “8-30 días” no es el mismo error que predecir “no adopción”; se requiere una métrica que castigue proporcionalmente (kappa cuadrático ponderado (Cohen 1968)).\nExplicación, no solo predicción. Salvo excepciones, los trabajos reportan métricas y no qué variables explican la velocidad de adopción; sin eso el resultado no es accionable para un refugio.\nReproducibilidad. Buena parte de las soluciones previas son cuadernos de competencia sin control de versiones ni declaración de límites.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Marco conceptual"
+    ]
+  },
+  {
+    "objectID": "proyecto/marco-conceptual.html#marco-teórico",
+    "href": "proyecto/marco-conceptual.html#marco-teórico",
+    "title": "Marco conceptual",
+    "section": "Marco teórico",
+    "text": "Marco teórico\na) Información asimétrica y señales. En un anuncio de adopción, el adoptante potencial no puede verificar la calidad del animal (salud, temperamento, historia) antes del contacto: hay información asimétrica, el problema que Akerlof (1970) formalizó para los mercados de calidad incierta. La ficha de adopción funciona como un conjunto de señales en el sentido de Spence (1973): atributos observables y difíciles de imitar por quien tiene un animal con problemas (una fotografía cuidada, un estado sanitario verificable, un relato coherente). De este marco se derivan las hipótesis sustantivas: las señales que reducen incertidumbre (esterilización, vacunación, fotos suficientes) deberían acortar el tiempo de adopción, y las señales asociadas a casos complejos (relatos muy largos, lesiones) deberían alargarlo.\nb) Decisión de adopción y costo de búsqueda. El adoptante enfrenta un costo de búsqueda: cada anuncio compite por su atención en un listado. La literatura de analítica de mascotas reporta que edad, raza, cantidad de animales y esterilización son los atributos más asociados a la velocidad de adopción (Zadeh et al. 2022). Esto justifica incluir el estado sanitario como bloque teóricamente relevante y no solo como variable disponible.\nc) Formulación estadística. La respuesta es una escala ordinal de cinco niveles, así que el problema se formula como clasificación ordinal supervisada; ignorar ese orden (tratarla como nominal) descarta información y penaliza por igual errores de distinta gravedad (2016). La métrica coherente es el kappa cuadrático ponderado (1968), la misma con la que se evaluó la base en su origen (PetFinder.my 2019a).\nd) Proceso de análisis. El trabajo se organiza con las fases de CRISP-DM (2000) —comprensión del negocio, comprensión de los datos, preparación, modelado, evaluación y despliegue—, que se corresponden con los momentos de acercamiento, preparación y ejecución del proyecto de investigación.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Marco conceptual"
+    ]
+  },
+  {
+    "objectID": "proyecto/marco-conceptual.html#marco-conceptual-propio",
+    "href": "proyecto/marco-conceptual.html#marco-conceptual-propio",
+    "title": "Marco conceptual",
+    "section": "Marco conceptual propio",
+    "text": "Marco conceptual propio\n\n\n\n\n\n\n\nConcepto\nDefinición operativa en este estudio\n\n\n\n\nVelocidad de adopción\nCategoría ordinal registrada por la plataforma para cada anuncio: mismo día, 1–7, 8–30, 31–90 días, o sin adopción tras 100 días\n\n\nSeñal tabular\nAtributos del animal y del anuncio codificados en columnas del archivo original (especie, edad, raza, tamaño, pelo, salud, cantidad, tarifa, estado, fotos, videos)\n\n\nSeñal textual\nCaracterísticas derivadas del relato del rescatista: polaridad e intensidad del sentimiento (Google Natural Language API) y longitud en caracteres y palabras\n\n\nSeñal visual\nCaracterísticas derivadas de las fotografías del anuncio mediante anotaciones automáticas: número de etiquetas de contenido, de rostros humanos y de colores dominantes (Google Vision API)\n\n\nBase enriquecida\nUnión de las tres fuentes por el identificador del anuncio (PetID): 14 993 anuncios × 31 variables\n\n\nCensura de la etiqueta\nLa categoría “sin adopción” significa “no adoptado dentro de los 100 días observados”, no “nunca adoptado”\n\n\nExplicabilidad\nUso de técnicas que atribuyen la predicción a las variables de entrada (importancia por permutación y valores SHAP), para pasar del puntaje a la interpretación sustantiva\n\n\nKappa cuadrático ponderado\nMedida de acuerdo entre clasificaciones ordinales que penaliza cada error en proporción al cuadrado de la distancia entre las categorías\n\n\n\nModelo conceptual. La velocidad de adopción se modela como una función de tres bloques de señales y un bloque de control, con la advertencia explícita de que se trata de un modelo de asociación predictiva, no de un modelo causal:\n\\[\n\\text{Velocidad de adopción} = f(\\text{tabular},\\ \\text{texto},\\ \\text{imagen}) + e\n\\]",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Marco conceptual"
+    ]
+  },
+  {
+    "objectID": "proyecto/marco-conceptual.html#del-problema-a-las-preguntas-de-investigación",
+    "href": "proyecto/marco-conceptual.html#del-problema-a-las-preguntas-de-investigación",
+    "title": "Marco conceptual",
+    "section": "Del problema a las preguntas de investigación",
+    "text": "Del problema a las preguntas de investigación\n\n\n\n\n\n\nflowchart LR\n  A[\"Anuncio de la mascota&lt;br/&gt;(PetID)\"] --&gt; B[\"Señales tabulares&lt;br/&gt;raza, edad, salud, precio\"]\n  A --&gt; C[\"Señal textual&lt;br/&gt;relato del rescatista\"]\n  A --&gt; D[\"Señal visual&lt;br/&gt;fotografía del anuncio\"]\n  B --&gt; E[\"Base enriquecida&lt;br/&gt;14 993 × 31\"]\n  C --&gt; E\n  D --&gt; E\n  E --&gt; F[\"Modelos de clasificación&lt;br/&gt;ordinal supervisada\"]\n  F --&gt; G[\"Predicción de la&lt;br/&gt;velocidad de adopción\"]\n  F --&gt; H[\"Explicación&lt;br/&gt;qué señal pesa más\"]\n  G --&gt; I[\"Apoyo a decisiones&lt;br/&gt;de refugios y plataformas\"]\n  H --&gt; I\n\n\n\n\nFigura 1: Del anuncio a la decisión: las tres fuentes de señal y su uso en el proyecto",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Marco conceptual"
+    ]
+  },
+  {
+    "objectID": "proyecto/bibliografia.html",
+    "href": "proyecto/bibliografia.html",
+    "title": "Bibliografía",
+    "section": "",
+    "text": "Todas las fuentes usadas en el proyecto, en un solo lugar: la referencia metodológica base del curso (2002), la fuente de datos (2019a) y los antecedentes y métodos citados en el sitio. La lista se genera automáticamente desde el archivo referencias.bib: si se agrega o corrige una entrada allí, esta página se actualiza al reconstruir el sitio, y las citas del texto ([@clave]) se enlazan con su entrada correspondiente.\n\n\nAkerlof, George A. 1970. «The Market for “Lemons”: Quality Uncertainty and the Market Mechanism». The Quarterly Journal of Economics 84 (3): 488-500. https://doi.org/10.2307/1879431.\n\n\nBreiman, Leo. 2001. «Random Forests». Machine Learning 45 (1): 5-32. https://doi.org/10.1023/A:1010933404324.\n\n\nBriones, Guillermo. 2002. Metodología de la investigación cuantitativa en las ciencias sociales. Módulo tres. Especialización en Teoría, Métodos y Técnicas de Investigación Social. Instituto Colombiano para el Fomento de la Educación Superior (ICFES) – ASCUN.\n\n\nChawla, Nitesh V., Kevin W. Bowyer, Lawrence O. Hall, y W. Philip Kegelmeyer. 2002. «SMOTE: Synthetic Minority Over-sampling Technique». Journal of Artificial Intelligence Research 16: 321-57. https://doi.org/10.1613/jair.953.\n\n\nChen, Tianqi, y Carlos Guestrin. 2016. «XGBoost: A Scalable Tree Boosting System». Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 785-94. https://doi.org/10.1145/2939672.2939785.\n\n\nCohen, Jacob. 1968. «Weighted kappa: Nominal scale agreement provision for scaled disagreement or partial credit». Psychological Bulletin 70 (4): 213-20. https://doi.org/10.1037/h0026256.\n\n\nCongreso de la República de Colombia. 2016. Ley 1774 de 2016: por medio de la cual se modifican el Código Civil, la Ley 84 de 1989, el Código Penal y el Código de Procedimiento Penal.\n\n\nGoogle Cloud. 2026a. Natural Language API: Analyzing sentiment. https://cloud.google.com/natural-language/docs/analyzing-sentiment.\n\n\nGoogle Cloud. 2026b. Vision API: Label detection, face detection and image properties. https://cloud.google.com/vision/docs.\n\n\nGutiérrez, Pedro A., María Pérez-Ortiz, Javier Sánchez-Monedero, Francisco Fernández-Navarro, y César Hervás-Martínez. 2016. «Ordinal Regression Methods: Survey and Experimental Study». IEEE Transactions on Knowledge and Data Engineering 28 (1): 127-46. https://doi.org/10.1109/TKDE.2015.2457911.\n\n\nKe, Guolin, Qi Meng, Thomas Finley, et al. 2017. «LightGBM: A Highly Efficient Gradient Boosting Decision Tree». Advances in Neural Information Processing Systems 30, 3146-54. https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree.\n\n\nLundberg, Scott M., y Su-In Lee. 2017. «A Unified Approach to Interpreting Model Predictions». Advances in Neural Information Processing Systems 30, 4765-74. https://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions.\n\n\nPetFinder.my. 2019a. PetFinder.my Adoption Prediction. Competencia de Kaggle. https://www.kaggle.com/competitions/petfinder-adoption-prediction.\n\n\nPetFinder.my. 2019b. Petfinder.my Adoption Speed Prediction. Zenodo. https://doi.org/10.5281/zenodo.2654452.\n\n\nPosit. 2026. Quarto: An open-source scientific and technical publishing system. https://quarto.org.\n\n\nR Core Team. 2026. R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing. https://www.R-project.org/.\n\n\nSivakumar, Shreya, y Prabu Selvam. 2024. «Predicting Pet Photo Pawpularity: A Deep Learning Approach on PetFinder.my». 2024 IEEE International Conference on Information Technology, Electronics and Intelligent Communication Systems (ICITEICS), 1-6. https://doi.org/10.1109/ICITEICS61368.2024.10625079.\n\n\nSpence, Michael. 1973. «Job Market Signaling». The Quarterly Journal of Economics 87 (3): 355-74. https://doi.org/10.2307/1882010.\n\n\nWang, Yizheng, y Yinghua Liu. 2022. PETS-SWINF: A regression method that considers images with metadata based Neural Network for pawpularity prediction on 2021 Kaggle Competition «PetFinder.my». https://doi.org/10.48550/arXiv.2201.06061.\n\n\nWickham, Hadley, Mara Averick, Jennifer Bryan, et al. 2019. «Welcome to the tidyverse». Journal of Open Source Software 4 (43): 1686. https://doi.org/10.21105/joss.01686.\n\n\nWirth, Rüdiger, y Jochen Hipp. 2000. «CRISP-DM: Towards a Standard Process Model for Data Mining». Proceedings of the 4th International Conference on the Practical Application of Knowledge Discovery and Data Mining, 29-39.\n\n\nZadeh, Amir H., Kara Combs, Brandon Burkey, Jordan Dop, Kevin Duffy, y Nasim Nosoudi. 2022. «Pet analytics: Predicting adoption speed of pets from their online profiles». Expert Systems with Applications 204: 117596. https://doi.org/10.1016/j.eswa.2022.117596.\n\n\n\n\n\n\n\n\nNotaCómo citar y cómo añadir referencias\n\n\n\n\nEn el texto, una cita se escribe [@clave] y una cita en paréntesis sin autor [-@clave].\nLas entradas se mantienen en referencias.bib en formato BibTeX, con DOI o URL verificable siempre que exista.\nLas claves siguen el patrón apellidoAñoPalabra (por ejemplo zadeh2022pet).\n\n\n\n\n\n\n\n\n Volver arriba",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Bibliografía"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Acerca de",
+    "section": "",
+    "text": "EDM_PetFinder es el cuaderno de investigación del proyecto Predicción de la velocidad de adopción de mascotas a partir de datos masivos. Reúne el proyecto de investigación (planteamiento, marco conceptual, objetivos, justificación, metodología, productos esperados y bibliografía) y los productos de la Entrega 1 (dataset enriquecido y análisis exploratorio).",
+    "crumbs": [
+      "Inicio",
+      "Información",
+      "Acerca de"
+    ]
+  },
+  {
+    "objectID": "about.html#qué-es-este-sitio",
+    "href": "about.html#qué-es-este-sitio",
+    "title": "Acerca de",
+    "section": "",
+    "text": "EDM_PetFinder es el cuaderno de investigación del proyecto Predicción de la velocidad de adopción de mascotas a partir de datos masivos. Reúne el proyecto de investigación (planteamiento, marco conceptual, objetivos, justificación, metodología, productos esperados y bibliografía) y los productos de la Entrega 1 (dataset enriquecido y análisis exploratorio).",
+    "crumbs": [
+      "Inicio",
+      "Información",
+      "Acerca de"
+    ]
+  },
+  {
+    "objectID": "about.html#equipo-y-curso",
+    "href": "about.html#equipo-y-curso",
+    "title": "Acerca de",
+    "section": "Equipo y curso",
+    "text": "Equipo y curso\n\n\n\nAutoría\n\n\nJared Mijail Ramírez Escalante · María Paula Silva Capera\n\n\nInstitución\n\n\nUniversidad Nacional de Colombia\n\n\nAsignatura\n\n\nEDM — Estadística Descriptiva Multivariada\n\n\nProfesor\n\n\nCamilo José Torres Jiménez\n\n\nPeriodo\n\n\nSemestre 2026-2",
+    "crumbs": [
+      "Inicio",
+      "Información",
+      "Acerca de"
+    ]
+  },
+  {
+    "objectID": "about.html#herramientas",
+    "href": "about.html#herramientas",
+    "title": "Acerca de",
+    "section": "Herramientas",
+    "text": "Herramientas\n\n\n\n\n\n\n\nHerramienta\nPara qué se usa en este proyecto\n\n\n\n\nR 4.6 y tidyverse (Wickham et al. 2019)\nProcesamiento de datos, análisis exploratorio y modelamiento\n\n\nQuarto (Posit 2026)\nConstrucción del sitio y de los documentos entregables\n\n\nrenv\nFijar las versiones de las dependencias (reproducibilidad)\n\n\nGit y GitHub\nControl de versiones y publicación del sitio\n\n\nGoogle Natural Language API (Google Cloud 2026a)\nSentimiento del relato del rescatista\n\n\nGoogle Vision API (Google Cloud 2026b)\nEtiquetas, rostros y colores de las fotografías\n\n\nKaggle / PetFinder.my (PetFinder.my 2019)\nFuente de los datos originales",
+    "crumbs": [
+      "Inicio",
+      "Información",
+      "Acerca de"
+    ]
+  },
+  {
+    "objectID": "about.html#cómo-citar",
+    "href": "about.html#cómo-citar",
+    "title": "Acerca de",
+    "section": "Cómo citar",
+    "text": "Cómo citar\n@misc{ramirez2026edmpetfinder,\n  author       = {Ramírez Escalante, Jared Mijail and Silva Capera, María Paula},\n  title        = {EDM\\_PetFinder: predicción de la velocidad de adopción de mascotas a partir de datos masivos},\n  year         = {2026},\n  howpublished = {Sitio web del proyecto, Universidad Nacional de Colombia},\n  url          = {https://github.com/JaredMijail/EDM_PetFInder}\n}",
+    "crumbs": [
+      "Inicio",
+      "Información",
+      "Acerca de"
+    ]
+  },
+  {
+    "objectID": "about.html#estructura-del-repositorio",
+    "href": "about.html#estructura-del-repositorio",
+    "title": "Acerca de",
+    "section": "Estructura del repositorio",
+    "text": "Estructura del repositorio\nEDM_PetFinder/\n├── index.qmd                        # Portada del sitio\n├── proyecto/                        # Proyecto de investigación (componentes de Briones)\n│   ├── planteamiento.qmd            # Problema, preguntas, hipótesis y propósito\n│   ├── marco-conceptual.qmd         # Antecedentes, teoría y marco propio\n│   ├── objetivos.qmd                # Objetivo general y específicos\n│   ├── justificacion.qmd            # Aporte social, científico, metodológico, institucional, personal\n│   ├── metodologia.qmd              # Diseño, variables, procesamiento y técnicas\n│   ├── productos.qmd                # Entregables y estructura del informe final\n│   └── bibliografia.qmd             # Bibliografía completa (desde referencias.bib)\n├── entregas/\n│   ├── analisis-exploratorio.qmd    # Entrega 1 — análisis exploratorio (en construcción)\n│   └── dataset.qmd                  # Entrega 1 — dataset y enriquecimiento\n├── scripts/\n│   └── 01_dataset_enriquecido.R     # Construcción de la base enriquecida\n├── data/                            # Datos (no versionados: ~550 MB)\n├── _borradores/                     # Material de trabajo (no se publica en el sitio)\n├── styles.css                       # Hoja de estilos del sitio\n├── referencias.bib                  # Bibliografía (BibTeX)\n├── _quarto.yml                      # Configuración del sitio Quarto\n└── renv.lock                        # Versiones de las dependencias de R",
+    "crumbs": [
+      "Inicio",
+      "Información",
+      "Acerca de"
+    ]
+  },
+  {
+    "objectID": "about.html#datos-código-y-licencia",
+    "href": "about.html#datos-código-y-licencia",
+    "title": "Acerca de",
+    "section": "Datos, código y licencia",
+    "text": "Datos, código y licencia\n\nDatos: propiedad de PetFinder.my; se usan bajo las condiciones de la competencia de Kaggle de 2019 (PetFinder.my 2019). No se redistribuyen en este repositorio.\nCódigo y documentos de este repositorio: disponibles para uso académico, citando la fuente.\nReproducibilidad: el sitio se reconstruye con renv::restore() y quarto render. Los resultados por bloque de código quedan en caché (_freeze/) para que el sitio pueda construirse sin los datos crudos.",
+    "crumbs": [
+      "Inicio",
+      "Información",
+      "Acerca de"
+    ]
+  },
+  {
+    "objectID": "entregas/analisis-exploratorio.html",
+    "href": "entregas/analisis-exploratorio.html",
+    "title": "Análisis exploratorio",
+    "section": "",
+    "text": "Volver arriba",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Análisis exploratorio"
+    ]
+  },
+  {
+    "objectID": "entregas/dataset.html",
+    "href": "entregas/dataset.html",
+    "title": "Dataset y enriquecimiento",
+    "section": "",
+    "text": "La base de trabajo es la publicada por la plataforma PetFinder.my en la competencia PetFinder.my Adoption Prediction de Kaggle (2019) (PetFinder.my 2019a), disponible también como registro independiente en Zenodo (PetFinder.my 2019b) y usada en la literatura posterior (Zadeh et al. 2022). Los datos son de acceso público; los identificadores de los rescatistas (RescuerID) son seudónimos y no hay datos personales de adoptantes.\nEs una base de datos secundarios: ya existía, fue producida por otro actor y con otro propósito (una competencia de aprendizaje automático). Nuestro aporte metodológico consiste en enriquecerla y someterla a un protocolo de investigación explícito.",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Dataset y enriquecimiento"
+    ]
+  },
+  {
+    "objectID": "entregas/dataset.html#fuente-y-licencia",
+    "href": "entregas/dataset.html#fuente-y-licencia",
+    "title": "Dataset y enriquecimiento",
+    "section": "",
+    "text": "La base de trabajo es la publicada por la plataforma PetFinder.my en la competencia PetFinder.my Adoption Prediction de Kaggle (2019) (PetFinder.my 2019a), disponible también como registro independiente en Zenodo (PetFinder.my 2019b) y usada en la literatura posterior (Zadeh et al. 2022). Los datos son de acceso público; los identificadores de los rescatistas (RescuerID) son seudónimos y no hay datos personales de adoptantes.\nEs una base de datos secundarios: ya existía, fue producida por otro actor y con otro propósito (una competencia de aprendizaje automático). Nuestro aporte metodológico consiste en enriquecerla y someterla a un protocolo de investigación explícito.",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Dataset y enriquecimiento"
+    ]
+  },
+  {
+    "objectID": "entregas/dataset.html#qué-hay-en-la-carpeta-data",
+    "href": "entregas/dataset.html#qué-hay-en-la-carpeta-data",
+    "title": "Dataset y enriquecimiento",
+    "section": "2. Qué hay en la carpeta data/",
+    "text": "2. Qué hay en la carpeta data/\n\n\n\nArchivos que componen la fuente de datos\n\n\n\n\n\n\n\nArchivo o carpeta\nContenido\nTamaño\n\n\n\n\ndata/train.csv\nAnuncios originales (24 columnas)\nNA MB\n\n\ndata/train_sentiment\nNA archivos JSON con el análisis de sentimiento por anuncio\nNA MB\n\n\ndata/train_metadata\nNA archivos JSON con etiquetas, rostros y colores por imagen\nNA MB\n\n\ndata/petfinder_enriquecido_final.csv\nBase enriquecida en texto plano (14.993 × 31)\nNA MB\n\n\ndata/petfinder_enriquecido_final.rds\nLa misma base en formato R (más liviana y con los factores ya definidos)\nNA MB\n\n\n\n\n\nLos archivos JSON no se analizan directamente en este sitio: se consolidan una sola vez en data/petfinder_enriquecido_final.csv mediante el script scripts/01_dataset_enriquecido.R.",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Dataset y enriquecimiento"
+    ]
+  },
+  {
+    "objectID": "entregas/dataset.html#diccionario-de-variables",
+    "href": "entregas/dataset.html#diccionario-de-variables",
+    "title": "Dataset y enriquecimiento",
+    "section": "3. Diccionario de variables",
+    "text": "3. Diccionario de variables\nLa unidad de análisis es el anuncio de adopción (clave PetID), no el animal ni el rescatista: un rescatista puede publicar varios animales y un animal tiene un solo anuncio. Las escalas de medición siguen la clasificación de Briones (2002).\n\n3.1 Variables originales del anuncio\n\n\n\n\n\n\n\n\n\nVariable\nTipo en R\nEscala\nDescripción y valores\n\n\n\n\nPetID\ncarácter\nNominal\nIdentificador del anuncio; clave de unión con las demás fuentes\n\n\nType\nfactor\nNominal\nEspecie: 1 = Perro, 2 = Gato\n\n\nName\ncarácter\nNominal\nNombre del animal (vacío en algunos anuncios)\n\n\nAge\nentero\nRazón\nEdad en meses\n\n\nBreed1\nfactor\nNominal\nRaza principal\n\n\nBreed2\nfactor\nNominal\nRaza secundaria; 0 = sin segunda raza\n\n\nGender\nfactor\nNominal\n1 = Macho, 2 = Hembra, 3 = Mixto (varios animales en el anuncio)\n\n\nColor1, Color2, Color3\nfactor\nNominal\nColores del pelaje (1–7); 0 = no aplica\n\n\nMaturitySize\nfactor\nOrdinal\n0 = no especificado, 1 = pequeño, 2 = mediano, 3 = grande, 4 = extra grande\n\n\nFurLength\nfactor\nOrdinal\n0 = no especificado, 1 = corto, 2 = mediano, 3 = largo\n\n\nVaccinated\nfactor\nNominal\n1 = sí, 2 = no, 3 = no está seguro\n\n\nDewormed\nfactor\nNominal\nDesparasitado: 1 = sí, 2 = no, 3 = no está seguro\n\n\nSterilized\nfactor\nNominal\nEsterilizado: 1 = sí, 2 = no, 3 = no está seguro\n\n\nHealth\nfactor\nOrdinal\n0 = no especificado, 1 = sano, 2 = lesión leve, 3 = lesión grave\n\n\nQuantity\nentero\nRazón\nNúmero de animales incluidos en el anuncio (1–20)\n\n\nFee\nentero\nRazón\nTarifa de adopción solicitada (ringgit malayo, MYR)\n\n\nState\nfactor\nNominal\nEstado o territorio de Malasia donde está el animal\n\n\nRescuerID\ncarácter\nNominal\nIdentificador seudónimo de quien publica\n\n\nVideoAmt\nentero\nRazón\nNúmero de videos en el anuncio\n\n\nPhotoAmt\nentero\nRazón\nNúmero de fotografías en el anuncio\n\n\nDescription\ntexto\n—\nRelato libre del rescatista sobre el animal (Malayo e inglés)\n\n\nAdoptionSpeed\nfactor\nOrdinal\nVariable respuesta: 0 = mismo día, 1 = 1–7 días, 2 = 8–30 días, 3 = 31–90 días, 4 = sin adopción tras 100 días\n\n\n\n\n\n3.2 Variables construidas en el enriquecimiento\n\n\n\n\n\n\n\n\n\nVariable\nTipo en R\nEscala\nDescripción y origen\n\n\n\n\nsentiment_score\nnumérico\nIntervalo\nPolaridad del relato, en [−1, 1]. Google Natural Language API (Google Cloud 2026a)\n\n\nsentiment_magnitude\nnumérico\nRazón\nIntensidad emocional del relato (≥ 0). Google Natural Language API\n\n\ntotal_labels\nentero\nRazón\nEtiquetas de contenido detectadas en las fotos del anuncio. Google Vision API (Google Cloud 2026b)\n\n\ntotal_faces\nentero\nRazón\nRostros humanos detectados en las fotos del anuncio. Google Vision API\n\n\ntotal_colors\nentero\nRazón\nColores dominantes detectados en las fotos del anuncio. Google Vision API\n\n\ndesc_char_len\nentero\nRazón\nNúmero de caracteres del relato (cálculo propio)\n\n\ndesc_word_count\nentero\nRazón\nNúmero de palabras del relato (cálculo propio)",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Dataset y enriquecimiento"
+    ]
+  },
+  {
+    "objectID": "entregas/dataset.html#control-de-calidad",
+    "href": "entregas/dataset.html#control-de-calidad",
+    "title": "Dataset y enriquecimiento",
+    "section": "4. Control de calidad",
+    "text": "4. Control de calidad\n\n\n\nAuditoría de la base enriquecida: faltantes, duplicados y valores extremos\n\n\n\n\n\n\nVerificación\nResultado\n\n\n\n\nAnuncios (filas)\n14.993\n\n\nVariables (columnas)\n31\n\n\nIdentificadores PetID duplicados\n0\n\n\nAnuncios sin segunda raza (Breed2 = 0)\n10.762 (71.8 %)\n\n\nAnuncios con video (VideoAmt &gt; 0)\n574 (3.8 %)\n\n\nAnuncios sin tarifa de adopción (Fee = 0)\n12.663 (84.5 %)\n\n\nAnuncios con relato vacío (Description = ’’)\n0\n\n\nEdad: mediana / máximo (meses)\n3 / 255\n\n\nFotos: mediana / máximo\n3 / 30\n\n\nVariables con faltantes\n6 (Name, sentiment_score, sentiment_magnitude, total_labels, total_faces, total_colors)\n\n\n\n\n\n\n\n\nVariables con datos faltantes\n\n\nVariable\nFaltantes\n% faltantes\n\n\n\n\nName\n1257\n8,4\n\n\nsentiment_score\n551\n3,7\n\n\nsentiment_magnitude\n551\n3,7\n\n\ntotal_labels\n341\n2,3\n\n\ntotal_faces\n341\n2,3\n\n\ntotal_colors\n341\n2,3\n\n\n\n\n\nLos faltantes son informativos, no aleatorios: un anuncio sin relato no genera puntaje de sentimiento, y un anuncio sin fotografía no genera anotaciones de imagen. Por eso el enriquecimiento trae tres variables con el mismo número de faltantes (los 341 anuncios sin foto) y el sentimiento falta en los 551 anuncios con relato vacío. Este patrón hay que tratarlo explícitamente en el modelamiento (indicador de ausencia + imputación declarada), no borrando filas.",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Dataset y enriquecimiento"
+    ]
+  },
+  {
+    "objectID": "entregas/dataset.html#cómo-se-construyó-la-base",
+    "href": "entregas/dataset.html#cómo-se-construyó-la-base",
+    "title": "Dataset y enriquecimiento",
+    "section": "5. Cómo se construyó la base",
+    "text": "5. Cómo se construyó la base\nEl script scripts/01_dataset_enriquecido.R ejecuta ocho pasos, en el orden en que Briones (2002) propone el procesamiento de la información:\n\n\n\nPasos del procesamiento y su producto\n\n\n\n\n\n\n\nPaso\nOperación\nProducto\n\n\n\n\n1\nDefinir rutas relativas al proyecto (paquete here)\nReproducibilidad en cualquier equipo\n\n\n2\nLeer el archivo principal train.csv\n14 993 × 24\n\n\n3\nExtraer el sentimiento de los JSON uno por uno y unirlos por PetID\nsentiment_score, sentiment_magnitude\n\n\n4\nExtraer etiquetas, rostros y colores de los JSON de imagen y agregarlos por anuncio\ntotal_labels, total_faces, total_colors\n\n\n5\nUnir las tres fuentes por PetID (left_join)\nBase integrada\n\n\n6\nConvertir las variables categóricas a factores con etiquetas legibles\nVariables interpretables\n\n\n7\nCalcular longitud del relato en caracteres y palabras\ndesc_char_len, desc_word_count\n\n\n8\nDiagnóstico de faltantes y exportación a CSV y RDS\npetfinder_enriquecido_final.csv / .rds\n\n\n\n\n\nLas claves de este procesamiento:\n\nUnión por clave única. PetID identifica el anuncio; los JSON de imagen se llaman PetID-n.json, así que se agregan con sum() por anuncio antes de unir. Un left_join sobre la base original no agrega ni pierde filas: se verificó que el resultado sigue teniendo 14 993 anuncios.\nTolerancia a fallos. Cada lectura de JSON va dentro de un tryCatch; un archivo corrupto produce un faltante declarado, no la caída del proceso.\nEtiquetas legibles. Los códigos numéricos del archivo original (1/2/3…) se convierten a factores con etiquetas (\"Yes\", \"No\", \"NotSure\"), lo que evita errores de interpretación en el análisis y en los gráficos.",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Dataset y enriquecimiento"
+    ]
+  },
+  {
+    "objectID": "entregas/dataset.html#reproducibilidad",
+    "href": "entregas/dataset.html#reproducibilidad",
+    "title": "Dataset y enriquecimiento",
+    "section": "6. Reproducibilidad",
+    "text": "6. Reproducibilidad\n\nLas dependencias de R están fijadas en renv.lock; se restauran con renv::restore().\nEl sitio se construye con Quarto (Posit 2026): quarto render.\nLos resultados de los bloques de código quedan en caché (_freeze), de modo que el sitio se puede renderizar sin tener los 550 MB de datos crudos.\nLas figuras y tablas de estas páginas se calculan en el momento de la construcción a partir de la base, no se transcriben a mano.",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Dataset y enriquecimiento"
+    ]
+  },
+  {
+    "objectID": "entregas/dataset.html#limitaciones-de-la-fuente",
+    "href": "entregas/dataset.html#limitaciones-de-la-fuente",
+    "title": "Dataset y enriquecimiento",
+    "section": "7. Limitaciones de la fuente",
+    "text": "7. Limitaciones de la fuente\n\n\n\n\n\n\nImportanteLo que la base no permite afirmar\n\n\n\n\nCobertura geográfica. Son anuncios de Malasia (2019). Las conclusiones describen esa plataforma; su traslado a Colombia es una hipótesis, no un resultado.\nOrigen de la etiqueta. AdoptionSpeed la registra el refugio o el rescatista, con criterios de reporte que no controlamos; puede haber error de medición.\n“Sin adopción” no es “nunca adoptado”. La categoría 4 significa “no adoptado en 100 días”, es decir, es una observación censurada.\nSelección. Solo aparecen animales que llegaron a publicarse en la plataforma; no es una muestra de la población de animales abandonados.\nAnotaciones automáticas. Sentimiento y etiquetas visuales provienen de modelos de Google entrenados para otros fines; son medidas proxy, con su propio error.\n\n\n\nLas consecuencias de estas limitaciones para el diseño y para lo que se puede concluir se desarrollan en la Metodología.",
+    "crumbs": [
+      "Inicio",
+      "Entrega 1",
+      "Dataset y enriquecimiento"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "EDM_PetFinder",
+    "section": "",
+    "text": "Investigación cuantitativa sobre datos secundarios: 14 993 anuncios de mascotas de la plataforma malaya PetFinder.my. Al anuncio original (datos tabulares, texto y fotografía) le añadimos señales textuales (sentimiento del relato del rescatista) y visuales (etiquetas, rostros y colores dominantes de la foto) para describir, predecir y explicar cuánto tarda una mascota en ser adoptada.\nEDM · Estadística descriptiva multivariada Datos secundarios Clasificación ordinal · 5 clases R · tidyverse · Quarto\n\nEl problema Metodología Repositorio",
+    "crumbs": [
+      "Inicio",
+      "EDM_PetFinder"
+    ]
+  },
+  {
+    "objectID": "index.html#el-proyecto",
+    "href": "index.html#el-proyecto",
+    "title": "EDM_PetFinder",
+    "section": "El proyecto",
+    "text": "El proyecto\nLos componentes del proyecto de investigación, siguiendo la estructura de Briones (ICFES, Módulo tres):\n\n\nPlanteamiento del problema\nEl problema del abandono, la plataforma de donde salen los datos, las preguntas, las hipótesis y el propósito.\n\n\nMarco conceptual\nAntecedentes, vacíos que quedan abiertos, marco teórico de señales y definiciones operativas.\n\n\nObjetivos\nObjetivo general y objetivos específicos tipificados, cada uno con su producto verificable.\n\n\nJustificación\nAporte social, científico, metodológico, institucional y personal.\n\n\nMetodología\nDiseño, unidades de análisis, variables, procesamiento, técnicas, controles de calidad y limitaciones.\n\n\nProductos esperados\nEntregables del proyecto y estructura del informe final.\n\n\nBibliografía\nTodas las fuentes, en formato BibTeX, con DOI o URL verificable.",
+    "crumbs": [
+      "Inicio",
+      "EDM_PetFinder"
+    ]
+  },
+  {
+    "objectID": "index.html#entrega-1",
+    "href": "index.html#entrega-1",
+    "title": "EDM_PetFinder",
+    "section": "Entrega 1",
+    "text": "Entrega 1\n\n\nAnálisis exploratorio\nEspacio de la entrega en construcción.\n\n\nDataset y enriquecimiento\nDe dónde vienen los datos, diccionario de las 31 variables, auditoría de calidad y reproducibilidad del proceso.\n\n\n\n\n\n\n\n\nTipCómo moverse por el sitio\n\n\n\nLa barra superior agrupa el contenido en El proyecto, Entrega 1 y Acerca de; la barra lateral muestra todo el mapa del sitio y la columna derecha la tabla de contenidos de la página que estés leyendo. Con el buscador (o Ctrl + K) puedes saltar a cualquier término, variable o referencia.",
+    "crumbs": [
+      "Inicio",
+      "EDM_PetFinder"
+    ]
+  },
+  {
+    "objectID": "proyecto/justificacion.html",
+    "href": "proyecto/justificacion.html",
+    "title": "Justificación",
+    "section": "",
+    "text": "Dimensión\nArgumento\n\n\n\n\nSocial\nLa permanencia prolongada de un animal en un refugio consume recursos, reduce la capacidad de recibir nuevos casos y aumenta el riesgo de eutanasia. Identificar temprano qué anuncios están en riesgo permite intervenir (mejorar fotos, precisar el relato, visibilizar el estado sanitario) (Zadeh et al. 2022)\n\n\nCientífica\nAporta una comparación controlada del aporte de señales tabulares, textuales y visuales dentro de un mismo protocolo y con métricas ordinales, algo que la literatura de competencia no reporta de forma sistemática\n\n\nMetodológica\nDocumenta cómo se adaptan los componentes clásicos de un proyecto de investigación (Briones (2002)) a un estudio basado en datos secundarios: sin muestreo ni instrumentos primarios y con recursos acotados, un escenario cada vez más frecuente\n\n\nInstitucional\nDeja en el repositorio del curso una base enriquecida, un código reproducible y un sitio metodológico reutilizable por otros estudiantes como plantilla de investigación cuantitativa\n\n\nPersonal\nConsolida competencias de investigación cuantitativa aplicada (formulación de problemas, diseño, procesamiento, modelado e interpretación) alrededor de un problema con impacto concreto en bienestar animal\n\n\n\nEn el plano normativo, la Ley 1774 de 2016 (2016) reconoce a los animales como seres sintientes y establece deberes de protección, lo que refuerza la pertinencia social de herramientas que apoyen la adopción responsable.\n\n\n\n\n\n\n Volver arribaReferencias\n\nBriones, Guillermo. 2002. Metodología de la investigación cuantitativa en las ciencias sociales. Módulo tres. Especialización en Teoría, Métodos y Técnicas de Investigación Social. Instituto Colombiano para el Fomento de la Educación Superior (ICFES) – ASCUN.\n\n\nCongreso de la República de Colombia. 2016. Ley 1774 de 2016: por medio de la cual se modifican el Código Civil, la Ley 84 de 1989, el Código Penal y el Código de Procedimiento Penal.\n\n\nZadeh, Amir H., Kara Combs, Brandon Burkey, Jordan Dop, Kevin Duffy, y Nasim Nosoudi. 2022. «Pet analytics: Predicting adoption speed of pets from their online profiles». Expert Systems with Applications 204: 117596. https://doi.org/10.1016/j.eswa.2022.117596.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Justificación"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html",
+    "href": "proyecto/metodologia.html",
+    "title": "Metodología",
+    "section": "",
+    "text": "La estructura sigue los componentes del proyecto de investigación propuestos por Briones (2002) en el Módulo tres del programa del ICFES. Esa plantilla está escrita para investigaciones que producen sus datos (encuestas, entrevistas, observación en campo). Este estudio, en cambio, trabaja con datos secundarios: una base pública ya existente que se enriquece con dos servicios de análisis automático. Por eso, antes de los componentes, se declara qué se aplica tal cual y qué se redefinió; hacerlo explícito evita forzar el diseño a una plantilla que no le corresponde.\n\n\n\n\n\n\n\nComponente (Briones)\nDecisión en este proyecto\n\n\n\n\nPlanteamiento del problema\nSe aplica directamente (preguntas, objeto, hipótesis, propósito)\n\n\nMarco conceptual (antecedentes, teórico y propio)\nSe aplica; se añade un marco de señalización e información asimétrica\n\n\nObjetivos\nSe aplica; se tipifican según Briones (descriptivo, clasificatorio, comparativo, relacional, explicativo)\n\n\nJustificación\nSe aplica (social, científica, institucional, personal)\n\n\nPoblación y unidades estadísticas\nRedefinido: la unidad es el anuncio publicado, no una persona; no hay población que muestrear\n\n\nDiseño muestral\nNo aplica: se trabaja con el censo de la base (14 993 anuncios), no con una muestra\n\n\nInstrumentos de recolección\nRedefinido: no hay cuestionario ni escala; los instrumentos son el protocolo de extracción de las APIs y el diccionario de variables\n\n\nPlan de trabajo de campo\nRedefinido: se sustituye por un plan de procesamiento y control de calidad de datos\n\n\nProcesamiento de la información\nSe aplica (R, auditoría de faltantes, partición estratificada, validación cruzada)\n\n\nTécnicas y métodos\nSe aplica: clasificación ordinal supervisada + interpretabilidad\n\n\nBibliografía\nSe aplica (referencias verificables en formato BibTeX)",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#como-leer",
+    "href": "proyecto/metodologia.html#como-leer",
+    "title": "Metodología",
+    "section": "",
+    "text": "La estructura sigue los componentes del proyecto de investigación propuestos por Briones (2002) en el Módulo tres del programa del ICFES. Esa plantilla está escrita para investigaciones que producen sus datos (encuestas, entrevistas, observación en campo). Este estudio, en cambio, trabaja con datos secundarios: una base pública ya existente que se enriquece con dos servicios de análisis automático. Por eso, antes de los componentes, se declara qué se aplica tal cual y qué se redefinió; hacerlo explícito evita forzar el diseño a una plantilla que no le corresponde.\n\n\n\n\n\n\n\nComponente (Briones)\nDecisión en este proyecto\n\n\n\n\nPlanteamiento del problema\nSe aplica directamente (preguntas, objeto, hipótesis, propósito)\n\n\nMarco conceptual (antecedentes, teórico y propio)\nSe aplica; se añade un marco de señalización e información asimétrica\n\n\nObjetivos\nSe aplica; se tipifican según Briones (descriptivo, clasificatorio, comparativo, relacional, explicativo)\n\n\nJustificación\nSe aplica (social, científica, institucional, personal)\n\n\nPoblación y unidades estadísticas\nRedefinido: la unidad es el anuncio publicado, no una persona; no hay población que muestrear\n\n\nDiseño muestral\nNo aplica: se trabaja con el censo de la base (14 993 anuncios), no con una muestra\n\n\nInstrumentos de recolección\nRedefinido: no hay cuestionario ni escala; los instrumentos son el protocolo de extracción de las APIs y el diccionario de variables\n\n\nPlan de trabajo de campo\nRedefinido: se sustituye por un plan de procesamiento y control de calidad de datos\n\n\nProcesamiento de la información\nSe aplica (R, auditoría de faltantes, partición estratificada, validación cruzada)\n\n\nTécnicas y métodos\nSe aplica: clasificación ordinal supervisada + interpretabilidad\n\n\nBibliografía\nSe aplica (referencias verificables en formato BibTeX)",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#enfoque-y-tipo-de-investigación",
+    "href": "proyecto/metodologia.html#enfoque-y-tipo-de-investigación",
+    "title": "Metodología",
+    "section": "Enfoque y tipo de investigación",
+    "text": "Enfoque y tipo de investigación\nInvestigación cuantitativa, no experimental (ex post facto: las variables no se manipulan, se observan registros ya producidos), transversal (una única ventana de observación, 2019) y de alcance descriptivo, relacional y explicativo-predictivo. Se trabaja con datos secundarios y el resultado principal es un procedimiento replicable, no una descripción del mercado local.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#fuentes-unidades-de-análisis-y-población",
+    "href": "proyecto/metodologia.html#fuentes-unidades-de-análisis-y-población",
+    "title": "Metodología",
+    "section": "Fuentes, unidades de análisis y “población”",
+    "text": "Fuentes, unidades de análisis y “población”\n\nUnidad estadística: el anuncio de adopción (clave PetID), no la persona ni el animal considerado de forma independiente. Un rescatista puede publicar varios animales; un anuncio puede incluir varios animales (Quantity), pero sigue siendo una unidad.\nUniverso: los 14 993 anuncios de la base pública de PetFinder.my (Kaggle 2019).\nDiseño muestral: no hay. Se trabaja con el censo de la base: se analizan todos los registros disponibles, sin muestreo. La distinción es importante: no se estima un parámetro de una población mayor, se evalúa la capacidad predictiva del modelo en registros no vistos, lo que exige partición y validación cruzada, no cálculo de tamaño de muestra.\nFuentes: (i) archivo tabular de la competencia (PetFinder.my 2019); (ii) anotaciones de sentimiento por anuncio; (iii) anotaciones de imagen por fotografía; ambas generadas con los servicios de Google Cloud y consolidadas en la base enriquecida (Dataset). El detalle de la construcción está en el script scripts/01_dataset_enriquecido.R.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#criterios-de-inclusión-exclusión-y-depuración",
+    "href": "proyecto/metodologia.html#criterios-de-inclusión-exclusión-y-depuración",
+    "title": "Metodología",
+    "section": "Criterios de inclusión, exclusión y depuración",
+    "text": "Criterios de inclusión, exclusión y depuración\n\n\n\n\n\n\n\nCriterio\nDefinición\n\n\n\n\nInclusión\nAnuncio con PetID único y con valor registrado en la variable respuesta AdoptionSpeed\n\n\nExclusión\nPetID duplicado (verificado: 0 casos) o respuesta ausente (verificado: 0 casos)\n\n\nNo exclusión, sino señalización\nLos faltantes (nombre, sentimiento, anotaciones de imagen) no se eliminan: se marcan con indicadores de ausencia y se declara la estrategia de imputación, porque su ausencia es informativa (un anuncio sin foto no es un dato perdido al azar)\n\n\nValores atípicos\nNo se eliminan; se documentan (edades extremas, tarifas altas) y se evalúan con y sin ellos (análisis de sensibilidad)",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#instrumentos-y-variables",
+    "href": "proyecto/metodologia.html#instrumentos-y-variables",
+    "title": "Metodología",
+    "section": "Instrumentos y variables",
+    "text": "Instrumentos y variables\nNo se aplican instrumentos primarios (cuestionarios, escalas, guías de observación). El papel del instrumento lo cumplen el protocolo de extracción automática y el diccionario de variables:\n\n\n\n\n\n\n\n\nInstrumento / operación\nVariables que produce\nNivel de medición\n\n\n\n\nFicha del anuncio publicada por el rescatista\n24 variables originales del archivo tabular\nNominal, ordinal, de razón\n\n\nExtracción de sentimiento (Natural Language API) (Google Cloud 2026a)\nsentiment_score, sentiment_magnitude\nDe intervalo, de razón\n\n\nExtracción de anotaciones visuales (Vision API) (Google Cloud 2026b)\ntotal_labels, total_faces, total_colors\nDe razón (conteos)\n\n\nCálculo propio sobre el texto\ndesc_char_len, desc_word_count\nDe razón (conteos)\n\n\n\nEl diccionario completo con la descripción y los valores de cada variable está en la página del Dataset. En términos del modelo:\n\nVariable respuesta: AdoptionSpeed (ordinal, 5 categorías).\nPredictores: bloques tabular, textual y visual, más Type y State como controles.\nVariables excluidas del modelo: PetID y RescuerID (identificadores; retenerlos produciría fuga de información) y Name (texto libre de alta cardinalidad, sin valor predictivo estable). Las descripciones textuales no se usan como texto crudo en esta fase: se usan las variables derivadas, y la incorporación de representaciones textuales (por ejemplo, bolsas de palabras ponderadas o incrustaciones) se deja como extensión.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#procedimientos-de-procesamiento",
+    "href": "proyecto/metodologia.html#procedimientos-de-procesamiento",
+    "title": "Metodología",
+    "section": "Procedimientos de procesamiento",
+    "text": "Procedimientos de procesamiento\n\nAuditoría de calidad de la base enriquecida: cobertura por fuente, faltantes por variable, duplicados y rangos.\nTratamiento de faltantes: indicadores de ausencia para las tres variables de imagen y para el sentimiento; imputación declarada (mediana o moda) solo cuando el modelo lo exija, comparando el desempeño con y sin imputación.\nTransformaciones: escala logarítmica para variables con fuerte asimetría (Fee, Age, PhotoAmt); agrupación de categorías con muy baja frecuencia (razas, colores); codificación de variables nominales (matriz indicadora) y, para State y las razas de alta cardinalidad, codificación supervisada calculada solo con datos de entrenamiento para evitar fuga.\nPartición: 70 % entrenamiento, 15 % validación (ajuste y selección), 15 % prueba. Estratificada simultáneamente por AdoptionSpeed y Type, con semilla fijada y publicada.\nValidación: validación cruzada estratificada de 5 particiones dentro del entrenamiento para seleccionar hiperparámetros; el conjunto de prueba se usa una sola vez, al final.\nMétricas: kappa cuadrático ponderado (principal), F1 macro, exactitud, error absoluto medio sobre el orden numérico de las categorías y matrices de confusión. Los intervalos de confianza se estiman por remuestreo bootstrap (1 000 réplicas).\nReproducibilidad: dependencias fijadas con renv, código versionado en Git, semillas fijadas y resultados del sitio en caché (_freeze). Cada cifra del informe se calcula por código, ninguna se transcribe a mano.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#técnicas-y-métodos-de-análisis",
+    "href": "proyecto/metodologia.html#técnicas-y-métodos-de-análisis",
+    "title": "Metodología",
+    "section": "Técnicas y métodos de análisis",
+    "text": "Técnicas y métodos de análisis\n\n\n\n\n\n\n\n\nEtapa\nTécnica\nFunción en el estudio\n\n\n\n\nReferencia\nClase modal y regresión ordinal con solo variables tabulares\nEstablecer el piso de desempeño: qué se gana al añadir información\n\n\nModelado\nRegresión logística ordinal (modelo de probabilidades proporcionales)\nModelo interpretable de referencia, con coeficientes en escala de razón de momios\n\n\nModelado\nBosques aleatorios (2001)\nCaptura de no linealidades e interacciones con poco ajuste\n\n\nModelado\nXGBoost (2016) y LightGBM (2017)\nAlternativa de mayor capacidad predictiva para datos tabulares con variables mixtas\n\n\nDesbalance\nPesos de clase y, como alternativa, remuestreo sintético (2002)\nEvitar que el modelo ignore las clases minoritarias (SameDay)\n\n\nComparación\nComparación de métricas con intervalos bootstrap y prueba de McNemar sobre aciertos\nDeterminar si las diferencias entre modelos son sistemáticas o azarosas\n\n\nExplicación\nImportancia por permutación y valores SHAP (2017)\nIdentificar qué variables explican las predicciones, en la línea de los objetivos 4 y 5\n\n\nRobustez\nAnálisis de sensibilidad (con y sin atípicos; con y sin imputación)\nVerificar que los resultados no dependan de una decisión arbitraria de procesamiento",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#plan-de-control-de-calidad-sustituto-del-trabajo-de-campo",
+    "href": "proyecto/metodologia.html#plan-de-control-de-calidad-sustituto-del-trabajo-de-campo",
+    "title": "Metodología",
+    "section": "Plan de control de calidad (sustituto del trabajo de campo)",
+    "text": "Plan de control de calidad (sustituto del trabajo de campo)\nComo no hay salida a campo, se define un plan de control de calidad de datos y de resultados, con verificaciones en cada fase:\n\n\n\n\n\n\n\n\nFase\nControl de calidad\nEvidencia\n\n\n\n\nConstrucción de la base\nConteo de filas antes y después de cada unión; verificación de unicidad de PetID; lectura tolerante a fallos de JSON\nScript de construcción y auditoría\n\n\nProcesamiento\nRevisión de distribuciones antes y después de cada transformación; verificación de que ninguna transformación introduce faltantes\nBitácora de decisiones (README)\n\n\nModelado\nSemillas fijadas; verificación de que el conjunto de prueba no participó en el ajuste; revisión de que la partición respeta la estratificación\nCódigo versionado\n\n\nResultados\nContraprueba manual de una muestra de predicciones y de los cálculos del informe; replicación independiente del informe en un equipo distinto\nSitio renderizado y _freeze\n\n\nInterpretación\nRevisión crítica de las asociaciones identificadas frente a la literatura y frente a la lógica sustantiva (evitar lecturas causales)\nBitácora de decisiones del proyecto",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#consideraciones-éticas-y-de-datos",
+    "href": "proyecto/metodologia.html#consideraciones-éticas-y-de-datos",
+    "title": "Metodología",
+    "section": "Consideraciones éticas y de datos",
+    "text": "Consideraciones éticas y de datos\n\nLos datos son públicos; el identificador del rescatista es seudónimo y no se usa en el modelo ni se intenta reidentificar a personas.\nNo se recogen datos nuevos: no hay consentimiento informado que gestionar, pero sí responsabilidad en el uso secundario de la base.\nSe reconoce el sesgo de la fuente: una plataforma malaya, en dos idiomas, con prácticas de reporte propias. Los resultados no se presentan como válidos para Colombia.\nRiesgo de recomendaciones sesgadas: si el modelo identifica, por ejemplo, que ciertos colores o razas (o los animales mixtos) tardan más en adoptarse, ese hallazgo describe un sesgo del mercado —y posiblemente de los adoptantes— y no una justificación para descartar animales. Cualquier recomendación práctica se formulará en términos de mejorar el anuncio, no de despriorizar animales.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#limitaciones",
+    "href": "proyecto/metodologia.html#limitaciones",
+    "title": "Metodología",
+    "section": "Limitaciones del estudio",
+    "text": "Limitaciones del estudio\n\nValidez externa: los datos son de Malasia (2019); extrapolar a otro país o a hoy es una hipótesis sin contrastar.\nCensura de la variable respuesta: “sin adopción” es “no adoptado en 100 días”.\nTecho de desempeño bajo: la base es intrínsecamente difícil; se esperan valores de kappa moderados, insuficientes para decisiones automáticas. El aporte es explicativo, no un sistema de decisión autónomo.\nMedidas proxy: sentimiento y etiquetas visuales provienen de modelos de terceros entrenados con otros fines; arrastran su error y sus sesgos.\nCausalidad: el diseño es observacional y ex post facto; no permite afirmar que esterilizar a un animal acelere su adopción, solo que se asocia con adopciones más rápidas.\nVariables no observadas: temperamento del animal, trato del rescatista, difusión del anuncio, demanda estacional: nada de eso está en la base.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/metodologia.html#viabilidad-y-riesgos",
+    "href": "proyecto/metodologia.html#viabilidad-y-riesgos",
+    "title": "Metodología",
+    "section": "Viabilidad y riesgos",
+    "text": "Viabilidad y riesgos\n\n\n\n\n\n\n\n\n\nRiesgo\nProbabilidad\nImpacto\nMitigación\n\n\n\n\nDesempeño por debajo de lo esperado\nAlta\nMedio\nReformular el aporte como explicativo; reportar honestamente el techo alcanzado\n\n\nFaltantes no aleatorios (foto, relato)\nMedia\nMedio\nIndicadores de ausencia + análisis de sensibilidad\n\n\nFuga de información por variables de alta cardinalidad\nMedia\nAlto\nExcluir identificadores; codificación calculada solo con entrenamiento; validación agrupada por rescatista\n\n\nTiempo de cómputo en equipo propio\nMedia\nBajo\nModelos tabulares (no redes profundas); búsqueda de hiperparámetros acotada\n\n\nDependencia de cuotas de servicios en la nube\nBaja\nBajo\nLas anotaciones ya están consolidadas en la base enriquecida; no se re-consultan\n\n\nSobrecarga académica\nMedia\nMedio\nAlcance mínimo declarado y priorización de las etapas críticas",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Metodología"
+    ]
+  },
+  {
+    "objectID": "proyecto/planteamiento.html",
+    "href": "proyecto/planteamiento.html",
+    "title": "Planteamiento del problema",
+    "section": "",
+    "text": "Cada año millones de animales entran a refugios y plataformas de adopción. Cuando el tiempo de permanencia se alarga, aumentan los costos del refugio y el riesgo de eutanasia, y la capacidad se agota para los animales que llegan después. En Colombia, la Ley 1774 de 2016 declaró a los animales seres sintientes y estableció deberes de protección, pero la sobrepoblación y el abandono siguen dependiendo, en la práctica, de la capacidad de las organizaciones y de la información disponible para colocar cada animal.\nLa información disponible es, precisamente, el punto de entrada de esta investigación: una ficha de adopción es un conjunto de señales —raza, edad, estado de salud, precio, fotos, relato del rescatista— que el adoptante potencial interpreta antes de decidir. La pregunta es si esas señales permiten anticipar la velocidad de adopción y, sobre todo, explicar qué pesa más en esa decisión.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Planteamiento del problema"
+    ]
+  },
+  {
+    "objectID": "proyecto/planteamiento.html#el-problema",
+    "href": "proyecto/planteamiento.html#el-problema",
+    "title": "Planteamiento del problema",
+    "section": "",
+    "text": "Cada año millones de animales entran a refugios y plataformas de adopción. Cuando el tiempo de permanencia se alarga, aumentan los costos del refugio y el riesgo de eutanasia, y la capacidad se agota para los animales que llegan después. En Colombia, la Ley 1774 de 2016 declaró a los animales seres sintientes y estableció deberes de protección, pero la sobrepoblación y el abandono siguen dependiendo, en la práctica, de la capacidad de las organizaciones y de la información disponible para colocar cada animal.\nLa información disponible es, precisamente, el punto de entrada de esta investigación: una ficha de adopción es un conjunto de señales —raza, edad, estado de salud, precio, fotos, relato del rescatista— que el adoptante potencial interpreta antes de decidir. La pregunta es si esas señales permiten anticipar la velocidad de adopción y, sobre todo, explicar qué pesa más en esa decisión.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Planteamiento del problema"
+    ]
+  },
+  {
+    "objectID": "proyecto/planteamiento.html#por-qué-la-plataforma-petfinder.my",
+    "href": "proyecto/planteamiento.html#por-qué-la-plataforma-petfinder.my",
+    "title": "Planteamiento del problema",
+    "section": "Por qué la plataforma PetFinder.my",
+    "text": "Por qué la plataforma PetFinder.my\nPetFinder.my es la principal plataforma de bienestar animal de Malasia. En 2019 liberó una base de anuncios con la variable AdoptionSpeed (cinco categorías, desde adopción el mismo día hasta no adopción en 100 días) y la propuso como competencia en Kaggle (PetFinder.my 2019). La base incluye, además de los datos del anuncio, el archivo train_sentiment y el archivo train_metadata con anotaciones automáticas de Google Cloud. Es un caso adecuado porque:\n\nla variable respuesta es ordinal y con cinco categorías, lo que obliga a tratar el problema como un problema de clasificación ordinal y no como una simple clasificación binaria;\nconviven en un mismo registro señales tabular, textual y visual, lo que permite estudiar su aporte relativo;\nel objetivo práctico (anticipar qué anuncios se quedarán atrás) es directamente útil para refugios y plataformas, y es la misma lógica que se aplicaría a plataformas locales.\n\n\n\n\n\n\n\nAdvertenciaAlcance\n\n\n\nLos datos provienen de una plataforma malaya de 2019. No son representativos de Colombia ni de la situación actual; el estudio aporta un método replicable, no una descripción del mercado local. Esta limitación se retoma en la metodología.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Planteamiento del problema"
+    ]
+  },
+  {
+    "objectID": "proyecto/planteamiento.html#objeto-de-indagación",
+    "href": "proyecto/planteamiento.html#objeto-de-indagación",
+    "title": "Planteamiento del problema",
+    "section": "Objeto de indagación",
+    "text": "Objeto de indagación\nLa relación entre las señales que emite un anuncio de adopción —atributos tabulares del animal, el relato escrito por quien lo publica y la fotografía— y la velocidad con que el animal es adoptado, en la base pública de anuncios de la plataforma PetFinder.my (14 993 anuncios, cinco categorías ordinales de velocidad).\nEl objeto es, entonces, doble: un objeto predictivo (estimar la velocidad de adopción a partir de la información disponible al momento de publicar) y un objeto explicativo (identificar qué señales se asocian con una adopción rápida o con la no adopción).",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Planteamiento del problema"
+    ]
+  },
+  {
+    "objectID": "proyecto/planteamiento.html#preguntas-de-investigación",
+    "href": "proyecto/planteamiento.html#preguntas-de-investigación",
+    "title": "Planteamiento del problema",
+    "section": "Preguntas de investigación",
+    "text": "Preguntas de investigación\nPregunta general. ¿En qué medida las señales tabulares, textuales y visuales de un anuncio de adopción permiten predecir y explicar la velocidad con que una mascota es adoptada?\nPreguntas específicas.\n\n¿Cómo se distribuye la velocidad de adopción en la base y qué características tienen sus categorías (desbalance, censura, valores atípicos)?\n¿Qué desempeño fuera de muestra alcanzan los modelos de clasificación ordinal frente a modelos de referencia, medido con kappa cuadrático ponderado y F1 macro?\n¿Cuánto aporta cada fuente de señal (tabular, textual, visual) y cuánto su combinación?\n¿Qué variables se asocian con la velocidad de adopción y en qué dirección?\n¿Qué características del anuncio se asocian con una mayor probabilidad de no adopción dentro de los 100 días?",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Planteamiento del problema"
+    ]
+  },
+  {
+    "objectID": "proyecto/planteamiento.html#hipótesis",
+    "href": "proyecto/planteamiento.html#hipótesis",
+    "title": "Planteamiento del problema",
+    "section": "Hipótesis",
+    "text": "Hipótesis\n\n\n\n\n\n\n\n\n#\nHipótesis\nSe contrasta con\n\n\n\n\nH1\nLas señales del anuncio contienen información predictiva: los modelos superan en kappa cuadrático ponderado a los modelos de referencia (clase modal y regresión ordinal solo con variables tabulares)\nComparación de métricas fuera de muestra\n\n\nH2\nLa combinación de las tres fuentes (tabular + textual + visual) supera a cualquiera de ellas por separado\nModelos con y sin cada bloque de variables\n\n\nH3\nEl bloque de estado sanitario y reproductivo (esterilizado, vacunado, desparasitado) es el de mayor asociación con la velocidad de adopción\nImportancia por permutación y valores SHAP\n\n\nH4\nLos relatos más largos se asocian con adopciones más lentas (el texto extenso señala casos complejos, no mejores fichas)\nMediana de palabras por clase y contribución SHAP\n\n\nH5\nUn mayor número de fotografías se asocia con menor probabilidad de no adopción\nTasa de no adopción por tramos de PhotoAmt\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nLas hipótesis H1 y H2 son estadísticas (se aceptan o rechazan con métricas e intervalos de confianza). H3, H4 y H5 son sustantivas y se evalúan por la dirección y magnitud de las asociaciones estimadas. Ninguna se formula como hipótesis causal: el diseño no permite identificar efectos causales (ver limitaciones).",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Planteamiento del problema"
+    ]
+  },
+  {
+    "objectID": "proyecto/planteamiento.html#propósito",
+    "href": "proyecto/planteamiento.html#propósito",
+    "title": "Planteamiento del problema",
+    "section": "Propósito",
+    "text": "Propósito\nAportar a refugios y plataformas de adopción un procedimiento replicable y explicable para identificar, en el momento de publicar un anuncio, qué animales tienen mayor riesgo de permanecer sin adopción, y qué características del anuncio se pueden intervenir (calidad y cantidad de fotos, contenido del relato, información sanitaria visible) para reducir ese riesgo.",
+    "crumbs": [
+      "Inicio",
+      "El proyecto",
+      "Planteamiento del problema"
+    ]
+  }
+]
