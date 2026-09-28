@@ -26,3 +26,7 @@
 # Sistema
 .DS_Store
 Thumbs.db
+.Rproj.user/
+.quarto/
+*_files/
+*_site/
