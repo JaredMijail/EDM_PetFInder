@@ -1,0 +1,130 @@
+---
+title: "Marco conceptual"
+subtitle: "Antecedentes, vacíos, marco teórico y conceptualización propia"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
+
+## Marco de antecedentes
+
+Los estudios previos que usan esta base y los que abordan la predicción de adopción de
+mascotas se resumen en la tabla siguiente
+[@zadeh2022pet; @sivakumar2024pawpularity; @wang2022petsswinf; @kaggle2019petfinder; @zenodo2019petfinder]:
+
+```{r}
+#| label: tabla-antecedentes
+#| echo: false
+#| tbl-cap: "Trabajos previos sobre predicción de adopción de mascotas y su relación con este proyecto"
+
+tibble::tribble(
+  ~`Estudio`, ~`Datos y enfoque`, ~`Hallazgos principales`, ~`Qué deja abierto`,
+  "Zadeh et al. (2022)",
+  "14 993 anuncios de PetFinder.my; regresión, árboles, bosques aleatorios, boosting y redes neuronales con minería de texto",
+  "Edad, raza, cantidad de animales y estado de esterilización son los factores con mayor asociación; los modelos de boosting y de regresión son los que más se benefician de las variables textuales",
+  "No integra las variables visuales del anuncio ni interpreta el modelo; reporta el aporte del texto, no el de la foto",
+  "Sivakumar y Selvam (2024)",
+  "Fotografías de la plataforma; redes neuronales convolucionales sobre el puntaje de atractivo visual ('pawpularity')",
+  "La apariencia de la fotografía es predecible y se asocia con la atracción del anuncio",
+  "Predice el atractivo de la foto, no la velocidad de adopción; no lo conecta con las variables tabulares",
+  "Wang y Liu (2022)",
+  "Redes neuronales con imágenes y metadatos en la competencia de 2021",
+  "La combinación de imagen y metadatos supera a cada fuente por separado",
+  "Optimiza un puntaje de competencia; sin discusión sustantiva ni interpretabilidad",
+  "Competencia Kaggle (2019)",
+  "Miles de soluciones publicadas; evaluación con kappa cuadrático ponderado",
+  "Los modelos de boosting con ingeniería de variables dominan la tabla de posiciones",
+  "El desempeño predictivo no se traduce en explicación del fenómeno: es un torneo, no una investigación",
+  "Versiones del conjunto en Zenodo (2019)",
+  "Replicaciones con ingeniería de variables detallada",
+  "Confirman la dificultad del problema: el techo de desempeño es moderado",
+  "Sin discusión de validez externa ni de sesgos de la etiqueta"
+) |>
+  knitr::kable(align = c("l", "l", "l", "l"))
+```
+
+## Vacíos que aborda este proyecto
+
+A partir de la tabla anterior se identifican cuatro vacíos concretos:
+
+1. **Integración de las tres señales en un solo modelo.** Los antecedentes trabajan con texto
+   o con imagen, y rara vez con las tres fuentes simultáneamente bajo un mismo protocolo de
+   evaluación.
+2. **Métrica adecuada al carácter ordinal de la respuesta.** Predecir "31-90 días" cuando
+   ocurrió "8-30 días" no es el mismo error que predecir "no adopción"; se requiere una
+   métrica que castigue proporcionalmente (kappa cuadrático ponderado [@cohen1968weighted]).
+3. **Explicación, no solo predicción.** Salvo excepciones, los trabajos reportan métricas y
+   no qué variables explican la velocidad de adopción; sin eso el resultado no es accionable
+   para un refugio.
+4. **Reproducibilidad.** Buena parte de las soluciones previas son cuadernos de competencia
+   sin control de versiones ni declaración de límites.
+
+## Marco teórico
+
+**a) Información asimétrica y señales.** En un anuncio de adopción, el adoptante potencial no
+puede verificar la calidad del animal (salud, temperamento, historia) antes del contacto: hay
+información asimétrica, el problema que Akerlof [-@akerlof1970lemons] formalizó para los
+mercados de calidad incierta. La ficha de adopción funciona como un conjunto de **señales**
+en el sentido de Spence [-@spence1973signaling]: atributos observables y difíciles de imitar
+por quien tiene un animal con problemas (una fotografía cuidada, un estado sanitario
+verificable, un relato coherente). De este marco se derivan las hipótesis sustantivas: las
+señales que **reducen incertidumbre** (esterilización, vacunación, fotos suficientes) deberían
+acortar el tiempo de adopción, y las señales asociadas a **casos complejos** (relatos muy
+largos, lesiones) deberían alargarlo.
+
+**b) Decisión de adopción y costo de búsqueda.** El adoptante enfrenta un costo de búsqueda:
+cada anuncio compite por su atención en un listado. La literatura de analítica de mascotas
+reporta que edad, raza, cantidad de animales y esterilización son los atributos más asociados
+a la velocidad de adopción [@zadeh2022pet]. Esto justifica incluir el estado sanitario como
+bloque teóricamente relevante y no solo como variable disponible.
+
+**c) Formulación estadística.** La respuesta es una **escala ordinal de cinco niveles**, así
+que el problema se formula como clasificación ordinal supervisada; ignorar ese orden (tratarla
+como nominal) descarta información y penaliza por igual errores de distinta gravedad
+[-@gutierrez2016ordinal]. La métrica coherente es el **kappa cuadrático ponderado**
+[-@cohen1968weighted], la misma con la que se evaluó la base en su origen
+[@kaggle2019petfinder].
+
+**d) Proceso de análisis.** El trabajo se organiza con las fases de CRISP-DM
+[-@wirth2000crisp] —comprensión del negocio, comprensión de los datos, preparación,
+modelado, evaluación y despliegue—, que se corresponden con los momentos de *acercamiento,
+preparación y ejecución* del proyecto de investigación.
+
+## Marco conceptual propio
+
+| Concepto | Definición operativa en este estudio |
+|:-------------------------|:-------------------------------------------------------------------------------------------------------|
+| Velocidad de adopción | Categoría ordinal registrada por la plataforma para cada anuncio: mismo día, 1–7, 8–30, 31–90 días, o sin adopción tras 100 días |
+| Señal tabular | Atributos del animal y del anuncio codificados en columnas del archivo original (especie, edad, raza, tamaño, pelo, salud, cantidad, tarifa, estado, fotos, videos) |
+| Señal textual | Características derivadas del relato del rescatista: polaridad e intensidad del sentimiento (Google Natural Language API) y longitud en caracteres y palabras |
+| Señal visual | Características derivadas de las fotografías del anuncio mediante anotaciones automáticas: número de etiquetas de contenido, de rostros humanos y de colores dominantes (Google Vision API) |
+| Base enriquecida | Unión de las tres fuentes por el identificador del anuncio (`PetID`): 14 993 anuncios × 31 variables |
+| Censura de la etiqueta | La categoría "sin adopción" significa "no adoptado dentro de los 100 días observados", no "nunca adoptado" |
+| Explicabilidad | Uso de técnicas que atribuyen la predicción a las variables de entrada (importancia por permutación y valores SHAP), para pasar del puntaje a la interpretación sustantiva |
+| Kappa cuadrático ponderado | Medida de acuerdo entre clasificaciones ordinales que penaliza cada error en proporción al cuadrado de la distancia entre las categorías |
+
+**Modelo conceptual.** La velocidad de adopción se modela como una función de tres bloques de
+señales y un bloque de control, con la advertencia explícita de que se trata de un modelo de
+**asociación predictiva**, no de un modelo causal:
+
+$$
+\text{Velocidad de adopción} = f(\text{tabular},\ \text{texto},\ \text{imagen}) + e
+$$
+
+## Del problema a las preguntas de investigación
+
+```{mermaid}
+%%| label: fig-flujo
+%%| fig-cap: "Del anuncio a la decisión: las tres fuentes de señal y su uso en el proyecto"
+%%| echo: false
+flowchart LR
+  A["Anuncio de la mascota<br/>(PetID)"] --> B["Señales tabulares<br/>raza, edad, salud, precio"]
+  A --> C["Señal textual<br/>relato del rescatista"]
+  A --> D["Señal visual<br/>fotografía del anuncio"]
+  B --> E["Base enriquecida<br/>14 993 × 31"]
+  C --> E
+  D --> E
+  E --> F["Modelos de clasificación<br/>ordinal supervisada"]
+  F --> G["Predicción de la<br/>velocidad de adopción"]
+  F --> H["Explicación<br/>qué señal pesa más"]
+  G --> I["Apoyo a decisiones<br/>de refugios y plataformas"]
+  H --> I
+```

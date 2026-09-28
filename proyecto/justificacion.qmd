@@ -1,0 +1,17 @@
+---
+title: "Justificación"
+subtitle: "Aporte social, científico, metodológico, institucional y personal"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
+
+| Dimensión | Argumento |
+|:-----------------|:----------------------------------------------------------------------------------------------------------------------|
+| Social | La permanencia prolongada de un animal en un refugio consume recursos, reduce la capacidad de recibir nuevos casos y aumenta el riesgo de eutanasia. Identificar temprano qué anuncios están en riesgo permite intervenir (mejorar fotos, precisar el relato, visibilizar el estado sanitario) [@zadeh2022pet] |
+| Científica | Aporta una comparación **controlada** del aporte de señales tabulares, textuales y visuales dentro de un mismo protocolo y con métricas ordinales, algo que la literatura de competencia no reporta de forma sistemática |
+| Metodológica | Documenta cómo se adaptan los componentes clásicos de un proyecto de investigación (Briones [-@briones2002]) a un estudio basado en datos secundarios: sin muestreo ni instrumentos primarios y con recursos acotados, un escenario cada vez más frecuente |
+| Institucional | Deja en el repositorio del curso una base enriquecida, un código reproducible y un sitio metodológico reutilizable por otros estudiantes como plantilla de investigación cuantitativa |
+| Personal | Consolida competencias de investigación cuantitativa aplicada (formulación de problemas, diseño, procesamiento, modelado e interpretación) alrededor de un problema con impacto concreto en bienestar animal |
+
+En el plano normativo, la Ley 1774 de 2016 [-@ley1774] reconoce a los animales como seres
+sintientes y establece deberes de protección, lo que refuerza la pertinencia social de
+herramientas que apoyen la adopción responsable.

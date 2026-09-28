@@ -1,0 +1,329 @@
+---
+title: "Análisis exploratorio"
+subtitle: "Qué dicen los datos antes de modelar"
+---
+
+```{r}
+#| label: setup-eda
+#| include: false
+
+library(tidyverse)
+
+options(OutDec = ",")   # separador decimal en español: evita el aviso de format()
+
+knitr::opts_chunk$set(
+  fig.width = 9.5, fig.height = 4.4, dpi = 115,
+  out.width = "100%", fig.align = "center"
+)
+
+datos <- readr::read_csv(
+  here::here("data", "petfinder_enriquecido_final.csv"),
+  show_col_types = FALSE
+) |>
+  mutate(
+    AdoptionSpeed = factor(AdoptionSpeed,
+      levels = c("SameDay", "1-7d", "8-30d", "31-90d", "NoAdoption"),
+      labels = c("Mismo día", "1–7 días", "8–30 días", "31–90 días", "Sin adopción")),
+    Type = factor(Type, levels = c("Dog", "Cat"), labels = c("Perro", "Gato"))
+  )
+
+pal_clases <- c(
+  "Mismo día"   = "#0f766e",
+  "1–7 días"    = "#2e7d9a",
+  "8–30 días"   = "#1a3a5c",
+  "31–90 días"  = "#d97706",
+  "Sin adopción" = "#dc2626"
+)
+
+tema_sitio <- function() {
+  theme_minimal(base_size = 14) +
+    theme(
+      plot.background  = element_rect(fill = "white", colour = NA),
+      panel.background = element_rect(fill = "white", colour = NA),
+      plot.title       = element_text(colour = "#1a3a5c", face = "bold", size = 15),
+      plot.subtitle    = element_text(colour = "#4b5563", size = 11),
+      axis.title       = element_text(colour = "#4b5563"),
+      axis.text        = element_text(colour = "#1f2937"),
+      legend.position  = "bottom",
+      legend.title     = element_blank(),
+      panel.grid.minor = element_blank()
+    )
+}
+
+# --- Cifras que se citan en el texto (se calculan, no se transcriben) --------
+dist_clases <- datos |> count(AdoptionSpeed, name = "n") |>
+  mutate(pct = round(100 * n / sum(n), 1))
+
+fila <- function(d, cat) d[d$AdoptionSpeed == cat, ]
+clase_modal    <- as.character(dist_clases$AdoptionSpeed[which.max(dist_clases$n)])
+pct_modal      <- dist_clases$pct[which.max(dist_clases$n)]
+pct_no_adop    <- fila(dist_clases, "Sin adopción")$pct
+pct_no_adop_ok <- fila(dist_clases, "Sin adopción")$n
+pct_sin_100    <- sum(dist_clases$pct[dist_clases$AdoptionSpeed %in% c("31–90 días", "Sin adopción")])
+
+no_adop_por_tipo <- datos |>
+  group_by(Type) |>
+  summarise(pct_sin_adopcion = round(100 * mean(AdoptionSpeed == "Sin adopción"), 1), .groups = "drop")
+
+med_palabras <- datos |>
+  group_by(AdoptionSpeed) |>
+  summarise(palabras = median(desc_word_count), .groups = "drop")
+
+diferencia_palabras <- round(
+  fila(med_palabras, "Sin adopción")$palabras - fila(med_palabras, "Mismo día")$palabras
+)
+```
+
+Esta página describe la base **antes** de modelar. Todo lo que aparece aquí se calcula sobre
+`data/petfinder_enriquecido_final.csv` en el momento de construir el sitio; el código de cada
+resultado queda disponible en el bloque desplegable.
+
+## 1. La variable respuesta {.unnumbered}
+
+```{r}
+#| label: dist-clases
+#| echo: false
+#| tbl-cap: "Distribución de la velocidad de adopción"
+
+dist_clases |>
+  mutate(`%` = sprintf("%.1f", pct)) |>
+  select(`Velocidad` = AdoptionSpeed, `Anuncios` = n, `%`) |>
+  knitr::kable(align = c("l", "r", "r"))
+```
+
+```{r}
+#| label: fig-clases
+#| echo: false
+#| fig-cap: "Distribución de los anuncios según la velocidad de adopción"
+
+ggplot(dist_clases, aes(x = AdoptionSpeed, y = n, fill = AdoptionSpeed)) +
+  geom_col(width = 0.72, show.legend = FALSE) +
+  geom_text(aes(label = paste0(format(n, big.mark = "."), "  (", pct, " %)")),
+            vjust = -0.5, size = 3.9, colour = "#1f2937") +
+  scale_fill_manual(values = pal_clases) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.14))) +
+  labs(x = NULL, y = "Anuncios",
+       subtitle = "Clase modal: sin adopción a los 100 días") +
+  tema_sitio()
+```
+
+El reparto no es equilibrado: la clase más frecuente es **`r clase_modal`**
+(`r format(pct_no_adop_ok, big.mark = ".")` anuncios, `r pct_no_adop` %), mientras que la
+adopción inmediata es marginal. Es decir, **`r pct_sin_100` % de los anuncios tardan más de
+un mes o nunca se adoptan en la ventana observada**. Esto tiene dos consecuencias directas:
+
+1. la exactitud (*accuracy*) es una métrica engañosa —un modelo que siempre responda
+   "sin adopción" acertaría cerca de una de cada cuatro veces—, por eso la métrica principal
+   será el **kappa cuadrático ponderado** [@cohen1968weighted], que además respeta el orden
+   de las categorías;
+2. hay desbalance de clases, así que el modelamiento debe usar pesos o remuestreo, y la
+   partición de evaluación debe ser **estratificada**.
+
+## 2. Perros y gatos no se comportan igual {.unnumbered}
+
+```{r}
+#| label: tabla-tipo
+#| echo: false
+#| tbl-cap: "Velocidad de adopción según especie (porcentaje por fila)"
+
+datos |>
+  count(Type, AdoptionSpeed) |>
+  group_by(Type) |>
+  mutate(pct = round(100 * n / sum(n), 1)) |>
+  ungroup() |>
+  select(Type, AdoptionSpeed, pct) |>
+  pivot_wider(names_from = AdoptionSpeed, values_from = pct) |>
+  knitr::kable(align = c("l", rep("r", 5)))
+```
+
+```{r}
+#| label: fig-tipo
+#| echo: false
+#| fig-cap: "Composición de la velocidad de adopción por especie"
+
+datos |>
+  count(Type, AdoptionSpeed) |>
+  group_by(Type) |>
+  mutate(pct = 100 * n / sum(n)) |>
+  ggplot(aes(x = Type, y = pct, fill = AdoptionSpeed)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = ifelse(pct >= 6, sprintf("%.0f %%", pct), "")),
+            position = position_stack(vjust = 0.5), size = 3.4, colour = "white") +
+  scale_fill_manual(values = pal_clases) +
+  labs(x = NULL, y = "Porcentaje de anuncios",
+       subtitle = sprintf("Sin adopción: %.1f %% de los gatos y %.1f %% de los perros",
+                          no_adop_por_tipo$pct_sin_adopcion[no_adop_por_tipo$Type == "Gato"],
+                          no_adop_por_tipo$pct_sin_adopcion[no_adop_por_tipo$Type == "Perro"])) +
+  tema_sitio()
+```
+
+La proporción de anuncios sin adopción es de **`r no_adop_por_tipo$pct_sin_adopcion[no_adop_por_tipo$Type == "Gato"]` %
+en gatos** y **`r no_adop_por_tipo$pct_sin_adopcion[no_adop_por_tipo$Type == "Perro"]` % en perros**.
+La diferencia es moderada, pero suficiente para **incluir la especie como variable de control**
+y para estratificar por ella en la validación cruzada.
+
+## 3. Señales del anuncio: qué se relaciona con la velocidad {.unnumbered}
+
+```{r}
+#| label: tabla-v
+#| echo: false
+#| tbl-cap: "Asociación de cada variable categórica con la velocidad de adopción (V de Cramér)"
+
+cramers_v <- function(x, y) {
+  tb <- table(x, y)
+  if (any(dim(tb) < 2)) return(NA_real_)
+  chi <- suppressWarnings(stats::chisq.test(tb)$statistic)
+  sqrt(as.numeric(chi) / (sum(tb) * (min(dim(tb)) - 1)))
+}
+
+vars_cat <- c("Type", "Gender", "Color1", "MaturitySize", "FurLength",
+              "Vaccinated", "Dewormed", "Sterilized", "Health", "State")
+
+tabla_v <- tibble::tibble(
+  Variable = vars_cat,
+  V = purrr::map_dbl(vars_cat, ~ cramers_v(datos[[.x]], datos$AdoptionSpeed))
+) |>
+  arrange(desc(V))
+
+top_v <- tabla_v$Variable[1:3]
+
+tabla_v |>
+  mutate(V = sprintf("%.3f", V)) |>
+  knitr::kable(align = c("l", "r"))
+```
+
+```{r}
+#| label: tabla-num
+#| echo: false
+#| tbl-cap: "Variables numéricas: promedio por clase y prueba de Kruskal-Wallis"
+
+vars_num <- c("Age", "Fee", "PhotoAmt", "Quantity", "desc_word_count",
+              "sentiment_score", "sentiment_magnitude", "total_labels", "total_colors")
+
+p_kruskal <- function(v) {
+  df <- datos[c("AdoptionSpeed", v)] |> tidyr::drop_na()
+  tryCatch(stats::kruskal.test(as.formula(paste(v, "~ AdoptionSpeed")), data = df)$p.value,
+           error = function(e) NA_real_)
+}
+
+tibble::tibble(
+  Variable = vars_num,
+  `Promedio por clase (de "mismo día" a "sin adopción")` = purrr::map_chr(vars_num, function(v) {
+    m <- tapply(datos[[v]], datos$AdoptionSpeed, median, na.rm = TRUE)
+    paste(sprintf("%.1f", m), collapse = " → ")
+  }),
+  `p (Kruskal-Wallis)` = purrr::map_chr(vars_num, function(v) {
+    p <- p_kruskal(v)
+    ifelse(is.na(p), "—", format.pval(p, digits = 2, eps = 1e-16))
+  })
+) |>
+  knitr::kable(align = c("l", "l", "r"))
+```
+
+```{r}
+#| label: fig-palabras
+#| echo: false
+#| fig-cap: "Longitud del relato del rescatista (en palabras) según velocidad de adopción"
+
+datos |>
+  ggplot(aes(x = AdoptionSpeed, y = desc_word_count, fill = AdoptionSpeed)) +
+  geom_boxplot(width = 0.6, outlier.alpha = 0.12, show.legend = FALSE) +
+  coord_cartesian(ylim = c(0, quantile(datos$desc_word_count, 0.97))) +
+  scale_fill_manual(values = pal_clases) +
+  labs(x = NULL, y = "Palabras del relato",
+       subtitle = "Los anuncios sin adopción concentran relatos más largos") +
+  tema_sitio()
+```
+
+```{r}
+#| label: fig-sentimiento
+#| echo: false
+#| fig-cap: "Polaridad del relato (sentimiento) según velocidad de adopción"
+
+datos |>
+  tidyr::drop_na(sentiment_score) |>
+  ggplot(aes(x = AdoptionSpeed, y = sentiment_score, fill = AdoptionSpeed)) +
+  geom_boxplot(width = 0.6, outlier.alpha = 0.12, show.legend = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "#6b7280") +
+  scale_fill_manual(values = pal_clases) +
+  labs(x = NULL, y = "Sentimiento (−1 a 1)",
+       subtitle = "La polaridad del relato apenas discrimina entre clases") +
+  tema_sitio()
+```
+
+```{r}
+#| label: fig-esterilizado
+#| echo: false
+#| fig-cap: "Composición de la velocidad de adopción según estado de esterilización"
+
+datos |>
+  count(Sterilized, AdoptionSpeed) |>
+  group_by(Sterilized) |>
+  mutate(pct = 100 * n / sum(n), total = sum(n)) |>
+  ungroup() |>
+  ggplot(aes(x = fct_reorder(paste0(Sterilized, "\n(", format(total, big.mark = "."), ")"),
+                             total, .desc = TRUE),
+             y = pct, fill = AdoptionSpeed)) +
+  geom_col(width = 0.62) +
+  scale_fill_manual(values = pal_clases) +
+  labs(x = "Esterilizado (y número de anuncios)", y = "Porcentaje de anuncios") +
+  tema_sitio()
+```
+
+```{r}
+#| label: fig-fotos
+#| echo: false
+#| fig-cap: "Proporción de anuncios sin adopción según número de fotografías"
+
+datos |>
+  mutate(tramos_fotos = cut(PhotoAmt, breaks = c(-1, 0, 2, 5, Inf),
+                            labels = c("0 fotos", "1–2", "3–5", "6 o más"))) |>
+  group_by(tramos_fotos) |>
+  summarise(pct_sin_adopcion = 100 * mean(AdoptionSpeed == "Sin adopción"),
+            n = n(), .groups = "drop") |>
+  ggplot(aes(x = tramos_fotos, y = pct_sin_adopcion)) +
+  geom_col(fill = "#2e7d9a", width = 0.62) +
+  geom_text(aes(label = sprintf("%.1f %%\n(%s)", pct_sin_adopcion, format(n, big.mark = "."))),
+            vjust = -0.25, size = 3.5, colour = "#1f2937", lineheight = 0.9) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  labs(x = "Fotografías en el anuncio", y = "% sin adopción") +
+  tema_sitio()
+```
+
+## 4. Hallazgos preliminares {.unnumbered}
+
+1. **El estado sanitario y reproductivo es la familia de variables más asociada** a la
+   velocidad de adopción: las tres variables con mayor V de Cramér son
+   `r paste(top_v, collapse = ", ")`. La lectura sustantiva es que los anuncios de
+   animales ya esterilizados, vacunados y desparasitados se adoptan antes, probablemente
+   porque reducen el costo y la incertidumbre del adoptante.
+2. **Los relatos largos acompañan a las adopciones lentas.** La mediana de palabras es
+   `r diferencia_palabras` palabras mayor en los anuncios sin adopción que en los adoptados
+   el mismo día; un relato extenso suele indicar un caso difícil (animal rescatado con
+   historia compleja), no una mejor ficha.
+3. **La polaridad del sentimiento discrimina poco.** A diferencia de la literatura que
+   reporta ganancias al usar texto [@zadeh2022pet], aquí la variable agregada
+   (`sentiment_score`) es casi plana entre clases: el texto probablemente aporta más por su
+   *contenido* (temas, menciones, condiciones del animal) que por su tono.
+4. **Más fotos se asocian con menos "sin adopción"**, lo que es consistente con la
+   literatura sobre atractivo visual del anuncio [@sivakumar2024pawpularity] y respalda
+   incluir las variables de imagen (`total_labels`, `total_colors`) en el modelo.
+5. **El desbalance y la censura de la etiqueta** ("sin adopción" = no adoptado dentro de 100
+   días) condicionan todo lo anterior: los resultados son **asociaciones**, no efectos, y la
+   variable respuesta mide un plazo observado, no un destino final.
+
+::: {.callout-note}
+## Cautela sobre la V de Cramér
+La V aumenta artificialmente cuando la variable tiene muchas categorías; por eso `State`
+(15 estados) y `Color1` (7 colores) deben leerse solo como *ranking* de asociación y no como
+tamaño de efecto comparable con las variables dicotómicas. En el modelamiento, el criterio
+será el desempeño fuera de muestra y la importancia por permutación o SHAP
+[-@lundberg2017shap], no esta tabla.
+:::
+
+## 5. Qué sigue {.unnumbered}
+
+Estos hallazgos delimitan el diseño: problema de **clasificación ordinal con desbalance**,
+predictores tabulares, textuales y visuales, evaluación con **kappa cuadrático ponderado**
+sobre particiones estratificadas y lectura de resultados con **importancia interpretable**.
+El protocolo completo —preguntas, hipótesis, objetivos, variables y técnicas— está en las páginas de la sección [El proyecto](../proyecto/planteamiento.qmd).

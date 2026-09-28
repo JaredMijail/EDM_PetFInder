@@ -1,0 +1,26 @@
+---
+title: "Productos esperados"
+subtitle: "Entregables del proyecto y estructura del informe final"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
+
+**Productos del proyecto:**
+
+1. Base de datos enriquecida y reproducible (14 993 anuncios × 31 variables) con su script de
+   construcción y su diccionario.
+2. Sitio web metodológico (este repositorio) con contexto, dataset, análisis exploratorio y
+   protocolo.
+3. Modelos entrenados, código de evaluación e informe de resultados con interpretabilidad.
+4. Informe final y sustentación.
+
+**Estructura del informe final** (momento de *ejecución* del proyecto, según Briones
+[-@briones2002]):
+
+| Sección | Contenido previsto |
+|:----------------------------|:----------------------------------------------------------------------------------------------------------------|
+| Resumen ejecutivo (*abstract*) | Problema, datos, método, resultado principal en kappa cuadrático y hallazgo central en cinco líneas |
+| Introducción | Problema de adopción, pertinencia, pregunta e hipótesis, aporte esperado |
+| Marco conceptual | Antecedentes, marco teórico de señalización, definiciones operativas |
+| Metodología | Diseño, base de datos, variables, procesamiento, técnicas, métricas y controles de calidad |
+| Resultados | Descriptivos de la respuesta y de las señales; comparación de modelos; importancia de variables (SHAP) |
+| Bibliografía | Referencias citadas en formato BibTeX |

@@ -1,9 +1,88 @@
 ---
-title: "About"
+title: "Acerca de"
+subtitle: "Equipo, herramientas y cómo citar este trabajo"
 ---
 
-About this site
+## Qué es este sitio {.unnumbered}
 
-```{r}
-1 + 1
+`EDM_PetFinder` es el cuaderno de investigación del proyecto **Predicción de la velocidad de
+adopción de mascotas a partir de datos masivos**. Reúne el proyecto de investigación
+(planteamiento, marco conceptual, objetivos, justificación, metodología, productos esperados y
+bibliografía) y los productos de la Entrega 1 (dataset enriquecido y análisis exploratorio).
+
+## Equipo y curso {.unnumbered}
+
+::: {.ficha}
+<dl>
+<dt>Autoría</dt>
+<dd>Jared Mijail Ramírez Escalante · María Paula Silva Capera</dd>
+<dt>Institución</dt>
+<dd>Universidad Nacional de Colombia</dd>
+<dt>Asignatura</dt>
+<dd>EDM — Estadística Descriptiva Multivariada</dd>
+<dt>Profesor</dt>
+<dd>Camilo José Torres Jiménez</dd>
+<dt>Periodo</dt>
+<dd>Semestre 2026-2</dd>
+</dl>
+:::
+
+## Herramientas {.unnumbered}
+
+| Herramienta | Para qué se usa en este proyecto |
+|:---------------------------|:----------------------------------------------------------------------------------|
+| R 4.6 y tidyverse [@wickham2019tidyverse] | Procesamiento de datos, análisis exploratorio y modelamiento |
+| Quarto [@quarto2026] | Construcción del sitio y de los documentos entregables |
+| `renv` | Fijar las versiones de las dependencias (reproducibilidad) |
+| Git y GitHub | Control de versiones y publicación del sitio |
+| Google Natural Language API [@googlenl2026] | Sentimiento del relato del rescatista |
+| Google Vision API [@googlevision2026] | Etiquetas, rostros y colores de las fotografías |
+| Kaggle / PetFinder.my [@kaggle2019petfinder] | Fuente de los datos originales |
+
+## Cómo citar {.unnumbered}
+
+```bibtex
+@misc{ramirez2026edmpetfinder,
+  author       = {Ramírez Escalante, Jared Mijail and Silva Capera, María Paula},
+  title        = {EDM\_PetFinder: predicción de la velocidad de adopción de mascotas a partir de datos masivos},
+  year         = {2026},
+  howpublished = {Sitio web del proyecto, Universidad Nacional de Colombia},
+  url          = {https://github.com/JaredMijail/EDM_PetFInder}
+}
 ```
+
+## Estructura del repositorio {.unnumbered}
+
+```
+EDM_PetFinder/
+├── index.qmd                        # Portada del sitio
+├── proyecto/                        # Proyecto de investigación (componentes de Briones)
+│   ├── planteamiento.qmd            # Problema, preguntas, hipótesis y propósito
+│   ├── marco-conceptual.qmd         # Antecedentes, teoría y marco propio
+│   ├── objetivos.qmd                # Objetivo general y específicos
+│   ├── justificacion.qmd            # Aporte social, científico, metodológico, institucional, personal
+│   ├── metodologia.qmd              # Diseño, variables, procesamiento y técnicas
+│   ├── productos.qmd                # Entregables y estructura del informe final
+│   └── bibliografia.qmd             # Bibliografía completa (desde referencias.bib)
+├── entregas/
+│   ├── analisis-exploratorio.qmd    # Entrega 1 — análisis exploratorio (en construcción)
+│   └── dataset.qmd                  # Entrega 1 — dataset y enriquecimiento
+├── scripts/
+│   └── 01_dataset_enriquecido.R     # Construcción de la base enriquecida
+├── data/                            # Datos (no versionados: ~550 MB)
+├── _borradores/                     # Material de trabajo (no se publica en el sitio)
+├── styles.css                       # Hoja de estilos del sitio
+├── referencias.bib                  # Bibliografía (BibTeX)
+├── _quarto.yml                      # Configuración del sitio Quarto
+└── renv.lock                        # Versiones de las dependencias de R
+```
+
+## Datos, código y licencia {.unnumbered}
+
+* **Datos:** propiedad de PetFinder.my; se usan bajo las condiciones de la competencia de
+  Kaggle de 2019 [@kaggle2019petfinder]. No se redistribuyen en este repositorio.
+* **Código y documentos de este repositorio:** disponibles para uso académico, citando la
+  fuente.
+* **Reproducibilidad:** el sitio se reconstruye con `renv::restore()` y `quarto render`.
+  Los resultados por bloque de código quedan en caché (`_freeze/`) para que el sitio pueda
+  construirse sin los datos crudos.

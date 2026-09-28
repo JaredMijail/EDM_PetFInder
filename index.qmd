@@ -1,12 +1,104 @@
 ---
-# ---
 title: "EDM_PetFinder"
+subtitle: "Predicción de la velocidad de adopción de mascotas a partir de datos masivos"
+toc: false
 ---
 
-This is a Quarto website.
+::: {.hero}
+### Un anuncio, cinco velocidades de adopción {.unnumbered}
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Investigación cuantitativa sobre **datos secundarios**: 14 993 anuncios de mascotas de la
+plataforma malaya PetFinder.my. Al anuncio original (datos tabulares, texto y fotografía) le
+añadimos señales **textuales** (sentimiento del relato del rescatista) y **visuales**
+(etiquetas, rostros y colores dominantes de la foto) para describir, predecir y explicar
+cuánto tarda una mascota en ser adoptada.
 
-```{r}
-1 + 1
-```
+<span class="chip">EDM · Estadística descriptiva multivariada</span>
+<span class="chip">Datos secundarios</span>
+<span class="chip">Clasificación ordinal · 5 clases</span>
+<span class="chip">R · tidyverse · Quarto</span>
+
+<div class="chip-group">
+
+[El problema](proyecto/planteamiento.qmd){.btn-print}
+[Metodología](proyecto/metodologia.qmd){.btn-ghost}
+[Repositorio](https://github.com/JaredMijail/EDM_PetFInder){.btn-ghost}
+
+</div>
+:::
+
+::: {.callout-note}
+## Por qué "datos secundarios"
+El estudio no recolecta información primaria (no hay encuestas, entrevistas ni observación
+directa). Trabaja con una base pública ya existente y la **enriquece** con dos servicios de
+análisis automático. Esto cambia varios componentes clásicos de un proyecto de investigación
+—población, diseño muestral, instrumentos de recolección, trabajo de campo—, y en la
+[Metodología](proyecto/metodologia.qmd) se declara explícitamente cómo se redefinió cada uno.
+:::
+
+## El proyecto {.unnumbered}
+
+Los componentes del proyecto de investigación, siguiendo la estructura de Briones (ICFES,
+Módulo tres):
+
+::: {.card-grid}
+::: {.card}
+### [Planteamiento del problema](proyecto/planteamiento.qmd)
+El problema del abandono, la plataforma de donde salen los datos, las preguntas, las
+hipótesis y el propósito.
+:::
+
+::: {.card}
+### [Marco conceptual](proyecto/marco-conceptual.qmd)
+Antecedentes, vacíos que quedan abiertos, marco teórico de señales y definiciones operativas.
+:::
+
+::: {.card}
+### [Objetivos](proyecto/objetivos.qmd)
+Objetivo general y objetivos específicos tipificados, cada uno con su producto verificable.
+:::
+
+::: {.card}
+### [Justificación](proyecto/justificacion.qmd)
+Aporte social, científico, metodológico, institucional y personal.
+:::
+
+::: {.card}
+### [Metodología](proyecto/metodologia.qmd)
+Diseño, unidades de análisis, variables, procesamiento, técnicas, controles de calidad y
+limitaciones.
+:::
+
+::: {.card}
+### [Productos esperados](proyecto/productos.qmd)
+Entregables del proyecto y estructura del informe final.
+:::
+
+::: {.card}
+### [Bibliografía](proyecto/bibliografia.qmd)
+Todas las fuentes, en formato BibTeX, con DOI o URL verificable.
+:::
+:::
+
+## Entrega 1 {.unnumbered}
+
+::: {.card-grid}
+::: {.card}
+### [Análisis exploratorio](entregas/analisis-exploratorio.qmd)
+Espacio de la entrega en construcción.
+:::
+
+::: {.card}
+### [Dataset y enriquecimiento](entregas/dataset.qmd)
+De dónde vienen los datos, diccionario de las 31 variables, auditoría de calidad y
+reproducibilidad del proceso.
+:::
+:::
+
+::: {.callout-tip}
+## Cómo moverse por el sitio
+La barra superior agrupa el contenido en *El proyecto*, *Entrega 1* y *Acerca de*; la barra
+lateral muestra todo el mapa del sitio y la columna derecha la tabla de contenidos de la
+página que estés leyendo. Con el buscador (o `Ctrl` + `K`) puedes saltar a cualquier
+término, variable o referencia.
+:::

@@ -1,0 +1,175 @@
+---
+title: "Metodología"
+subtitle: "Diseño, datos, variables, procesamiento, técnicas, controles y limitaciones"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
+
+## Cómo leer esta sección {#como-leer}
+
+La estructura sigue los componentes del proyecto de investigación propuestos por Briones
+[-@briones2002] en el Módulo tres del programa del ICFES. Esa plantilla está escrita para
+investigaciones que **producen** sus datos (encuestas, entrevistas, observación en campo).
+Este estudio, en cambio, trabaja con **datos secundarios**: una base pública ya existente que
+se enriquece con dos servicios de análisis automático. Por eso, antes de los componentes, se
+declara qué se aplica tal cual y qué se redefinió; hacerlo explícito evita forzar el diseño a
+una plantilla que no le corresponde.
+
+| Componente (Briones) | Decisión en este proyecto |
+|:---------------------------------|:-----------------------------------------------------------------------------------------------------------|
+| Planteamiento del problema | Se aplica directamente (preguntas, objeto, hipótesis, propósito) |
+| Marco conceptual (antecedentes, teórico y propio) | Se aplica; se añade un marco de **señalización e información asimétrica** |
+| Objetivos | Se aplica; se tipifican según Briones (descriptivo, clasificatorio, comparativo, relacional, explicativo) |
+| Justificación | Se aplica (social, científica, institucional, personal) |
+| Población y unidades estadísticas | **Redefinido:** la unidad es el anuncio publicado, no una persona; no hay población que muestrear |
+| Diseño muestral | **No aplica:** se trabaja con el **censo** de la base (14 993 anuncios), no con una muestra |
+| Instrumentos de recolección | **Redefinido:** no hay cuestionario ni escala; los instrumentos son el **protocolo de extracción** de las APIs y el **diccionario de variables** |
+| Plan de trabajo de campo | **Redefinido:** se sustituye por un **plan de procesamiento y control de calidad de datos** |
+| Procesamiento de la información | Se aplica (R, auditoría de faltantes, partición estratificada, validación cruzada) |
+| Técnicas y métodos | Se aplica: clasificación ordinal supervisada + interpretabilidad |
+| Bibliografía | Se aplica (referencias verificables en formato BibTeX) |
+
+## Enfoque y tipo de investigación {.unnumbered}
+
+Investigación **cuantitativa**, **no experimental** (ex post facto: las variables no se
+manipulan, se observan registros ya producidos), **transversal** (una única ventana de
+observación, 2019) y de alcance **descriptivo, relacional y explicativo-predictivo**. Se
+trabaja con **datos secundarios** y el resultado principal es un procedimiento replicable, no
+una descripción del mercado local.
+
+## Fuentes, unidades de análisis y "población" {.unnumbered}
+
+* **Unidad estadística:** el **anuncio de adopción** (clave `PetID`), no la persona ni el
+  animal considerado de forma independiente. Un rescatista puede publicar varios animales; un
+  anuncio puede incluir varios animales (`Quantity`), pero sigue siendo una unidad.
+* **Universo:** los 14 993 anuncios de la base pública de PetFinder.my (Kaggle 2019).
+* **Diseño muestral:** **no hay**. Se trabaja con el **censo** de la base: se analizan todos
+  los registros disponibles, sin muestreo. La distinción es importante: no se estima un
+  parámetro de una población mayor, se evalúa la capacidad predictiva del modelo en registros
+  no vistos, lo que exige **partición y validación cruzada**, no cálculo de tamaño de muestra.
+* **Fuentes:** (i) archivo tabular de la competencia [@kaggle2019petfinder]; (ii) anotaciones
+  de sentimiento por anuncio; (iii) anotaciones de imagen por fotografía; ambas generadas con
+  los servicios de Google Cloud y consolidadas en la base enriquecida
+  ([Dataset](../entregas/dataset.qmd)). El detalle de la construcción está en el script
+  [`scripts/01_dataset_enriquecido.R`](https://github.com/JaredMijail/EDM_PetFInder/blob/main/scripts/01_dataset_enriquecido.R).
+
+## Criterios de inclusión, exclusión y depuración {.unnumbered}
+
+| Criterio | Definición |
+|:-----------------------------|:-------------------------------------------------------------------------------------------------------|
+| Inclusión | Anuncio con `PetID` único y con valor registrado en la variable respuesta `AdoptionSpeed` |
+| Exclusión | `PetID` duplicado (verificado: 0 casos) o respuesta ausente (verificado: 0 casos) |
+| No exclusión, sino señalización | Los faltantes (nombre, sentimiento, anotaciones de imagen) **no se eliminan**: se marcan con indicadores de ausencia y se declara la estrategia de imputación, porque su ausencia es informativa (un anuncio sin foto no es un dato perdido al azar) |
+| Valores atípicos | No se eliminan; se documentan (edades extremas, tarifas altas) y se evalúan con y sin ellos (análisis de sensibilidad) |
+
+## Instrumentos y variables {.unnumbered}
+
+No se aplican instrumentos primarios (cuestionarios, escalas, guías de observación). El papel
+del instrumento lo cumplen el **protocolo de extracción automática** y el
+**diccionario de variables**:
+
+| Instrumento / operación | Variables que produce | Nivel de medición |
+|:------------------------------------------------|:----------------------------------------------------|:--------------------------|
+| Ficha del anuncio publicada por el rescatista | 24 variables originales del archivo tabular | Nominal, ordinal, de razón |
+| Extracción de sentimiento (Natural Language API) [@googlenl2026] | `sentiment_score`, `sentiment_magnitude` | De intervalo, de razón |
+| Extracción de anotaciones visuales (Vision API) [@googlevision2026] | `total_labels`, `total_faces`, `total_colors` | De razón (conteos) |
+| Cálculo propio sobre el texto | `desc_char_len`, `desc_word_count` | De razón (conteos) |
+
+El diccionario completo con la descripción y los valores de cada variable está en la página
+del [Dataset](../entregas/dataset.qmd#diccionario-de-variables). En términos del modelo:
+
+* **Variable respuesta:** `AdoptionSpeed` (ordinal, 5 categorías).
+* **Predictores:** bloques tabular, textual y visual, más `Type` y `State` como controles.
+* **Variables excluidas del modelo:** `PetID` y `RescuerID` (identificadores; retenerlos
+  produciría fuga de información) y `Name` (texto libre de alta cardinalidad, sin valor
+  predictivo estable). Las descripciones textuales no se usan como texto crudo en esta fase:
+  se usan las variables derivadas, y la incorporación de representaciones textuales
+  (por ejemplo, bolsas de palabras ponderadas o incrustaciones) se deja como extensión.
+
+## Procedimientos de procesamiento {.unnumbered}
+
+1. **Auditoría de calidad** de la base enriquecida: cobertura por fuente, faltantes por
+   variable, duplicados y rangos.
+2. **Tratamiento de faltantes:** indicadores de ausencia para las tres variables de imagen y
+   para el sentimiento; imputación declarada (mediana o moda) solo cuando el modelo lo exija,
+   comparando el desempeño con y sin imputación.
+3. **Transformaciones:** escala logarítmica para variables con fuerte asimetría (`Fee`,
+   `Age`, `PhotoAmt`); agrupación de categorías con muy baja frecuencia (razas, colores);
+   codificación de variables nominales (matriz indicadora) y, para `State` y las razas de alta
+   cardinalidad, codificación supervisada calculada **solo con datos de entrenamiento** para
+   evitar fuga.
+4. **Partición:** 70 % entrenamiento, 15 % validación (ajuste y selección), 15 % prueba.
+   Estratificada simultáneamente por `AdoptionSpeed` y `Type`, con semilla fijada y publicada.
+5. **Validación:** validación cruzada estratificada de 5 particiones dentro del entrenamiento
+   para seleccionar hiperparámetros; el conjunto de prueba se usa **una sola vez**, al final.
+6. **Métricas:** kappa cuadrático ponderado (principal), F1 macro, exactitud, error absoluto
+   medio sobre el orden numérico de las categorías y matrices de confusión. Los intervalos de
+   confianza se estiman por remuestreo bootstrap (1 000 réplicas).
+7. **Reproducibilidad:** dependencias fijadas con `renv`, código versionado en Git, semillas
+   fijadas y resultados del sitio en caché (`_freeze`). Cada cifra del informe se calcula por
+   código, ninguna se transcribe a mano.
+
+## Técnicas y métodos de análisis {.unnumbered}
+
+| Etapa | Técnica | Función en el estudio |
+|:------------------|:--------------------------------------------------|:---------------------------------------------------------------|
+| Referencia | Clase modal y regresión ordinal con solo variables tabulares | Establecer el piso de desempeño: qué se gana al añadir información |
+| Modelado | Regresión logística ordinal (modelo de probabilidades proporcionales) | Modelo interpretable de referencia, con coeficientes en escala de razón de momios |
+| Modelado | Bosques aleatorios [-@breiman2001random] | Captura de no linealidades e interacciones con poco ajuste |
+| Modelado | XGBoost [-@chen2016xgboost] y LightGBM [-@ke2017lightgbm] | Alternativa de mayor capacidad predictiva para datos tabulares con variables mixtas |
+| Desbalance | Pesos de clase y, como alternativa, remuestreo sintético [-@chawla2002smote] | Evitar que el modelo ignore las clases minoritarias (`SameDay`) |
+| Comparación | Comparación de métricas con intervalos bootstrap y prueba de McNemar sobre aciertos | Determinar si las diferencias entre modelos son sistemáticas o azarosas |
+| Explicación | Importancia por permutación y valores SHAP [-@lundberg2017shap] | Identificar qué variables explican las predicciones, en la línea de los objetivos 4 y 5 |
+| Robustez | Análisis de sensibilidad (con y sin atípicos; con y sin imputación) | Verificar que los resultados no dependan de una decisión arbitraria de procesamiento |
+
+## Plan de control de calidad (sustituto del trabajo de campo) {.unnumbered}
+
+Como no hay salida a campo, se define un **plan de control de calidad de datos y de
+resultados**, con verificaciones en cada fase:
+
+| Fase | Control de calidad | Evidencia |
+|:--------------------|:----------------------------------------------------------------------------------------------------|:-------------------------------------------|
+| Construcción de la base | Conteo de filas antes y después de cada unión; verificación de unicidad de `PetID`; lectura tolerante a fallos de JSON | Script de construcción y auditoría |
+| Procesamiento | Revisión de distribuciones antes y después de cada transformación; verificación de que ninguna transformación introduce faltantes | Bitácora de decisiones (`README`) |
+| Modelado | Semillas fijadas; verificación de que el conjunto de prueba no participó en el ajuste; revisión de que la partición respeta la estratificación | Código versionado |
+| Resultados | Contraprueba manual de una muestra de predicciones y de los cálculos del informe; replicación independiente del informe en un equipo distinto | Sitio renderizado y `_freeze` |
+| Interpretación | Revisión crítica de las asociaciones identificadas frente a la literatura y frente a la lógica sustantiva (evitar lecturas causales) | Bitácora de decisiones del proyecto |
+
+## Consideraciones éticas y de datos {.unnumbered}
+
+* Los datos son **públicos**; el identificador del rescatista es seudónimo y no se usa en el
+  modelo ni se intenta reidentificar a personas.
+* No se recogen datos nuevos: **no hay consentimiento informado** que gestionar, pero sí
+  responsabilidad en el uso secundario de la base.
+* Se reconoce el **sesgo de la fuente**: una plataforma malaya, en dos idiomas, con prácticas
+  de reporte propias. Los resultados no se presentan como válidos para Colombia.
+* **Riesgo de recomendaciones sesgadas:** si el modelo identifica, por ejemplo, que ciertos
+  colores o razas (o los animales mixtos) tardan más en adoptarse, ese hallazgo describe un
+  sesgo del mercado —y posiblemente de los adoptantes— y **no** una justificación para
+  descartar animales. Cualquier recomendación práctica se formulará en términos de mejorar el
+  anuncio, no de despriorizar animales.
+
+## Limitaciones del estudio {#limitaciones}
+
+1. **Validez externa:** los datos son de Malasia (2019); extrapolar a otro país o a hoy es una
+   hipótesis sin contrastar.
+2. **Censura de la variable respuesta:** "sin adopción" es "no adoptado en 100 días".
+3. **Techo de desempeño bajo:** la base es intrínsecamente difícil; se esperan valores de
+   kappa moderados, insuficientes para decisiones automáticas. El aporte es **explicativo**,
+   no un sistema de decisión autónomo.
+4. **Medidas proxy:** sentimiento y etiquetas visuales provienen de modelos de terceros
+   entrenados con otros fines; arrastran su error y sus sesgos.
+5. **Causalidad:** el diseño es observacional y ex post facto; **no** permite afirmar que
+   esterilizar a un animal acelere su adopción, solo que se asocia con adopciones más rápidas.
+6. **Variables no observadas:** temperamento del animal, trato del rescatista, difusión del
+   anuncio, demanda estacional: nada de eso está en la base.
+
+## Viabilidad y riesgos {.unnumbered}
+
+| Riesgo | Probabilidad | Impacto | Mitigación |
+|:-----------------------------------|:---|:---|:--------------------------------------------------------------------------------|
+| Desempeño por debajo de lo esperado | Alta | Medio | Reformular el aporte como explicativo; reportar honestamente el techo alcanzado |
+| Faltantes no aleatorios (foto, relato) | Media | Medio | Indicadores de ausencia + análisis de sensibilidad |
+| Fuga de información por variables de alta cardinalidad | Media | Alto | Excluir identificadores; codificación calculada solo con entrenamiento; validación agrupada por rescatista |
+| Tiempo de cómputo en equipo propio | Media | Bajo | Modelos tabulares (no redes profundas); búsqueda de hiperparámetros acotada |
+| Dependencia de cuotas de servicios en la nube | Baja | Bajo | Las anotaciones ya están consolidadas en la base enriquecida; no se re-consultan |
+| Sobrecarga académica | Media | Medio | Alcance mínimo declarado y priorización de las etapas críticas |

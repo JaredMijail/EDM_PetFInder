@@ -1,0 +1,21 @@
+---
+title: "Objetivos"
+subtitle: "Objetivo general y objetivos específicos tipificados"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
+
+**Objetivo general.** Estimar y explicar la velocidad de adopción de las mascotas publicadas en
+la plataforma PetFinder.my mediante modelos de clasificación ordinal supervisada que integran
+señales tabulares, textuales y visuales del anuncio, evaluados fuera de muestra con kappa
+cuadrático ponderado.
+
+**Objetivos específicos** (clasificados según la tipología de Briones [-@briones2002]):
+
+| Tipo | Objetivo específico | Producto verificable |
+|:-----------------|:------------------------------------------------------------------------------------------------------------|:---------------------------------------------|
+| Descriptivo | Caracterizar la distribución de la velocidad de adopción y de los tres bloques de señales del anuncio | Tablas y figuras de la página de análisis exploratorio |
+| Descriptivo | Documentar el proceso de construcción y la calidad de la base enriquecida (cobertura, faltantes, duplicados) | Diccionario de variables y auditoría de calidad |
+| Clasificatorio | Construir modelos de clasificación ordinal con las tres fuentes de señal y predecir la velocidad de adopción de anuncios no vistos | Modelos entrenados y predicciones sobre el conjunto de prueba |
+| Comparativo | Comparar el desempeño de los modelos entre sí y frente a los modelos de referencia, y comparar el aporte de cada bloque de señal | Tabla comparativa de métricas con intervalos por bootstrap |
+| Relacional | Determinar la asociación entre cada bloque de señales y la velocidad de adopción, y su dirección | Ranking de importancia (permutación y SHAP) |
+| Explicativo | Identificar las características del anuncio que se asocian con mayor probabilidad de no adopción | Análisis SHAP e implicaciones prácticas |

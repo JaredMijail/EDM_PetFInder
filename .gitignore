@@ -1,5 +1,28 @@
+# ---------------------------------------------------------------------------
+# Datos: los archivos crudos y derivados pesan cientos de MB (data/train_metadata
+# ~464 MB, data/train_sentiment ~82 MB) y no se versionan.
+# ---------------------------------------------------------------------------
 /data/
 
+# ---------------------------------------------------------------------------
+# Caché de ejecución de Quarto (_freeze): guarda los resultados ya calculados de
+# cada bloque de código. SÍ se versiona (620 KB), para que cualquier persona
+# pueda renderizar el sitio sin tener los datos crudos en disco.
+#   - Los archivos de _freeze/ se agregan al repositorio con `git add _freeze`
+#   - El resto del estado local de Quarto no se versiona:
+# ---------------------------------------------------------------------------
 /.quarto/
+
+# Documentos generados a partir de .qmd
 **/*.quarto_ipynb
-.Rproj.user
+**/*.nb.html
+
+# Estado local de RStudio / R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,23 @@
+---
+title: "Bibliografía"
+subtitle: "Referencias del proyecto, generadas desde referencias.bib"
+nocite: '@*'
+---
+
+Todas las fuentes usadas en el proyecto, en un solo lugar: la referencia metodológica base del
+curso [-@briones2002], la fuente de datos [-@kaggle2019petfinder] y los antecedentes y métodos
+citados en el sitio. La lista se genera automáticamente desde el archivo `referencias.bib`: si
+se agrega o corrige una entrada allí, esta página se actualiza al reconstruir el sitio, y las
+citas del texto (`[@clave]`) se enlazan con su entrada correspondiente.
+
+::: {#refs}
+:::
+
+::: {.callout-note}
+## Cómo citar y cómo añadir referencias
+* En el texto, una cita se escribe `[@clave]` y una cita en paréntesis sin autor
+  `[-@clave]`.
+* Las entradas se mantienen en [`referencias.bib`](https://github.com/JaredMijail/EDM_PetFInder/blob/main/referencias.bib)
+  en formato BibTeX, con DOI o URL verificable siempre que exista.
+* Las claves siguen el patrón `apellidoAñoPalabra` (por ejemplo `zadeh2022pet`).
+:::

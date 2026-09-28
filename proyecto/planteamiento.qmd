@@ -1,0 +1,96 @@
+---
+title: "Planteamiento del problema"
+subtitle: "Del contexto del abandono a las preguntas, las hipótesis y el propósito de la investigación"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
+
+## El problema
+
+Cada año millones de animales entran a refugios y plataformas de adopción. Cuando el tiempo
+de permanencia se alarga, aumentan los costos del refugio y el riesgo de eutanasia, y la
+capacidad se agota para los animales que llegan después. En Colombia, la Ley 1774 de 2016
+declaró a los animales seres sintientes y estableció deberes de protección, pero la
+sobrepoblación y el abandono siguen dependiendo, en la práctica, de la capacidad de las
+organizaciones y de la información disponible para colocar cada animal.
+
+La información disponible es, precisamente, el punto de entrada de esta investigación: una
+ficha de adopción es un **conjunto de señales** —raza, edad, estado de salud, precio, fotos,
+relato del rescatista— que el adoptante potencial interpreta antes de decidir. La pregunta es
+si esas señales permiten **anticipar** la velocidad de adopción y, sobre todo, **explicar**
+qué pesa más en esa decisión.
+
+## Por qué la plataforma PetFinder.my
+
+PetFinder.my es la principal plataforma de bienestar animal de Malasia. En 2019 liberó una
+base de anuncios con la variable `AdoptionSpeed` (cinco categorías, desde adopción el mismo
+día hasta no adopción en 100 días) y la propuso como competencia en Kaggle [@kaggle2019petfinder].
+La base incluye, además de los datos del anuncio, el archivo `train_sentiment` y el archivo
+`train_metadata` con anotaciones automáticas de Google Cloud. Es un caso adecuado porque:
+
+* la variable respuesta es **ordinal y con cinco categorías**, lo que obliga a tratar el
+  problema como un problema de clasificación ordinal y no como una simple clasificación
+  binaria;
+* conviven en un mismo registro señales **tabular, textual y visual**, lo que permite
+  estudiar su aporte relativo;
+* el objetivo práctico (anticipar qué anuncios se quedarán atrás) es directamente útil para
+  refugios y plataformas, y es la misma lógica que se aplicaría a plataformas locales.
+
+::: {.callout-warning}
+## Alcance
+Los datos provienen de una plataforma malaya de 2019. **No** son representativos de Colombia
+ni de la situación actual; el estudio aporta un método replicable, no una descripción del
+mercado local. Esta limitación se retoma en la [metodología](metodologia.qmd#limitaciones).
+:::
+
+## Objeto de indagación
+
+La relación entre **las señales que emite un anuncio de adopción** —atributos tabulares del
+animal, el relato escrito por quien lo publica y la fotografía— y **la velocidad con que el
+animal es adoptado**, en la base pública de anuncios de la plataforma PetFinder.my
+(14 993 anuncios, cinco categorías ordinales de velocidad).
+
+El objeto es, entonces, doble: un objeto **predictivo** (estimar la velocidad de adopción a
+partir de la información disponible al momento de publicar) y un objeto **explicativo**
+(identificar qué señales se asocian con una adopción rápida o con la no adopción).
+
+## Preguntas de investigación
+
+**Pregunta general.** ¿En qué medida las señales tabulares, textuales y visuales de un anuncio
+de adopción permiten **predecir** y **explicar** la velocidad con que una mascota es adoptada?
+
+**Preguntas específicas.**
+
+1. ¿Cómo se distribuye la velocidad de adopción en la base y qué características tienen sus
+   categorías (desbalance, censura, valores atípicos)?
+2. ¿Qué desempeño fuera de muestra alcanzan los modelos de clasificación ordinal frente a
+   modelos de referencia, medido con kappa cuadrático ponderado y F1 macro?
+3. ¿Cuánto aporta cada fuente de señal (tabular, textual, visual) y cuánto su combinación?
+4. ¿Qué variables se asocian con la velocidad de adopción y en qué dirección?
+5. ¿Qué características del anuncio se asocian con una mayor probabilidad de no adopción
+   dentro de los 100 días?
+
+## Hipótesis
+
+| # | Hipótesis | Se contrasta con |
+|:---|:------------------------------------------------------------------------------------------------------|:---------------------------------------------------|
+| H1 | Las señales del anuncio contienen información predictiva: los modelos superan en kappa cuadrático ponderado a los modelos de referencia (clase modal y regresión ordinal solo con variables tabulares) | Comparación de métricas fuera de muestra |
+| H2 | La combinación de las tres fuentes (tabular + textual + visual) supera a cualquiera de ellas por separado | Modelos con y sin cada bloque de variables |
+| H3 | El bloque de estado sanitario y reproductivo (esterilizado, vacunado, desparasitado) es el de mayor asociación con la velocidad de adopción | Importancia por permutación y valores SHAP |
+| H4 | Los relatos más largos se asocian con adopciones más lentas (el texto extenso señala casos complejos, no mejores fichas) | Mediana de palabras por clase y contribución SHAP |
+| H5 | Un mayor número de fotografías se asocia con menor probabilidad de no adopción | Tasa de no adopción por tramos de `PhotoAmt` |
+
+::: {.callout-note}
+
+Las hipótesis H1 y H2 son **estadísticas** (se aceptan o rechazan con métricas e intervalos de
+confianza). H3, H4 y H5 son **sustantivas** y se evalúan por la dirección y magnitud de las
+asociaciones estimadas. Ninguna se formula como hipótesis causal: el diseño no permite
+identificar efectos causales (ver [limitaciones](#limitaciones)).
+:::
+
+## Propósito
+
+Aportar a refugios y plataformas de adopción un procedimiento **replicable y explicable** para
+identificar, en el momento de publicar un anuncio, qué animales tienen mayor riesgo de
+permanecer sin adopción, y qué características del anuncio se pueden intervenir (calidad y
+cantidad de fotos, contenido del relato, información sanitaria visible) para reducir ese
+riesgo.

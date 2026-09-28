@@ -1,0 +1,255 @@
+---
+title: "Dataset y enriquecimiento"
+subtitle: "Fuente, diccionario de variables, control de calidad y reproducibilidad"
+---
+
+```{r}
+#| label: setup-datos
+#| include: false
+
+library(tidyverse)
+
+options(OutDec = ",")   # separador decimal en español: evita el aviso de format()
+
+datos <- readr::read_csv(
+  here::here("data", "petfinder_enriquecido_final.csv"),
+  show_col_types = FALSE
+) |>
+  mutate(
+    AdoptionSpeed = factor(AdoptionSpeed,
+      levels = c("SameDay", "1-7d", "8-30d", "31-90d", "NoAdoption")),
+    Type = factor(Type, levels = c("Dog", "Cat"))
+  )
+```
+
+## 1. Fuente y licencia {.unnumbered}
+
+La base de trabajo es la publicada por la plataforma **PetFinder.my** en la competencia
+*PetFinder.my Adoption Prediction* de Kaggle (2019) [@kaggle2019petfinder], disponible también
+como registro independiente en Zenodo [@zenodo2019petfinder] y usada en la literatura
+posterior [@zadeh2022pet]. Los datos son de acceso público; los identificadores de los
+rescatistas (`RescuerID`) son seudónimos y no hay datos personales de adoptantes.
+
+Es una base de **datos secundarios**: ya existía, fue producida por otro actor y con otro
+propósito (una competencia de aprendizaje automático). Nuestro aporte metodológico consiste en
+enriquecerla y someterla a un protocolo de investigación explícito.
+
+## 2. Qué hay en la carpeta `data/` {.unnumbered}
+
+```{r}
+#| label: tabla-archivos
+#| echo: false
+#| tbl-cap: "Archivos que componen la fuente de datos"
+
+tam <- function(ruta) {
+  if (!file.exists(ruta)) return(NA_real_)
+  if (dir.exists(ruta)) {
+    f <- list.files(ruta, full.names = TRUE, recursive = TRUE)
+    sum(file.size(f), na.rm = TRUE)
+  } else {
+    file.size(ruta)
+  }
+}
+
+n_json <- function(ruta) {
+  if (!dir.exists(ruta)) return(NA_integer_)
+  length(list.files(ruta, pattern = "\\.json$"))
+}
+
+rutas <- c("data/train.csv", "data/train_sentiment", "data/train_metadata",
+           "data/petfinder_enriquecido_final.csv", "data/petfinder_enriquecido_final.rds")
+
+tibble::tibble(
+  `Archivo o carpeta` = rutas,
+  Contenido = c(
+    "Anuncios originales (24 columnas)",
+    sprintf("%s archivos JSON con el análisis de sentimiento por anuncio", format(n_json("data/train_sentiment"), big.mark = ".")),
+    sprintf("%s archivos JSON con etiquetas, rostros y colores por imagen", format(n_json("data/train_metadata"), big.mark = ".")),
+    sprintf("Base enriquecida en texto plano (%s × %s)", format(nrow(datos), big.mark = "."), ncol(datos)),
+    "La misma base en formato R (más liviana y con los factores ya definidos)"
+  ),
+  Tamaño = c(sprintf("%.1f MB", tam(rutas[1]) / 1024^2),
+             sprintf("%.0f MB", tam(rutas[2]) / 1024^2),
+             sprintf("%.0f MB", tam(rutas[3]) / 1024^2),
+             sprintf("%.1f MB", tam(rutas[4]) / 1024^2),
+             sprintf("%.1f MB", tam(rutas[5]) / 1024^2))
+) |>
+  knitr::kable(align = c("l", "l", "r"))
+```
+
+Los archivos JSON no se analizan directamente en este sitio: se consolidan una sola vez en
+`data/petfinder_enriquecido_final.csv` mediante el script
+[`scripts/01_dataset_enriquecido.R`](https://github.com/JaredMijail/EDM_PetFInder/blob/main/scripts/01_dataset_enriquecido.R).
+
+## 3. Diccionario de variables {.unnumbered}
+
+La unidad de análisis es el **anuncio de adopción** (clave `PetID`), no el animal ni el
+rescatista: un rescatista puede publicar varios animales y un animal tiene un solo anuncio.
+Las escalas de medición siguen la clasificación de Briones [-@briones2002].
+
+### 3.1 Variables originales del anuncio {.unnumbered}
+
+| Variable | Tipo en R | Escala | Descripción y valores |
+|:---------------|:-------------|:------------|:---------------------------------------------------------------------------------------|
+| `PetID` | carácter | Nominal | Identificador del anuncio; clave de unión con las demás fuentes |
+| `Type` | factor | Nominal | Especie: 1 = Perro, 2 = Gato |
+| `Name` | carácter | Nominal | Nombre del animal (vacío en algunos anuncios) |
+| `Age` | entero | Razón | Edad en meses |
+| `Breed1` | factor | Nominal | Raza principal |
+| `Breed2` | factor | Nominal | Raza secundaria; 0 = sin segunda raza |
+| `Gender` | factor | Nominal | 1 = Macho, 2 = Hembra, 3 = Mixto (varios animales en el anuncio) |
+| `Color1`, `Color2`, `Color3` | factor | Nominal | Colores del pelaje (1–7); 0 = no aplica |
+| `MaturitySize` | factor | Ordinal | 0 = no especificado, 1 = pequeño, 2 = mediano, 3 = grande, 4 = extra grande |
+| `FurLength` | factor | Ordinal | 0 = no especificado, 1 = corto, 2 = mediano, 3 = largo |
+| `Vaccinated` | factor | Nominal | 1 = sí, 2 = no, 3 = no está seguro |
+| `Dewormed` | factor | Nominal | Desparasitado: 1 = sí, 2 = no, 3 = no está seguro |
+| `Sterilized` | factor | Nominal | Esterilizado: 1 = sí, 2 = no, 3 = no está seguro |
+| `Health` | factor | Ordinal | 0 = no especificado, 1 = sano, 2 = lesión leve, 3 = lesión grave |
+| `Quantity` | entero | Razón | Número de animales incluidos en el anuncio (1–20) |
+| `Fee` | entero | Razón | Tarifa de adopción solicitada (ringgit malayo, MYR) |
+| `State` | factor | Nominal | Estado o territorio de Malasia donde está el animal |
+| `RescuerID` | carácter | Nominal | Identificador seudónimo de quien publica |
+| `VideoAmt` | entero | Razón | Número de videos en el anuncio |
+| `PhotoAmt` | entero | Razón | Número de fotografías en el anuncio |
+| `Description` | texto | — | Relato libre del rescatista sobre el animal (Malayo e inglés) |
+| `AdoptionSpeed` | factor | **Ordinal** | **Variable respuesta**: 0 = mismo día, 1 = 1–7 días, 2 = 8–30 días, 3 = 31–90 días, 4 = sin adopción tras 100 días |
+
+### 3.2 Variables construidas en el enriquecimiento {.unnumbered}
+
+| Variable | Tipo en R | Escala | Descripción y origen |
+|:----------------------|:-------------|:------------|:--------------------------------------------------------------------------------|
+| `sentiment_score` | numérico | Intervalo | Polaridad del relato, en [−1, 1]. Google Natural Language API [@googlenl2026] |
+| `sentiment_magnitude` | numérico | Razón | Intensidad emocional del relato (≥ 0). Google Natural Language API |
+| `total_labels` | entero | Razón | Etiquetas de contenido detectadas en las fotos del anuncio. Google Vision API [@googlevision2026] |
+| `total_faces` | entero | Razón | Rostros humanos detectados en las fotos del anuncio. Google Vision API |
+| `total_colors` | entero | Razón | Colores dominantes detectados en las fotos del anuncio. Google Vision API |
+| `desc_char_len` | entero | Razón | Número de caracteres del relato (cálculo propio) |
+| `desc_word_count` | entero | Razón | Número de palabras del relato (cálculo propio) |
+
+## 4. Control de calidad {.unnumbered}
+
+```{r}
+#| label: tabla-calidad
+#| echo: false
+#| tbl-cap: "Auditoría de la base enriquecida: faltantes, duplicados y valores extremos"
+
+faltantes <- tibble::tibble(
+  Variable = names(datos),
+  `Faltantes` = as.integer(colSums(is.na(datos))),
+  `% faltantes` = round(100 * colMeans(is.na(datos)), 1)
+) |>
+  dplyr::filter(`Faltantes` > 0) |>
+  dplyr::arrange(dplyr::desc(`Faltantes`))
+
+tibble::tibble(
+  `Verificación` = c(
+    "Anuncios (filas)",
+    "Variables (columnas)",
+    "Identificadores PetID duplicados",
+    "Anuncios sin segunda raza (Breed2 = 0)",
+    "Anuncios con video (VideoAmt > 0)",
+    "Anuncios sin tarifa de adopción (Fee = 0)",
+    "Anuncios con relato vacío (Description = '')",
+    "Edad: mediana / máximo (meses)",
+    "Fotos: mediana / máximo",
+    "Variables con faltantes"
+  ),
+  Resultado = c(
+    format(nrow(datos), big.mark = "."),
+    as.character(ncol(datos)),
+    as.character(sum(duplicated(datos$PetID))),
+    sprintf("%s (%.1f %%)", format(sum(datos$Breed2 == 0), big.mark = "."), 100 * mean(datos$Breed2 == 0)),
+    sprintf("%s (%.1f %%)", format(sum(datos$VideoAmt > 0), big.mark = "."), 100 * mean(datos$VideoAmt > 0)),
+    sprintf("%s (%.1f %%)", format(sum(datos$Fee == 0), big.mark = "."), 100 * mean(datos$Fee == 0)),
+    as.character(sum(datos$Description == "", na.rm = TRUE)),
+    sprintf("%s / %s", stats::median(datos$Age), max(datos$Age)),
+    sprintf("%s / %s", stats::median(datos$PhotoAmt), max(datos$PhotoAmt)),
+    sprintf("%s (%s)", nrow(faltantes), paste(faltantes$Variable, collapse = ", "))
+  )
+) |>
+  knitr::kable(align = c("l", "l"))
+```
+
+```{r}
+#| label: faltantes
+#| echo: false
+
+faltantes |>
+  knitr::kable(
+    col.names = c("Variable", "Faltantes", "% faltantes"),
+    align = c("l", "r", "r"),
+    caption = "Variables con datos faltantes"
+  )
+```
+
+Los faltantes son **informativos, no aleatorios**: un anuncio sin relato no genera puntaje de
+sentimiento, y un anuncio sin fotografía no genera anotaciones de imagen. Por eso el
+enriquecimiento trae tres variables con el mismo número de faltantes (los 341 anuncios sin
+foto) y el sentimiento falta en los 551 anuncios con relato vacío. Este patrón hay que
+tratarlo explícitamente en el modelamiento (indicador de ausencia + imputación declarada), no
+borrando filas.
+
+## 5. Cómo se construyó la base {.unnumbered}
+
+El script `scripts/01_dataset_enriquecido.R` ejecuta
+ocho pasos, en el orden en que Briones [-@briones2002] propone el procesamiento de la
+información:
+
+```{r}
+#| label: pipeline
+#| echo: false
+#| tbl-cap: "Pasos del procesamiento y su producto"
+
+tibble::tribble(
+  ~`Paso`, ~`Operación`, ~`Producto`,
+  "1", "Definir rutas relativas al proyecto (paquete here)", "Reproducibilidad en cualquier equipo",
+  "2", "Leer el archivo principal train.csv", "14 993 × 24",
+  "3", "Extraer el sentimiento de los JSON uno por uno y unirlos por PetID", "sentiment_score, sentiment_magnitude",
+  "4", "Extraer etiquetas, rostros y colores de los JSON de imagen y agregarlos por anuncio", "total_labels, total_faces, total_colors",
+  "5", "Unir las tres fuentes por PetID (left_join)", "Base integrada",
+  "6", "Convertir las variables categóricas a factores con etiquetas legibles", "Variables interpretables",
+  "7", "Calcular longitud del relato en caracteres y palabras", "desc_char_len, desc_word_count",
+  "8", "Diagnóstico de faltantes y exportación a CSV y RDS", "petfinder_enriquecido_final.csv / .rds"
+) |>
+  knitr::kable(align = c("c", "l", "l"))
+```
+
+Las claves de este procesamiento:
+
+* **Unión por clave única.** `PetID` identifica el anuncio; los JSON de imagen se llaman
+  `PetID-n.json`, así que se agregan con `sum()` por anuncio antes de unir. Un `left_join`
+  sobre la base original no agrega ni pierde filas: se verificó que el resultado sigue
+  teniendo 14 993 anuncios.
+* **Tolerancia a fallos.** Cada lectura de JSON va dentro de un `tryCatch`; un archivo
+  corrupto produce un faltante declarado, no la caída del proceso.
+* **Etiquetas legibles.** Los códigos numéricos del archivo original (1/2/3…) se convierten
+  a factores con etiquetas (`"Yes"`, `"No"`, `"NotSure"`), lo que evita errores de
+  interpretación en el análisis y en los gráficos.
+
+## 6. Reproducibilidad {.unnumbered}
+
+* Las dependencias de R están fijadas en `renv.lock`; se restauran con `renv::restore()`.
+* El sitio se construye con Quarto [@quarto2026]: `quarto render`.
+* Los resultados de los bloques de código quedan en caché (`_freeze`), de modo que el sitio se
+  puede renderizar sin tener los 550 MB de datos crudos.
+* Las figuras y tablas de estas páginas se calculan **en el momento de la construcción** a
+  partir de la base, no se transcriben a mano.
+
+## 7. Limitaciones de la fuente {.unnumbered}
+
+::: {.callout-important}
+## Lo que la base no permite afirmar
+1. **Cobertura geográfica.** Son anuncios de Malasia (2019). Las conclusiones describen esa
+   plataforma; su traslado a Colombia es una hipótesis, no un resultado.
+2. **Origen de la etiqueta.** `AdoptionSpeed` la registra el refugio o el rescatista, con
+   criterios de reporte que no controlamos; puede haber error de medición.
+3. **"Sin adopción" no es "nunca adoptado".** La categoría 4 significa "no adoptado en 100
+   días", es decir, es una observación censurada.
+4. **Selección.** Solo aparecen animales que llegaron a publicarse en la plataforma;
+   no es una muestra de la población de animales abandonados.
+5. **Anotaciones automáticas.** Sentimiento y etiquetas visuales provienen de modelos de
+   Google entrenados para otros fines; son medidas *proxy*, con su propio error.
+:::
+
+Las consecuencias de estas limitaciones para el diseño y para lo que se puede concluir se
+desarrollan en la [Metodología](../proyecto/metodologia.qmd#limitaciones).
