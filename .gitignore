@@ -16,6 +16,8 @@
 # Documentos generados a partir de .qmd
 **/*.quarto_ipynb
 **/*.nb.html
+**/*.knit.md
+**/*.knit.html
 
 # Estado local de RStudio / R
 .Rproj.user/

@@ -1,4 +1,1098 @@
 ---
 title: "Análisis exploratorio"
-subtitle: "Entrega 1"
+subtitle: "Entrega 1 — Análisis univariado del dataset PetFinder.my"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
+
+::: {.action-bar}
+[Dataset y enriquecimiento](dataset.qmd){.btn-ghost}
+[Metodología](../proyecto/metodologia.qmd){.btn-ghost}
+<button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
+:::
+
+Esta entrega corresponde al **análisis univariado** de la base enriquecida: se describe cada
+variable **por separado** (distribución, tendencia central, dispersión, forma, valores atípicos y
+frecuencias, según su tipo). Por el alcance de esta entrega **no** se incluyen cruces entre
+variables, medidas de asociación, correlaciones, reducción de dimensionalidad ni modelos; esos
+análisis corresponden a las entregas siguientes.
+
+Base de trabajo: `data/petfinder_enriquecido_final.csv` (14 993 anuncios × 31 variables), descrita
+en la página de [Dataset y enriquecimiento](dataset.qmd). Todas las cifras de esta página se
+calculan al construir el sitio: no hay resultados transcritos a mano.
+
+## Análisis univariado {#univariado}
+
+### Análisis general {#general}
+
+Aquí se describe la **estructura global** de la base. No se analiza variable por variable: eso se
+hace en las dos partes siguientes.
+
+```{r}
+#| label: setup-univariado
+#| echo: true
+
+library(tidyverse)
+
+options(OutDec = ",")   # separador decimal en español
+knitr::opts_chunk$set(fig.width = 4.6, fig.height = 3.3, dpi = 120, out.width = "100%")
+
+datos <- readr::read_csv(
+  here::here("data", "petfinder_enriquecido_final.csv"),
+  show_col_types = FALSE
+) |>
+  mutate(
+    Type          = factor(Type, levels = c("Dog", "Cat"), labels = c("Perro", "Gato")),
+    Gender        = factor(Gender, levels = c("Male", "Female", "Mixed"),
+                           labels = c("Macho", "Hembra", "Mixto")),
+    MaturitySize  = factor(MaturitySize, levels = c("Small", "Medium", "Large", "XLarge"),
+                           labels = c("Pequeño", "Mediano", "Grande", "Extra grande")),
+    FurLength     = factor(FurLength, levels = c("Short", "Medium", "Long"),
+                           labels = c("Corto", "Mediano", "Largo")),
+    Vaccinated    = factor(Vaccinated, levels = c("Yes", "No", "NotSure"),
+                           labels = c("Sí", "No", "No está seguro")),
+    Dewormed      = factor(Dewormed, levels = c("Yes", "No", "NotSure"),
+                           labels = c("Sí", "No", "No está seguro")),
+    Sterilized    = factor(Sterilized, levels = c("Yes", "No", "NotSure"),
+                           labels = c("Sí", "No", "No está seguro")),
+    Health        = factor(Health, levels = c("Healthy", "MinorInjury", "SeriousInjury"),
+                           labels = c("Sano", "Lesión leve", "Lesión grave")),
+    AdoptionSpeed = factor(AdoptionSpeed,
+                           levels = c("SameDay", "1-7d", "8-30d", "31-90d", "NoAdoption"),
+                           labels = c("Mismo día", "1–7 días", "8–30 días",
+                                      "31–90 días", "Sin adopción"))
+  )
+
+VARS_NUM <- c("Age", "Quantity", "Fee", "PhotoAmt", "VideoAmt", "sentiment_score",
+              "sentiment_magnitude", "total_labels", "total_faces", "total_colors",
+              "desc_char_len", "desc_word_count")
+VARS_CAT <- c("Type", "Gender", "MaturitySize", "FurLength", "Vaccinated", "Dewormed",
+              "Sterilized", "Health", "AdoptionSpeed", "Color1", "Color2", "Color3",
+              "Breed1", "Breed2", "State", "Name", "Description", "PetID", "RescuerID")
+
+# --- formateo de cifras en español ---
+fmt <- function(x, d = 2) {
+  x <- as.numeric(x)
+  if (all(abs(x - round(x)) < 1e-9)) {
+    return(format(round(x), big.mark = ".", decimal.mark = ",", scientific = FALSE))
+  }
+  format(round(x, d), big.mark = ".", decimal.mark = ",", nsmall = d, scientific = FALSE)
+}
+ent <- function(x) format(as.integer(round(as.numeric(x))), big.mark = ".", decimal.mark = ",")
+pct <- function(x, d = 1) gsub("\\.", ",", sprintf(paste0("%.", d, "f %%"), x))
+
+# --- estadísticos ---
+moda      <- function(x) { x <- x[!is.na(x)]; ux <- unique(x); ux[which.max(tabulate(match(x, ux)))] }
+asimetria <- function(x) { x <- x[!is.na(x)]; n <- length(x); m <- mean(x); s <- sd(x); n/((n-1)*(n-2))*sum(((x-m)/s)^3) }
+curtosis  <- function(x) { x <- x[!is.na(x)]; n <- length(x); m <- mean(x); s <- sd(x)
+  n*(n+1)/((n-1)*(n-2)*(n-3))*sum(((x-m)/s)^4) - 3*(n-1)^2/((n-2)*(n-3)) }
+
+esc_num <- function(x) {
+  x <- as.numeric(x); v <- x[!is.na(x)]; q <- quantile(v, c(.25, .75)); iqr <- diff(q)
+  z <- (v - mean(v)) / sd(v); li <- q[1] - 1.5*iqr; ls <- q[2] + 1.5*iqr
+  list(n = length(v), na = sum(is.na(x)), media = mean(v), mediana = median(v), moda = as.numeric(moda(v)),
+       min = min(v), max = max(v), q1 = q[1], q3 = q[2], iqr = iqr, rango = max(v) - min(v),
+       var = var(v), sd = sd(v), cv = 100*sd(v)/mean(v), asim = asimetria(v), curt = curtosis(v),
+       out_iqr = sum(v < li | v > ls), pct_out_iqr = 100*mean(v < li | v > ls),
+       out_z = sum(abs(z) > 3), pct_out_z = 100*mean(abs(z) > 3), pct_ceros = 100*mean(v == 0),
+       unicos = length(unique(v)))
+}
+
+esc_cat <- function(x) {
+  v <- as.character(x); tb <- sort(table(v), decreasing = TRUE)
+  list(n = length(v), niveles = length(tb), moda = names(tb)[1], n_moda = as.integer(tb[1]),
+       pct_moda = 100*tb[1]/length(v), raras = sum(tb/length(v) < 0.01),
+       pct_raras = 100*sum(tb[tb/length(v) < 0.01])/length(v),
+       unicos = length(tb), unicidad = 100*length(tb)/length(v))
+}
+
+E <- lapply(setNames(VARS_NUM, VARS_NUM), function(v) esc_num(datos[[v]]))
+C <- lapply(setNames(VARS_CAT, VARS_CAT), function(v) esc_cat(datos[[v]]))
+
+lectura_asim <- function(a) if (abs(a) < 0.5) "prácticamente simétrica" else if (a >= 0.5) "asimétrica positiva (cola a la derecha)" else "asimétrica negativa (cola a la izquierda)"
+lectura_cv   <- function(cv) if (cv < 15) "baja" else if (cv < 30) "moderada" else if (cv < 60) "alta" else "muy alta"
+
+# --- tablas ---
+tabla_estadisticos <- function(x) {
+  s <- esc_num(x)
+  tibble::tibble(
+    `Estadístico` = c("Observaciones válidas", "Valores perdidos", "Media", "Mediana", "Moda",
+                      "Mínimo", "Máximo", "Primer cuartil (Q1)", "Tercer cuartil (Q3)",
+                      "Rango intercuartílico (IQR)", "Rango", "Varianza", "Desviación estándar",
+                      "Coeficiente de variación", "Asimetría", "Curtosis"),
+    Valor = c(ent(s$n), ent(s$na), fmt(s$media), fmt(s$mediana), fmt(s$moda), fmt(s$min),
+              fmt(s$max), fmt(s$q1), fmt(s$q3), fmt(s$iqr), fmt(s$rango), fmt(s$var),
+              fmt(s$sd), pct(s$cv), fmt(s$asim, 3), fmt(s$curt, 3))
+  ) |> knitr::kable(align = c("l", "r"))
+}
+
+tabla_atipicos <- function(x, k = 3) {
+  x <- as.numeric(x); v <- x[!is.na(x)]; q <- quantile(v, c(.25, .75)); iqr <- diff(q)
+  z <- (v - mean(v))/sd(v); li <- q[1] - 1.5*iqr; ls <- q[2] + 1.5*iqr
+  tibble::tibble(
+    Criterio = c("Regla de 1,5 × IQR", paste0("Puntaje z (|z| > ", k, ")")),
+    `Límite inferior` = c(fmt(li), fmt(mean(v) - k*sd(v))),
+    `Límite superior` = c(fmt(ls), fmt(mean(v) + k*sd(v))),
+    Atípicos = c(ent(sum(v < li | v > ls)), ent(sum(abs(z) > k))),
+    `% del total` = c(pct(100*mean(v < li | v > ls)), pct(100*mean(abs(z) > k)))
+  ) |> knitr::kable(align = c("l", "r", "r", "r", "r"))
+}
+
+tabla_frecuencias <- function(x, etiqueta = "Categoría", n_top = 10) {
+  v <- as.character(x); tb <- sort(table(v), decreasing = TRUE); n <- length(tb); tot <- sum(tb)
+  if (n > n_top) {
+    tab <- tibble::tibble(
+      Categoría = c(names(tb)[1:(n_top - 1)], sprintf("Otras (%d categorías)", n - n_top + 1)),
+      Frecuencia = c(as.integer(tb[1:(n_top - 1)]), tot - sum(tb[1:(n_top - 1)])))
+  } else {
+    tab <- tibble::tibble(Categoría = names(tb), Frecuencia = as.integer(tb))
+  }
+  tab |>
+    mutate(`Frecuencia relativa` = 100*Frecuencia/sum(Frecuencia),
+           `Frecuencia acumulada` = cumsum(`Frecuencia relativa`)) |>
+    mutate(Frecuencia = ent(Frecuencia),
+           `Frecuencia relativa` = pct(`Frecuencia relativa`),
+           `Frecuencia acumulada` = pct(`Frecuencia acumulada`)) |>
+    knitr::kable(col.names = c(etiqueta, "Frecuencia absoluta", "Frecuencia relativa",
+                               "Frecuencia acumulada"), align = c("l", "r", "r", "r"))
+}
+
+tabla_cardinalidad <- function(x) {
+  v <- as.character(x)
+  tibble::tibble(
+    Verificación = c("Observaciones", "Valores perdidos", "Categorías distintas",
+                     "Proporción de valores distintos", "Categoría más frecuente",
+                     "Frecuencia de la moda"),
+    Resultado = c(ent(length(v)), ent(sum(is.na(x))), ent(length(unique(v))),
+                  pct(100*length(unique(v))/length(v)),
+                  names(sort(table(v), decreasing = TRUE))[1],
+                  pct(100*max(table(v))/length(v)))
+  ) |> knitr::kable(align = c("l", "r"))
+}
+
+# --- gráficos ---
+tema_u <- function() {
+  theme_minimal(base_size = 11.5) +
+    theme(plot.background = element_rect(fill = "white", colour = NA),
+          panel.background = element_rect(fill = "white", colour = NA),
+          plot.title = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
+          axis.title = element_text(colour = "#4b5563", size = 10),
+          panel.grid.minor = element_blank())
+}
+
+graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
+  tipo <- match.arg(tipo)
+  d <- tibble::tibble(v = as.numeric(x))
+  p1 <- ggplot(d, aes(v)) +
+    geom_histogram(bins = 30, fill = "#2e7d9a", colour = "white", linewidth = 0.2) +
+    labs(title = "Histograma", x = etiqueta, y = "Frecuencia") + tema_u()
+  p2 <- ggplot(d, aes(y = v)) +
+    geom_boxplot(fill = "#d97706", width = 0.32, outlier.colour = "#dc2626", outlier.alpha = 0.3) +
+    labs(title = "Diagrama de caja", x = NULL, y = etiqueta) +
+    theme(axis.text.x = element_blank()) + tema_u()
+  p3 <- ggplot(d, aes(v)) +
+    geom_density(fill = "#0f766e", alpha = 0.35, colour = "#0f766e") +
+    labs(title = "Densidad", x = etiqueta, y = "Densidad") + tema_u()
+  p4 <- if (tipo == "continuo") {
+    ggplot(d, aes(sample = v)) +
+      stat_qq(colour = "#1a3a5c", alpha = 0.4, size = 0.8) +
+      stat_qq_line(colour = "#d97706") +
+      labs(title = "QQ-plot (referencia normal)", x = "Cuantiles teóricos", y = "Cuantiles muestrales") + tema_u()
+  } else {
+    d |> count(v) |> slice_max(n, n = 8) |> mutate(v = factor(v)) |>
+      ggplot(aes(x = v, y = n)) + geom_col(fill = "#1a3a5c") +
+      labs(title = "Valores más frecuentes", x = etiqueta, y = "Frecuencia") + tema_u()
+  }
+  for (p in list(p1, p2, p3, p4)) print(p)
+  invisible(NULL)
+}
+
+graficos_cuali <- function(x, etiqueta, pastel = FALSE, n_top = 10) {
+  v <- as.character(x); tb <- sort(table(v), decreasing = TRUE); n <- length(tb); tot <- sum(tb)
+  d <- if (n > n_top) {
+    tibble::tibble(cat = c(names(tb)[1:(n_top - 1)], sprintf("Otras (%d)", n - n_top + 1)),
+                   n = c(as.integer(tb[1:(n_top - 1)]), tot - sum(tb[1:(n_top - 1)])))
+  } else tibble::tibble(cat = names(tb), n = as.integer(tb))
+  d <- d |> mutate(cat = factor(cat, levels = rev(cat)),
+                   pct = 100*n/sum(n))
+  p1 <- ggplot(d, aes(x = pct, y = cat)) +
+    geom_col(fill = "#2e7d9a", width = 0.7) +
+    geom_text(aes(label = sprintf("%.1f %%", pct)), hjust = -0.15, size = 3, colour = "#1f2937") +
+    scale_x_continuous(expand = expansion(mult = c(0, 0.22))) +
+    labs(title = "Distribución de frecuencias", x = "Porcentaje de anuncios", y = etiqueta) + tema_u()
+  if (!pastel) { print(p1); return(invisible(NULL)) }
+  p2 <- ggplot(d, aes(x = "", y = n, fill = cat)) +
+    geom_col(width = 1, colour = "white") + coord_polar("y") +
+    labs(title = "Composición porcentual", x = NULL, y = NULL) +
+    theme_minimal(base_size = 11.5) +
+    theme(plot.background = element_rect(fill = "white", colour = NA),
+          plot.title = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
+          legend.title = element_blank(), legend.text = element_text(size = 9),
+          legend.position = "right", axis.text = element_blank(), panel.grid = element_blank())
+  print(p1); print(p2)
+  invisible(NULL)
+}
+```
+
+
+```{r}
+#| label: general-estructura
+#| tbl-cap: "Dimensión y estructura general de la base"
+
+tibble::tibble(
+  Aspecto = c("Unidades de análisis", "Variables", "Celdas de datos", "Valores perdidos",
+              "Porcentaje de celdas completas", "Filas duplicadas",
+              "Identificadores duplicados (PetID)", "Tamaño en memoria",
+              "Variables cuantitativas", "Variables cualitativas"),
+  Resultado = c(paste(ent(nrow(datos)), "anuncios"),
+                paste(ncol(datos), "variables"),
+                ent(nrow(datos) * ncol(datos)),
+                sprintf("%s (%.2f %%)", ent(sum(is.na(datos))), 100 * mean(is.na(datos))),
+                pct(100 - 100 * mean(is.na(datos)), 2),
+                ent(sum(duplicated(datos))),
+                ent(sum(duplicated(datos$PetID))),
+                format(object.size(datos), units = "MB"),
+                sprintf("%d (%.1f %%)", length(VARS_NUM), 100 * length(VARS_NUM) / ncol(datos)),
+                sprintf("%d (%.1f %%)", length(VARS_CAT), 100 * length(VARS_CAT) / ncol(datos)))
+) |>
+  knitr::kable(align = c("l", "l"))
+```
+
+**Tipos de variables.** Las 31 variables se clasifican por su naturaleza y su escala de medición.
+La columna *Fuente* distingue las variables originales de la competencia de las que se
+construyeron en el enriquecimiento (texto e imagen).
+
+```{r}
+#| label: general-clasificacion
+#| tbl-cap: "Clasificación de las 31 variables por tipo, escala y origen"
+
+clasificacion <- tibble::tribble(
+  ~Variable, ~`Tipo en R`, ~Grupo, ~Escala, ~Fuente,
+  "PetID",              "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
+  "Name",               "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
+  "Type",               "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Breed1",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Breed2",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Gender",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Color1",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Color2",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Color3",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Vaccinated",         "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Dewormed",           "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Sterilized",         "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "State",              "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "RescuerID",          "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
+  "Description",        "texto",     "Cualitativa nominal",   "Nominal",   "Original",
+  "MaturitySize",       "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
+  "FurLength",          "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
+  "Health",             "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
+  "AdoptionSpeed",      "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
+  "Age",                "entero",    "Cuantitativa discreta", "De razón",  "Original",
+  "Quantity",           "entero",    "Cuantitativa discreta", "De razón",  "Original",
+  "Fee",                "entero",    "Cuantitativa discreta", "De razón",  "Original",
+  "VideoAmt",           "entero",    "Cuantitativa discreta", "De razón",  "Original",
+  "PhotoAmt",           "entero",    "Cuantitativa discreta", "De razón",  "Original",
+  "sentiment_score",    "numérico",  "Cuantitativa continua", "De intervalo", "Enriquecimiento (texto)",
+  "sentiment_magnitude","numérico",  "Cuantitativa continua", "De razón",  "Enriquecimiento (texto)",
+  "total_labels",       "entero",    "Cuantitativa discreta", "De razón",  "Enriquecimiento (imagen)",
+  "total_faces",        "entero",    "Cuantitativa discreta", "De razón",  "Enriquecimiento (imagen)",
+  "total_colors",       "entero",    "Cuantitativa discreta", "De razón",  "Enriquecimiento (imagen)",
+  "desc_char_len",      "entero",    "Cuantitativa discreta", "De razón",  "Derivada del texto",
+  "desc_word_count",    "entero",    "Cuantitativa discreta", "De razón",  "Derivada del texto"
+) |>
+  dplyr::arrange(Grupo, Variable)
+
+clasificacion |> knitr::kable(align = c("l", "l", "l", "l", "l"))
+```
+
+```{r}
+#| label: general-tipos
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: ["Número de variables por tipo", "Composición porcentual por tipo de variable"]
+p1 <- clasificacion |> count(Grupo) |>
+  ggplot(aes(x = n, y = fct_reorder(Grupo, n))) +
+  geom_col(fill = "#2e7d9a", width = 0.68) +
+  geom_text(aes(label = n), hjust = -0.4, colour = "#1f2937", size = 3.4) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Variables por tipo", x = "Número de variables", y = NULL) + tema_u()
+p2 <- clasificacion |> count(Grupo) |>
+  ggplot(aes(x = "", y = n, fill = Grupo)) +
+  geom_col(width = 1, colour = "white") + coord_polar("y") +
+  labs(title = "Composición por tipo", x = NULL, y = NULL) +
+  theme_minimal(base_size = 11.5) +
+  theme(plot.background = element_rect(fill = "white", colour = NA),
+        plot.title = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
+        legend.title = element_blank(), legend.text = element_text(size = 9),
+        axis.text = element_blank(), panel.grid = element_blank())
+print(p1); print(p2)
+```
+
+**Valores perdidos.** Cinco variables presentan datos faltantes y todas pertenecen al
+enriquecimiento: el nombre del animal (1 257 casos), las dos variables de sentimiento (551 cada
+una) y las tres variables derivadas de la imagen (341 cada una, los anuncios sin fotografía).
+
+```{r}
+#| label: general-perdidos
+#| tbl-cap: "Valores perdidos por variable"
+
+tibble::tibble(Variable = names(datos), Perdidos = as.integer(colSums(is.na(datos)))) |>
+  dplyr::filter(Perdidos > 0) |>
+  dplyr::mutate(`% de las filas` = pct(100 * Perdidos / nrow(datos))) |>
+  dplyr::arrange(dplyr::desc(Perdidos)) |>
+  dplyr::mutate(Perdidos = ent(Perdidos)) |>
+  knitr::kable(col.names = c("Variable", "Valores perdidos", "% de las filas"),
+               align = c("l", "r", "r"))
+```
+
+**Duplicados.** No hay filas repetidas ni identificadores de anuncio repetidos: la base es un
+censo de anuncios únicos, lo que se verificó con `duplicated()` sobre las filas y sobre `PetID`.
+
+**Resumen global de las variables cuantitativas.** Una vista de conjunto antes de entrar variable
+por variable (la lectura detallada de cada una está en el análisis cuantitativo).
+
+```{r}
+#| label: general-resumen-num
+#| tbl-cap: "Resumen global de las 12 variables cuantitativas"
+
+purrr::map_dfr(VARS_NUM, function(v) {
+  s <- E[[v]]
+  tibble::tibble(Variable = v, `n válidos` = ent(s$n), Perdidos = ent(s$na),
+                 Mínimo = fmt(s$min), `Q1` = fmt(s$q1), Media = fmt(s$media),
+                 Mediana = fmt(s$mediana), `Q3` = fmt(s$q3), Máximo = fmt(s$max),
+                 `Desv. est.` = fmt(s$sd), CV = pct(s$cv), Asimetría = fmt(s$asim, 2))
+}) |>
+  knitr::kable(align = c("l", rep("r", 11)))
+```
+
+**Lectura del análisis general.** La base tiene `r ent(nrow(datos))` unidades de análisis (los
+anuncios), `r ncol(datos)` variables y `r ent(nrow(datos)*ncol(datos))` celdas, de las cuales se
+pierde el `r pct(100*mean(is.na(datos)), 2)`; ese porcentaje es bajo y está concentrado en cinco
+variables del enriquecimiento, así que un análisis univariado por variable puede hacerse sin
+imputaciones. Los `r ent(sum(duplicated(datos)))` duplicados de fila y de identificador confirman
+que no hay anuncios repetidos. En cuanto a la composición, hay `r length(VARS_NUM)` variables
+cuantitativas (`r pct(100*length(VARS_NUM)/ncol(datos), 0)` del total) y `r length(VARS_CAT)`
+cualitativas (`r pct(100*length(VARS_CAT)/ncol(datos), 0)`), de modo que el análisis descriptivo
+tiene una parte cuantitativa y una cualitativa de tamaño comparable. Dos advertencias que se
+retoman más adelante: hay variables **casi constantes** (`Health`, `total_faces`, `VideoAmt`) y
+variables **de alta cardinalidad** (`Breed1`, `State`, `Name`, `Description`), que exigen
+tratamientos distintos de las tablas de frecuencia convencionales.
+
+
+### Análisis cuantitativo {#cuantitativo}
+
+Se analizan las 12 variables cuantitativas. Para cada una se reportan: tamaño de la muestra y
+valores perdidos; tendencia central (media, mediana y moda); posición (mínimo, máximo y
+cuartiles); dispersión (rango, IQR, varianza, desviación estándar y coeficiente de variación);
+forma (asimetría y curtosis) y detección de valores atípicos con dos criterios (regla de
+1,5 × IQR y puntaje z con |z| > 3). La asimetría y la curtosis usan los estimadores muestrales
+tipo 2 de `e1071`, de modo que la curtosis es *exceso* respecto de la normal (0 = normal). Para
+las variables de **conteo** el cuarto panel muestra los valores más frecuentes en lugar del
+QQ-plot, porque la referencia normal no aplica a ese tipo de datos.
+
+
+#### `Age` — Edad {.unnumbered}
+
+```{r}
+#| label: cuanti-Age
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Edad (meses)"
+tabla_estadisticos(datos$Age)
+```
+
+```{r}
+#| label: atip-Age
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Edad (meses)"
+tabla_atipicos(datos$Age)
+```
+
+```{r}
+#| label: graf-Age
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de edad", "Diagrama de caja de edad", "Gráfico de densidad de edad", "Valores más frecuentes de edad"]
+graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
+```
+
+**Interpretación.** La edad se concentra en animales muy jóvenes: el `r pct(100*mean(datos$Age <= 6, na.rm = TRUE))` de los anuncios corresponde a animales de seis meses o menos, y el 50 % central de la distribución está entre `r fmt(E$Age$q1)` y `r fmt(E$Age$q3)` meses. La distribución es **`r lectura_asim(E$Age$asim)`** (asimetría = `r fmt(E$Age$asim, 2)`; curtosis = `r fmt(E$Age$curt, 2)`), con una media (`r fmt(E$Age$media)` meses) que casi cuadruplica la mediana (`r fmt(E$Age$mediana)` meses) porque la cola derecha la estiran los animales adultos: `r pct(100*mean(datos$Age > 24, na.rm = TRUE))` de los anuncios supera los dos años y el máximo es de `r ent(E$Age$max)` meses (`r fmt(E$Age$max/12, 1)` años). El coeficiente de variación (`r pct(E$Age$cv)`) es **muy alto**, señal de gran heterogeneidad. La regla de 1,5 × IQR marca `r ent(E$Age$out_iqr)` atípicos (`r pct(E$Age$pct_out_iqr)`), todos por la cola alta. **Lectura:** la base está dominada por cachorros y animales jóvenes; los casos de animales mayores son reales, no errores, por lo que en el modelamiento la edad conviene tratarla en escala logarítmica o por tramos de edad.
+
+
+#### `Quantity` — Cantidad de animales en el anuncio {.unnumbered}
+
+```{r}
+#| label: cuanti-Quantity
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Cantidad de animales en el anuncio (animales)"
+tabla_estadisticos(datos$Quantity)
+```
+
+```{r}
+#| label: atip-Quantity
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Cantidad de animales en el anuncio (animales)"
+tabla_atipicos(datos$Quantity)
+```
+
+```{r}
+#| label: graf-Quantity
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de cantidad de animales en el anuncio", "Diagrama de caja de cantidad de animales en el anuncio", "Gráfico de densidad de cantidad de animales en el anuncio", "Valores más frecuentes de cantidad de animales en el anuncio"]
+graficos_cuanti(datos$Quantity, "Animales en el anuncio", tipo = "conteo")
+```
+
+**Interpretación.** La variable es **esencialmente binaria**: el `r pct(100*mean(datos$Quantity == 1))` de los anuncios describe un solo animal, y los anuncios con más de uno son poco frecuentes (2 animales, `r pct(100*mean(datos$Quantity == 2))`; 3 o más, `r pct(100*mean(datos$Quantity >= 3))`). Como el IQR es exactamente 0 (Q1 = Q3 = `r fmt(E$Quantity$q1, 0)`), la regla de 1,5 × IQR marca como atípico **cualquier** valor distinto de 1, lo que explica los `r ent(E$Quantity$out_iqr)` «atípicos» (`r pct(E$Quantity$pct_out_iqr)`): no son errores, sino la consecuencia esperable de una distribución con el 50 % de los datos en un único valor. El criterio del puntaje z es más razonable aquí y detecta `r ent(E$Quantity$out_z)` anuncios (`r pct(E$Quantity$pct_out_z)`), que corresponden a los grupos grandes (hasta `r ent(E$Quantity$max)` animales). **Lectura:** conviene usarla como variable binaria (un animal vs. varios) o por tramos; su máximo refleja anuncios de refugios que publican camadas completas.
+
+
+#### `Fee` — Tarifa de adopción {.unnumbered}
+
+```{r}
+#| label: cuanti-Fee
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Tarifa de adopción (ringgit malayo (MYR))"
+tabla_estadisticos(datos$Fee)
+```
+
+```{r}
+#| label: atip-Fee
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Tarifa de adopción (ringgit malayo (MYR))"
+tabla_atipicos(datos$Fee)
+```
+
+```{r}
+#| label: graf-Fee
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de tarifa de adopción", "Diagrama de caja de tarifa de adopción", "Gráfico de densidad de tarifa de adopción", "Valores más frecuentes de tarifa de adopción"]
+graficos_cuanti(datos$Fee, "Tarifa (MYR)", tipo = "conteo")
+```
+
+**Interpretación.** Es una variable **de dos regímenes**: el `r pct(E$Fee$pct_ceros)` de los anuncios no cobra tarifa (mediana = Q1 = Q3 = 0), mientras que el `r pct(100 - E$Fee$pct_ceros)` restante sí lo hace y, entre esos casos, la mediana es de `r fmt(median(datos$Fee[datos$Fee > 0]))` MYR. Esa mezcla produce la asimetría y curtosis más extremas de la base (asimetría = `r fmt(E$Fee$asim, 2)`, curtosis = `r fmt(E$Fee$curt, 1)`), una media (`r fmt(E$Fee$media)` MYR) muy superior a la mediana (`r fmt(E$Fee$mediana)` MYR) y un máximo de `r ent(E$Fee$max)` MYR. El coeficiente de variación (`r pct(E$Fee$cv)`) es el más alto entre las variables cuantitativas. **Lectura:** la tarifa debe analizarse como variable mixta (indicador de «¿cobra?» más el monto cuando cobra); tratada como continua, sus medidas de tendencia central son engañosas porque el 0 domina la distribución.
+
+
+#### `PhotoAmt` — Número de fotografías {.unnumbered}
+
+```{r}
+#| label: cuanti-PhotoAmt
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Número de fotografías (fotos)"
+tabla_estadisticos(datos$PhotoAmt)
+```
+
+```{r}
+#| label: atip-PhotoAmt
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Número de fotografías (fotos)"
+tabla_atipicos(datos$PhotoAmt)
+```
+
+```{r}
+#| label: graf-PhotoAmt
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de número de fotografías", "Diagrama de caja de número de fotografías", "Gráfico de densidad de número de fotografías", "Valores más frecuentes de número de fotografías"]
+graficos_cuanti(datos$PhotoAmt, "Fotografías", tipo = "conteo")
+```
+
+**Interpretación.** El número de fotos es una variable discreta con moda en `r fmt(E$PhotoAmt$moda, 0)` foto (`r pct(C$PhotoAmt$pct_moda)` de los anuncios), mediana `r fmt(E$PhotoAmt$mediana, 0)` y media `r fmt(E$PhotoAmt$media)`; el `r pct(E$PhotoAmt$pct_ceros)` de los anuncios no tiene ninguna foto y el máximo es de `r ent(E$PhotoAmt$max)`. La distribución es **`r lectura_asim(E$PhotoAmt$asim)`** con curtosis `r fmt(E$PhotoAmt$curt, 2)`, y la regla de 1,5 × IQR detecta `r ent(E$PhotoAmt$out_iqr)` anuncios con muchas fotos (`r pct(E$PhotoAmt$pct_out_iqr)`), que son casos legítimos de rescatistas muy documentados. **Lectura:** la mayoría de los anuncios tiene entre `r fmt(E$PhotoAmt$q1, 0)` y `r fmt(E$PhotoAmt$q3, 0)` fotos; los anuncios sin fotos merecen seguimiento porque su ficha está incompleta.
+
+
+#### `VideoAmt` — Número de videos {.unnumbered}
+
+```{r}
+#| label: cuanti-VideoAmt
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Número de videos (videos)"
+tabla_estadisticos(datos$VideoAmt)
+```
+
+```{r}
+#| label: atip-VideoAmt
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Número de videos (videos)"
+tabla_atipicos(datos$VideoAmt)
+```
+
+```{r}
+#| label: graf-VideoAmt
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de número de videos", "Diagrama de caja de número de videos", "Gráfico de densidad de número de videos", "Valores más frecuentes de número de videos"]
+graficos_cuanti(datos$VideoAmt, "Videos", tipo = "conteo")
+```
+
+**Interpretación.** La variable es **casi constante**: el `r pct(E$VideoAmt$pct_ceros)` de los anuncios no incluye video, solo el `r pct(100 - E$VideoAmt$pct_ceros)` tiene al menos uno y el máximo es `r ent(E$VideoAmt$max)`. Su media (`r fmt(E$VideoAmt$media)`), mediana y moda son 0, y el coeficiente de variación (`r pct(E$VideoAmt$cv)`) es enorme justamente porque la media es casi nula. Los `r ent(E$VideoAmt$out_iqr)` atípicos que marca el IQR (`r pct(E$VideoAmt$pct_out_iqr)`) son simplemente los anuncios con video. **Lectura:** con tan poca variabilidad, la variable aporta poca información descriptiva; se recomienda tratarla como dicotómica (tiene o no video) y evaluar en la fase de modelamiento si vale la pena conservarla.
+
+
+#### `sentiment_score` — Sentimiento del relato (polaridad) {.unnumbered}
+
+```{r}
+#| label: cuanti-sentiment_score
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Sentimiento del relato (polaridad) (índice de −1 a 1)"
+tabla_estadisticos(datos$sentiment_score)
+```
+
+```{r}
+#| label: atip-sentiment_score
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Sentimiento del relato (polaridad) (índice de −1 a 1)"
+tabla_atipicos(datos$sentiment_score)
+```
+
+```{r}
+#| label: graf-sentiment_score
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de sentimiento del relato (polaridad)", "Diagrama de caja de sentimiento del relato (polaridad)", "Gráfico de densidad de sentimiento del relato (polaridad)", "QQ-plot (referencia normal) de sentimiento del relato (polaridad)"]
+graficos_cuanti(datos$sentiment_score, "Polaridad (−1 a 1)", tipo = "continuo")
+```
+
+**Interpretación.** La polaridad del relato es la variable cuantitativa **mejor comportada**: su distribución es `r lectura_asim(E$sentiment_score$asim)` (asimetría = `r fmt(E$sentiment_score$asim, 2)`, curtosis = `r fmt(E$sentiment_score$curt, 2)`, prácticamente la de una normal). La media (`r fmt(E$sentiment_score$media)`) y la mediana (`r fmt(E$sentiment_score$mediana)`) son casi iguales, el 50 % central está entre `r fmt(E$sentiment_score$q1)` y `r fmt(E$sentiment_score$q3)` y el rango observado va de `r fmt(E$sentiment_score$min)` a `r fmt(E$sentiment_score$max)`. El `r pct(E$sentiment_score$pct_ceros)` de los relatos obtiene una polaridad de exactamente 0 (texto neutro) y los atípicos por IQR (`r ent(E$sentiment_score$out_iqr)`, `r pct(E$sentiment_score$pct_out_iqr)`) aparecen en los dos extremos. Los `r ent(E$sentiment_score$na)` valores perdidos corresponden a anuncios para los que no se recuperó la anotación (no son relatos vacíos: en esos casos la mediana de longitud es de `r fmt(median(datos$desc_char_len[is.na(datos$sentiment_score)]))` caracteres). **Lectura:** en conjunto, los relatos tienden a ser levemente positivos, con poca polaridad extrema.
+
+
+#### `sentiment_magnitude` — Sentimiento del relato (intensidad) {.unnumbered}
+
+```{r}
+#| label: cuanti-sentiment_magnitude
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Sentimiento del relato (intensidad) (índice ≥ 0)"
+tabla_estadisticos(datos$sentiment_magnitude)
+```
+
+```{r}
+#| label: atip-sentiment_magnitude
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Sentimiento del relato (intensidad) (índice ≥ 0)"
+tabla_atipicos(datos$sentiment_magnitude)
+```
+
+```{r}
+#| label: graf-sentiment_magnitude
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de sentimiento del relato (intensidad)", "Diagrama de caja de sentimiento del relato (intensidad)", "Gráfico de densidad de sentimiento del relato (intensidad)", "QQ-plot (referencia normal) de sentimiento del relato (intensidad)"]
+graficos_cuanti(datos$sentiment_magnitude, "Intensidad del sentimiento", tipo = "continuo")
+```
+
+**Interpretación.** Mide **cuánta** carga emocional hay en el relato (no su signo) y es una variable acumulativa: crece con la cantidad de texto anotado, por lo que no es directamente comparable entre relatos de distinta extensión. Su distribución es **`r lectura_asim(E$sentiment_magnitude$asim)`** (asimetría = `r fmt(E$sentiment_magnitude$asim, 2)`), con mediana `r fmt(E$sentiment_magnitude$mediana)` y media `r fmt(E$sentiment_magnitude$media)`; el `r pct(E$sentiment_magnitude$pct_ceros)` de los casos tiene intensidad 0 y el máximo llega a `r fmt(E$sentiment_magnitude$max)` en relatos muy largos. Comparte los `r ent(E$sentiment_magnitude$na)` valores perdidos de `sentiment_score`. **Lectura:** es una medida de exposición emocional, no de tono; si se usa en el modelamiento conviene normalizarla por la longitud del relato y documentar esa decisión.
+
+
+#### `total_labels` — Etiquetas de contenido detectadas en las fotos {.unnumbered}
+
+```{r}
+#| label: cuanti-total_labels
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Etiquetas de contenido detectadas en las fotos (etiquetas)"
+tabla_estadisticos(datos$total_labels)
+```
+
+```{r}
+#| label: atip-total_labels
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Etiquetas de contenido detectadas en las fotos (etiquetas)"
+tabla_atipicos(datos$total_labels)
+```
+
+```{r}
+#| label: graf-total_labels
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de etiquetas de contenido detectadas en las fotos", "Diagrama de caja de etiquetas de contenido detectadas en las fotos", "Gráfico de densidad de etiquetas de contenido detectadas en las fotos", "Valores más frecuentes de etiquetas de contenido detectadas en las fotos"]
+graficos_cuanti(datos$total_labels, "Etiquetas detectadas", tipo = "conteo")
+```
+
+**Interpretación.** Es un **conteo acumulado** de las etiquetas que la API de visión detectó en el conjunto de fotografías del anuncio (no un promedio por foto), de modo que su magnitud está ligada al número de imágenes de la ficha; interpretarla como «riqueza visual media» exigiría normalizarla. La distribución es **`r lectura_asim(E$total_labels$asim)`** (asimetría = `r fmt(E$total_labels$asim, 2)`, curtosis = `r fmt(E$total_labels$curt, 2)`), con mínimo `r ent(E$total_labels$min)`, mediana `r fmt(E$total_labels$mediana, 0)`, media `r fmt(E$total_labels$media)` y máximo `r ent(E$total_labels$max)` etiquetas. Presenta `r ent(E$total_labels$na)` valores perdidos (anuncios sin fotografía) y `r ent(E$total_labels$out_iqr)` atípicos altos por IQR (`r pct(E$total_labels$pct_out_iqr)`). **Lectura:** variable de conteo con cola derecha marcada; útil como indicador de cuánta información visual contiene la ficha.
+
+
+#### `total_faces` — Rostros humanos detectados en las fotos {.unnumbered}
+
+```{r}
+#| label: cuanti-total_faces
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Rostros humanos detectados en las fotos (rostros)"
+tabla_estadisticos(datos$total_faces)
+```
+
+```{r}
+#| label: atip-total_faces
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Rostros humanos detectados en las fotos (rostros)"
+tabla_atipicos(datos$total_faces)
+```
+
+```{r}
+#| label: graf-total_faces
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de rostros humanos detectados en las fotos", "Diagrama de caja de rostros humanos detectados en las fotos", "Gráfico de densidad de rostros humanos detectados en las fotos", "Valores más frecuentes de rostros humanos detectados en las fotos"]
+graficos_cuanti(datos$total_faces, "Rostros detectados", tipo = "conteo")
+```
+
+**Interpretación.** La variable es **casi constante y casi toda cero**: el `r pct(E$total_faces$pct_ceros)` de los anuncios no tiene rostros detectados, la media es `r fmt(E$total_faces$media)` y el máximo `r ent(E$total_faces$max)` (aparecen personas, por ejemplo voluntarios o adoptantes). Como Q1 = Q3 = 0, la regla de 1,5 × IQR marca como atípico todo valor mayor que cero (`r ent(E$total_faces$out_iqr)` casos, `r pct(E$total_faces$pct_out_iqr)`), y el puntaje z detecta exactamente los mismos casos. **Lectura:** es una variable prácticamente dicotómica («¿hay personas en las fotos?»); su utilidad está en esa distinción, no en su valor numérico.
+
+
+#### `total_colors` — Colores dominantes detectados en las fotos {.unnumbered}
+
+```{r}
+#| label: cuanti-total_colors
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Colores dominantes detectados en las fotos (colores)"
+tabla_estadisticos(datos$total_colors)
+```
+
+```{r}
+#| label: atip-total_colors
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Colores dominantes detectados en las fotos (colores)"
+tabla_atipicos(datos$total_colors)
+```
+
+```{r}
+#| label: graf-total_colors
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de colores dominantes detectados en las fotos", "Diagrama de caja de colores dominantes detectados en las fotos", "Gráfico de densidad de colores dominantes detectados en las fotos", "Valores más frecuentes de colores dominantes detectados en las fotos"]
+graficos_cuanti(datos$total_colors, "Colores dominantes", tipo = "conteo")
+```
+
+**Interpretación.** Conteo acumulado de los colores dominantes de todas las fotografías del anuncio; el servicio de visión devuelve hasta diez colores por imagen, de ahí que los valores sean múltiplos de 10 en la mayoría de los casos. El mínimo es `r ent(E$total_colors$min)` (todo anuncio con foto tiene al menos una imagen procesada), la mediana `r fmt(E$total_colors$mediana, 0)`, la media `r fmt(E$total_colors$media)` y el máximo `r ent(E$total_colors$max)`; la asimetría es `r fmt(E$total_colors$asim, 2)` y el `r pct(E$total_colors$pct_out_iqr)` de los anuncios queda fuera de los límites de 1,5 × IQR. Comparte los `r ent(E$total_colors$na)` valores perdidos de los anuncios sin foto. **Lectura:** igual que `total_labels`, es un indicador del volumen de información visual, sensible al número de fotos.
+
+
+#### `desc_char_len` — Longitud del relato (caracteres) {.unnumbered}
+
+```{r}
+#| label: cuanti-desc_char_len
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Longitud del relato (caracteres) (caracteres)"
+tabla_estadisticos(datos$desc_char_len)
+```
+
+```{r}
+#| label: atip-desc_char_len
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Longitud del relato (caracteres) (caracteres)"
+tabla_atipicos(datos$desc_char_len)
+```
+
+```{r}
+#| label: graf-desc_char_len
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de longitud del relato (caracteres)", "Diagrama de caja de longitud del relato (caracteres)", "Gráfico de densidad de longitud del relato (caracteres)", "QQ-plot (referencia normal) de longitud del relato (caracteres)"]
+graficos_cuanti(datos$desc_char_len, "Caracteres del relato", tipo = "continuo")
+```
+
+**Interpretación.** El relato del rescatista tiene una extensión muy variable: la mediana es de `r fmt(E$desc_char_len$mediana, 0)` caracteres, el 50 % central va de `r fmt(E$desc_char_len$q1, 0)` a `r fmt(E$desc_char_len$q3, 0)` y el máximo alcanza `r ent(E$desc_char_len$max)` caracteres. La distribución es **`r lectura_asim(E$desc_char_len$asim)`** (asimetría = `r fmt(E$desc_char_len$asim, 2)`, curtosis = `r fmt(E$desc_char_len$curt, 2)`): una mayoría de relatos breves y una minoría de textos extensos. La media (`r fmt(E$desc_char_len$media)` caracteres) supera la mediana, y la regla de 1,5 × IQR marca `r ent(E$desc_char_len$out_iqr)` relatos largos como atípicos (`r pct(E$desc_char_len$pct_out_iqr)`). No hay relatos vacíos: el mínimo es de `r ent(E$desc_char_len$min)` carácter. **Lectura:** la extensión del relato es una de las variables con mayor dispersión relativa (CV = `r pct(E$desc_char_len$cv)`); conviene tratarla en escala logarítmica.
+
+
+#### `desc_word_count` — Longitud del relato (palabras) {.unnumbered}
+
+```{r}
+#| label: cuanti-desc_word_count
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Longitud del relato (palabras) (palabras)"
+tabla_estadisticos(datos$desc_word_count)
+```
+
+```{r}
+#| label: atip-desc_word_count
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Longitud del relato (palabras) (palabras)"
+tabla_atipicos(datos$desc_word_count)
+```
+
+```{r}
+#| label: graf-desc_word_count
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de longitud del relato (palabras)", "Diagrama de caja de longitud del relato (palabras)", "Gráfico de densidad de longitud del relato (palabras)", "QQ-plot (referencia normal) de longitud del relato (palabras)"]
+graficos_cuanti(datos$desc_word_count, "Palabras del relato", tipo = "continuo")
+```
+
+**Interpretación.** Es la misma extensión del relato medida en palabras, así que reproduce el patrón anterior: mediana de `r fmt(E$desc_word_count$mediana, 0)` palabras, media `r fmt(E$desc_word_count$media)`, rango de `r fmt(E$desc_word_count$min, 0)` a `r ent(E$desc_word_count$max)` palabras y un 50 % central entre `r fmt(E$desc_word_count$q1, 0)` y `r fmt(E$desc_word_count$q3, 0)`. La asimetría (`r fmt(E$desc_word_count$asim, 2)`) y la curtosis (`r fmt(E$desc_word_count$curt, 2)`) confirman la cola derecha, con `r ent(E$desc_word_count$out_iqr)` atípicos por IQR (`r pct(E$desc_word_count$pct_out_iqr)`). **Lectura:** es una versión equivalente a `desc_char_len` en otra unidad; para el modelamiento basta conservar una de las dos (o estandarizar) para no duplicar la misma información.
+
+
+### Análisis cualitativo {#cualitativo}
+
+Se analizan las 19 variables cualitativas. Para cada una se reportan: número de categorías (o de
+valores distintos, si la variable es un identificador), la categoría modal y su peso, las
+categorías poco frecuentes (definidas como las que reúnen **menos del 1 %** de los anuncios) y la
+tabla de frecuencias absolutas y relativas, con el gráfico de barras correspondiente. El pastel se
+incluye solo cuando el número de categorías es pequeño (siete o menos), porque con más categorías
+deja de ser legible; en las variables de alta cardinalidad la tabla muestra las categorías más
+frecuentes y el resto agrupado en «Otras».
+
+
+#### `Type` — Especie {.unnumbered}
+
+```{r}
+#| label: cuali-Type
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Especie"
+tabla_frecuencias(datos$Type, "Especie")
+```
+
+```{r}
+#| label: graf-cuali-Type
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por especie", "Composición porcentual por especie"]
+graficos_cuali(datos$Type, "Especie", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Variable **binaria** y bien balanceada: `r pct(C$Type$pct_moda)` de los anuncios son de perro y `r pct(100 - C$Type$pct_moda)` de gato, sin categorías poco frecuentes. Como la diferencia entre categorías es pequeña (`r ent(C$Type$n_moda)` vs. `r ent(C$Type$n - C$Type$n_moda)` anuncios), ninguna categoría domina la tabla y no requiere agrupamiento. **Lectura:** la composición por especie es casi paritaria, lo que permite describir la base sin sesgo evidente hacia perros o gatos.
+
+
+#### `Gender` — Sexo {.unnumbered}
+
+```{r}
+#| label: cuali-Gender
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Sexo"
+tabla_frecuencias(datos$Gender, "Sexo")
+```
+
+```{r}
+#| label: graf-cuali-Gender
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por sexo", "Composición porcentual por sexo"]
+graficos_cuali(datos$Gender, "Sexo", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Tres categorías: la más frecuente es «Hembra» (`r pct(100*mean(datos$Gender == "Hembra"))`), seguida de «Macho» (`r pct(100*mean(datos$Gender == "Macho"))`) y «Mixto» (`r pct(100*mean(datos$Gender == "Mixto"))`); ninguna es poco frecuente. La categoría «Mixto» no describe el sexo de un animal individual, sino que identifica los anuncios que agrupan **varios animales de distinto sexo** (los mismos casos de `Quantity > 1`). **Lectura:** la variable mezcla un atributo del animal con un atributo del anuncio; al modelar conviene separar ambos significados o analizar el sexo solo en los anuncios de un único animal.
+
+
+#### `MaturitySize` — Tamaño {.unnumbered}
+
+```{r}
+#| label: cuali-MaturitySize
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Tamaño"
+tabla_frecuencias(datos$MaturitySize, "Tamaño")
+```
+
+```{r}
+#| label: graf-cuali-MaturitySize
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por tamaño", "Composición porcentual por tamaño"]
+graficos_cuali(datos$MaturitySize, "Tamaño", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Escala **ordinal** de cuatro categorías dominada por `r C$MaturitySize$moda` (`r pct(C$MaturitySize$pct_moda)`); las categorías «Grande» (`r pct(100*mean(datos$MaturitySize == "Grande"))`) y sobre todo «Extra grande» (`r pct(100*mean(datos$MaturitySize == "Extra grande"))`, `r ent(table(datos$MaturitySize)["Extra grande"])` anuncios) son poco frecuentes, y esta última es la única categoría rara de la base. **Lectura:** es una variable casi constante, con una categoría minoritaria muy pequeña; para el modelamiento conviene agrupar «Grande» con «Extra grande» o tratarla como ordinal de tres niveles.
+
+
+#### `FurLength` — Longitud del pelo {.unnumbered}
+
+```{r}
+#| label: cuali-FurLength
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Longitud del pelo"
+tabla_frecuencias(datos$FurLength, "Longitud del pelo")
+```
+
+```{r}
+#| label: graf-cuali-FurLength
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por longitud del pelo", "Composición porcentual por longitud del pelo"]
+graficos_cuali(datos$FurLength, "Longitud del pelo", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Escala **ordinal** de tres categorías: `r C$FurLength$moda` (`r pct(C$FurLength$pct_moda)`), `r C$FurLength$moda2` y `r pct(100*mean(datos$FurLength == "Largo"))` de pelo largo; ninguna categoría es poco frecuente. El orden natural (corto < mediano < largo) permite usar medidas de posición sin perder información. **Lectura:** la mayoría de las fichas describe animales de pelo corto o mediano; el pelo largo es minoritario, pero con suficiente frecuencia para conservar la categoría.
+
+
+#### `Vaccinated` — Vacunado {.unnumbered}
+
+```{r}
+#| label: cuali-Vaccinated
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Vacunado"
+tabla_frecuencias(datos$Vaccinated, "Vacunado")
+```
+
+```{r}
+#| label: graf-cuali-Vaccinated
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por vacunado", "Composición porcentual por vacunado"]
+graficos_cuali(datos$Vaccinated, "Vacunado", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Tres categorías nominales: `r C$Vaccinated$moda` (`r pct(C$Vaccinated$pct_moda)`), seguida de «Sí» (`r pct(100*mean(datos$Vaccinated == "Sí"))`) y «No está seguro» (`r pct(100*mean(datos$Vaccinated == "No está seguro"))`); sin categorías raras. La categoría intermedia es informativa por sí misma: refleja fichas en las que el rescatista no tiene certeza del estado sanitario. **Lectura:** más de la mitad de los anuncios no declara vacunación o no está seguro de ella.
+
+
+#### `Dewormed` — Desparasitado {.unnumbered}
+
+```{r}
+#| label: cuali-Dewormed
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Desparasitado"
+tabla_frecuencias(datos$Dewormed, "Desparasitado")
+```
+
+```{r}
+#| label: graf-cuali-Dewormed
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por desparasitado", "Composición porcentual por desparasitado"]
+graficos_cuali(datos$Dewormed, "Desparasitado", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Tres categorías; la moda es «Sí» (`r pct(C$Dewormed$pct_moda)`), seguida de «No» (`r pct(100*mean(datos$Dewormed == "No"))`) y «No está seguro» (`r pct(100*mean(datos$Dewormed == "No está seguro"))`). Es la única de las tres variables sanitarias en la que la respuesta afirmativa es mayoritaria. **Lectura:** la desparasitación se declara con más frecuencia que la vacunación y la esterilización, lo que sugiere que es el cuidado más común en los animales publicados.
+
+
+#### `Sterilized` — Esterilizado {.unnumbered}
+
+```{r}
+#| label: cuali-Sterilized
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Esterilizado"
+tabla_frecuencias(datos$Sterilized, "Esterilizado")
+```
+
+```{r}
+#| label: graf-cuali-Sterilized
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por esterilizado", "Composición porcentual por esterilizado"]
+graficos_cuali(datos$Sterilized, "Esterilizado", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Tres categorías con moda en «No» (`r pct(C$Sterilized$pct_moda)`); solo `r pct(100*mean(datos$Sterilized == "Sí"))` de los anuncios declara esterilización y `r pct(100*mean(datos$Sterilized == "No está seguro"))` no está seguro. **Lectura:** casi cuatro de cada cinco anuncios corresponden a animales no esterilizados o de estado desconocido; junto con la vacunación, es la información sanitaria que más falta en las fichas.
+
+
+#### `Health` — Estado de salud {.unnumbered}
+
+```{r}
+#| label: cuali-Health
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Estado de salud"
+tabla_frecuencias(datos$Health, "Estado de salud")
+```
+
+```{r}
+#| label: graf-cuali-Health
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por estado de salud", "Composición porcentual por estado de salud"]
+graficos_cuali(datos$Health, "Estado de salud", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Escala **ordinal** de tres niveles **casi constante**: `r C$Health$moda` concentra el `r pct(C$Health$pct_moda)` de los anuncios, mientras «Lesión leve» aparece en el `r pct(100*mean(datos$Health == "Lesión leve"))` y «Lesión grave» en el `r pct(100*mean(datos$Health == "Lesión grave"))` (apenas `r ent(table(datos$Health)["Lesión grave"])` casos, categoría poco frecuente). **Lectura:** la variable aporta muy poca variabilidad; en la práctica equivale a una dicotomía «sano / no sano», y así conviene tratarla en el modelamiento.
+
+
+#### `AdoptionSpeed` — Velocidad de adopción (variable respuesta) {.unnumbered}
+
+```{r}
+#| label: cuali-AdoptionSpeed
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Velocidad de adopción (variable respuesta)"
+tabla_frecuencias(datos$AdoptionSpeed, "Velocidad de adopción")
+```
+
+```{r}
+#| label: graf-cuali-AdoptionSpeed
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por velocidad de adopción", "Composición porcentual por velocidad de adopción"]
+graficos_cuali(datos$AdoptionSpeed, "Velocidad de adopción", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Variable **ordinal** de cinco categorías y **respuesta** del estudio. La categoría más frecuente es «Sin adopción» (`r pct(100*mean(datos$AdoptionSpeed == "Sin adopción"))`), seguida de «8–30 días» (`r pct(100*mean(datos$AdoptionSpeed == "8–30 días"))`), «31–90 días» (`r pct(100*mean(datos$AdoptionSpeed == "31–90 días"))`) y «1–7 días» (`r pct(100*mean(datos$AdoptionSpeed == "1–7 días"))`); la adopción el mismo día es la categoría poco frecuente, con `r ent(table(datos$AdoptionSpeed)["Mismo día"])` anuncios (`r pct(100*mean(datos$AdoptionSpeed == "Mismo día"))`). El perfil es de **desbalance moderado**: las cuatro categorías principales pesan entre el 20 % y el 28 %, pero «Mismo día» queda muy por debajo. **Lectura:** el orden natural de las categorías permite tratarla como respuesta ordinal; el desbalance de la clase minoritaria exige pesos o remuestreo en la fase de modelamiento.
+
+
+#### `Color1` — Color principal {.unnumbered}
+
+```{r}
+#| label: cuali-Color1
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Color principal"
+tabla_frecuencias(datos$Color1, "Código de color principal")
+```
+
+```{r}
+#| label: graf-cuali-Color1
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por código de color principal", "Composición porcentual por código de color principal"]
+graficos_cuali(datos$Color1, "Código de color principal", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Siete códigos de color (el diccionario de nombres no forma parte de la base de trabajo, por lo que se conservan como identificadores). La distribución es muy concentrada: el código `r C$Color1$moda` reúne el `r pct(C$Color1$pct_moda)` de los anuncios y el código 2 otro `r pct(100*mean(datos$Color1 == "2"))`; entre los dos suman `r pct(100*mean(datos$Color1 %in% c("1", "2")))`. Ninguna categoría es poco frecuente y solo tres códigos superan el 6 %. **Lectura:** la ficha describe un color principal en todos los anuncios, pero la diversidad real es baja: casi tres de cada cuatro animales se anuncian con uno de dos colores.
+
+
+#### `Color2` — Segundo color {.unnumbered}
+
+```{r}
+#| label: cuali-Color2
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Segundo color"
+tabla_frecuencias(datos$Color2, "Código de segundo color")
+```
+
+```{r}
+#| label: graf-cuali-Color2
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por código de segundo color", "Composición porcentual por código de segundo color"]
+graficos_cuali(datos$Color2, "Código de segundo color", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Siete valores, donde el código 0 significa «sin segundo color» y aparece en el `r pct(C$Color2$pct_moda)` de los anuncios; entre los colores declarados, los códigos 7 (`r pct(100*mean(datos$Color2 == "7"))`) y 2 (`r pct(100*mean(datos$Color2 == "2"))`) son los más frecuentes. **Lectura:** casi un tercio de las fichas describe un solo color, lo que convierte al 0 en una categoría informativa (fichas menos detalladas) y no en un dato perdido.
+
+
+#### `Color3` — Tercer color {.unnumbered}
+
+```{r}
+#| label: cuali-Color3
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Tercer color"
+tabla_frecuencias(datos$Color3, "Código de tercer color")
+```
+
+```{r}
+#| label: graf-cuali-Color3
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Distribución por código de tercer color", "Composición porcentual por código de tercer color"]
+graficos_cuali(datos$Color3, "Código de tercer color", pastel = TRUE, n_top = 10)
+```
+**Interpretación.** Seis valores; el código 0 («sin tercer color») domina con el `r pct(100*mean(datos$Color3 == "0"))` de los anuncios y el resto se reparte entre códigos minoritarios, de los cuales el 7 (`r pct(100*mean(datos$Color3 == "7"))`) es el más común. **Lectura:** la descripción de colores pierde detalle a medida que se avanza en la ficha — Color1 está diligenciado en el 100 % de los anuncios, Color2 en el `r pct(100*mean(datos$Color2 != "0"))` y Color3 solo en el `r pct(100*mean(datos$Color3 != "0"))` —, lo que es coherente con un esfuerzo decreciente al llenar el formulario.
+
+
+#### `Breed1` — Raza principal {.unnumbered}
+
+```{r}
+#| label: cuali-Breed1
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Raza principal"
+tabla_frecuencias(datos$Breed1, "Código de raza principal", n_top = 11)
+```
+
+```{r}
+#| label: graf-cuali-Breed1
+#| echo: true
+#| layout-ncol: 1
+#| fig-cap: ["Categorías más frecuentes de código de raza principal"]
+graficos_cuali(datos$Breed1, "Código de raza principal", pastel = FALSE, n_top = 11)
+```
+**Interpretación.** Variable de **alta cardinalidad**: `r ent(C$Breed1$unicos)` códigos distintos de raza. El más frecuente (`r C$Breed1$moda`) concentra el `r pct(C$Breed1$pct_moda)` de los anuncios, los diez primeros reúnen el `r pct(100*sum(sort(table(datos$Breed1), decreasing = TRUE)[1:10])/nrow(datos))` y hay `r ent(C$Breed1$raras)` códigos con menos del 1 % de los casos, que juntos representan el `r pct(C$Breed1$pct_raras)` de los anuncios. **Lectura:** una tabla de frecuencia completa sería inmanejable y la mitad de las categorías sería ruido; para el modelamiento conviene agrupar las razas raras en una categoría «otras» (o usar una codificación que agrupe por frecuencia) y conservar el código tal como lo publica la plataforma, ya que el diccionario de nombres no está disponible en la base de trabajo.
+
+
+#### `Breed2` — Segunda raza {.unnumbered}
+
+```{r}
+#| label: cuali-Breed2
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Segunda raza"
+tabla_frecuencias(datos$Breed2, "Código de segunda raza", n_top = 11)
+```
+
+```{r}
+#| label: graf-cuali-Breed2
+#| echo: true
+#| layout-ncol: 1
+#| fig-cap: ["Categorías más frecuentes de código de segunda raza"]
+graficos_cuali(datos$Breed2, "Código de segunda raza", pastel = FALSE, n_top = 11)
+```
+**Interpretación.** `r ent(C$Breed2$unicos)` códigos distintos, pero con un valor dominante: el código 0 («sin segunda raza») aparece en el `r pct(C$Breed2$pct_moda)` de los anuncios. Entre los que sí declaran una segunda raza, los tres códigos más frecuentes son `r paste(names(sort(table(datos$Breed2), decreasing = TRUE)[2:4]), collapse = ", ")`, y hay `r ent(C$Breed2$raras)` códigos con menos del 1 % de los casos. **Lectura:** la mayoría de las fichas declara una sola raza; la segunda raza es una variable escasa y muy fragmentada, por lo que su aporte descriptivo es limitado.
+
+
+#### `State` — Estado o territorio (ubicación) {.unnumbered}
+
+```{r}
+#| label: cuali-State
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Estado o territorio (ubicación)"
+tabla_frecuencias(datos$State, "Código de estado", n_top = 11)
+```
+
+```{r}
+#| label: graf-cuali-State
+#| echo: true
+#| layout-ncol: 1
+#| fig-cap: ["Categorías más frecuentes de código de estado"]
+graficos_cuali(datos$State, "Código de estado", pastel = FALSE, n_top = 11)
+```
+**Interpretación.** `r ent(C$State$unicos)` códigos de ubicación con una concentración geográfica marcada: el código `r C$State$moda` agrupa el `r pct(C$State$pct_moda)` de los anuncios y los otros dos códigos principales suman `r pct(100*mean(datos$State %in% c("41401", "41327")))`, de modo que los tres primeros explican el `r pct(100*mean(datos$State %in% c("41326", "41401", "41327")))`. Hay `r ent(C$State$raras)` códigos con menos del 1 % de los anuncios (`r pct(C$State$pct_raras)` del total). **Lectura:** la base está fuertemente concentrada en tres territorios; los códigos minoritarios son candidatos a agruparse y, al no contar con el diccionario de nombres, conviene conservarlos como identificadores.
+
+
+#### `Name` — Nombre del animal {.unnumbered}
+
+```{r}
+#| label: cuali-Name
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Nombre del animal"
+tabla_frecuencias(datos$Name, "Nombre", n_top = 11)
+```
+
+```{r}
+#| label: graf-cuali-Name
+#| echo: true
+#| layout-ncol: 1
+#| fig-cap: ["Categorías más frecuentes de nombre"]
+graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 11)
+```
+**Interpretación.** Variable nominal de **alta cardinalidad**: `r ent(C$Name$unicos)` nombres distintos sobre `r ent(C$Name$n)` anuncios (proporción de valores distintos `r pct(C$Name$unicidad)`), `r ent(sum(is.na(datos$Name)))` anuncios sin nombre y una moda (`r C$Name$moda`) que apenas reúne el `r pct(C$Name$pct_moda)` de los casos. Los diez nombres más repetidos (Baby, Lucky, Brownie…) suman menos del `r pct(100*sum(sort(table(datos$Name), decreasing = TRUE)[1:10])/sum(!is.na(datos$Name)))` de los anuncios con nombre. **Lectura:** como categoría no aporta información agregada; sí aporta la distinción binaria «tiene nombre / no tiene nombre», que puede usarse como indicador del cuidado puesto en la ficha.
+
+
+#### `Description` — Relato del rescatista {.unnumbered}
+
+```{r}
+#| label: card-Description
+#| echo: true
+#| tbl-cap: "Cardinalidad — Relato del rescatista"
+tabla_cardinalidad(datos$Description)
+```
+**Interpretación.** Texto libre con `r ent(C$Description$unicos)` valores distintos (`r pct(C$Description$unicidad)` de unicidad) y una moda (`r C$Description$moda`) que corresponde a una plantilla y solo representa el `r pct(C$Description$pct_moda)` de los anuncios. Una tabla de frecuencias por categorías no tiene sentido aquí, y tampoco un gráfico de barras: el texto se aprovecha a través de sus dos derivadas cuantitativas, la longitud (`desc_char_len`, `desc_word_count`) y el sentimiento (`sentiment_score`, `sentiment_magnitude`), analizadas en la parte cuantitativa. **Lectura:** el relato es la fuente de información más rica de la ficha, pero su explotación exige tratarlo como texto, no como categoría.
+
+
+#### `PetID` — Identificador del anuncio {.unnumbered}
+
+```{r}
+#| label: card-PetID
+#| echo: true
+#| tbl-cap: "Cardinalidad — Identificador del anuncio"
+tabla_cardinalidad(datos$PetID)
+```
+**Interpretación.** `r ent(C$PetID$unicos)` valores distintos para `r ent(C$PetID$n)` filas: proporción de valores distintos del `r pct(C$PetID$unicidad)` y frecuencia de la moda de `r pct(C$PetID$pct_moda)`. La verificación de duplicados confirma `r ent(sum(duplicated(datos$PetID)))` identificadores repetidos. **Lectura:** no es una variable de análisis, es la **clave** que une los anuncios con las anotaciones de texto e imagen; se documenta aquí para dejar constancia de que identifica unidades únicas.
+
+
+#### `RescuerID` — Identificador del rescatista {.unnumbered}
+
+```{r}
+#| label: card-RescuerID
+#| echo: true
+#| tbl-cap: "Cardinalidad — Identificador del rescatista"
+tabla_cardinalidad(datos$RescuerID)
+```
+**Interpretación.** `r ent(C$RescuerID$unicos)` rescatistas distintos; el más activo publica el `r pct(C$RescuerID$pct_moda)` de los anuncios y los diez más activos, el `r pct(100*sum(sort(table(datos$RescuerID), decreasing = TRUE)[1:10])/nrow(datos))`. Hay `r ent(C$RescuerID$raras)` rescatistas con menos del 1 % de los anuncios, que en conjunto representan el `r pct(C$RescuerID$pct_raras)` de la base. **Lectura:** los anuncios **no son independientes** entre sí: un mismo rescatista publica varios animales, con prácticas y textos similares; por eso esta variable debe usarse para **agrupar** las particiones de entrenamiento y prueba (y nunca como predictor), para evitar fuga de información.
+
+
+### Nota de alcance y supuestos {#alcance}
+
+**Alcance.** Los 31 análisis anteriores son estrictamente univariados: cada variable se describió
+por separado, con sus propias medidas y gráficos. No se incluyeron cruces de variables, medidas de
+asociación ni correlaciones, y tampoco técnicas multivariadas (componentes principales,
+agrupamiento) ni modelos de clasificación: todo eso corresponde a las entregas siguientes.
+
+**Supuestos y decisiones documentadas.**
+
+1. **Valores perdidos sin imputar.** Las cinco variables con faltantes pertenecen al
+   enriquecimiento (nombre, sentimiento y anotaciones de imagen). Se reportan y se describen solo
+   con los casos válidos; la estrategia de imputación se definirá en la fase de modelamiento.
+2. **Los faltantes no son aleatorios.** El sentimiento falta en anuncios para los que no se
+   recuperó la anotación de la API (no en relatos vacíos) y las variables de imagen faltan en los
+   anuncios sin fotografía; conviene tratarlos con indicadores de ausencia.
+3. **Conteos acumulados.** `total_labels`, `total_faces` y `total_colors` acumulan las anotaciones
+   de todas las fotografías del anuncio, no son promedios por imagen; su magnitud depende del
+   número de fotos de la ficha.
+4. **Códigos sin diccionario.** Las razas, los colores y los estados se conservan como
+   identificadores numéricos porque los archivos `breed_labels.csv`, `color_labels.csv` y
+   `state_labels.csv` de la competencia no forman parte de la carpeta `data/` del proyecto. Si se
+   agregan, las tablas se pueden etiquetar sin cambiar el análisis.
+5. **Atípicos conservados.** No se eliminó ningún registro: los valores atípicos se documentaron
+   con dos criterios y se interpretaron, porque en esta base corresponden a casos reales
+   (animales mayores, anuncios de refugios, fichas muy detalladas).
+6. **Forma de las distribuciones.** La asimetría y la curtosis se calcularon con los estimadores
+   muestrales tipo 2 de `e1071` (la curtosis es *exceso* respecto de la normal).
+7. **Reproducibilidad.** Todo el análisis se ejecuta al construir el sitio con
+   `quarto render`, a partir de `data/petfinder_enriquecido_final.csv` y del script
+   [`scripts/01_dataset_enriquecido.R`](../scripts/01_dataset_enriquecido.R).
+
+Con este panorama univariado quedan identificadas las variables que requieren decisiones de
+tratamiento antes de modelar: las casi constantes (`Health`, `total_faces`, `VideoAmt`), las de
+dos regímenes (`Fee`, `Quantity`) y las de alta cardinalidad (`Breed1`, `State`).

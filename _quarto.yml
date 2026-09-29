@@ -1,6 +1,11 @@
 project:
   type: website
   output-dir: _site
+  # Solo se renderizan archivos .qmd: así los intermedios de knitr (*.knit.md)
+  # no se publican como si fueran páginas del sitio.
+  render:
+    - "*.qmd"
+    - "**/*.qmd" 
 
 website:
   title: "EDM_PetFinder"
