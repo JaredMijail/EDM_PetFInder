@@ -31,8 +31,8 @@
   --color-text: #1f2937;
   --color-text-soft: #4b5563;
   --color-border: #e2e8f0;
-  --color-code-bg: #1e293b;
-  --color-code-text: #e2e8f0;
+  --color-code-bg: #f6f8fa;         /* fondo claro: el código siempre se lee */
+  --color-code-text: #1a1a1a;
 
   /* Tipografía */
   --font-serif: "Source Serif Pro", "Georgia", "Cambria", serif;
@@ -59,8 +59,8 @@ body.quarto-dark {
   --color-text: #e5ecf6;
   --color-text-soft: #a9b8cf;
   --color-border: #2a3c5c;
-  --color-code-bg: #0b1220;
-  --color-code-text: #dbe6f5;
+  --color-code-bg: #0b1220;      /* en oscuro, fondo oscuro y tokens claros */
+  --color-code-text: #e8eef7;
   --color-primary: #c7dcf5;
   --color-secondary: #6fb6d1;
   --color-accent: #f0ab4b;
@@ -457,7 +457,8 @@ pre {
   color: var(--color-code-text) !important;
   border-radius: var(--radius);
   padding: 1.2rem 1.4rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
   border-left: 4px solid var(--color-accent);
   overflow-x: auto;
   font-size: 0.9rem;
@@ -471,6 +472,50 @@ pre code {
   font-size: 1em;
 }
 
+/* --- Resaltado de sintaxis con contraste garantizado ---------------------
+   Tema claro: palabras clave en azul oscuro, comentarios en verde oscuro,
+   cadenas en vino, números en azul petróleo. Fondo claro y texto oscuro.  */
+body:not(.quarto-dark) pre code span.kw,
+body:not(.quarto-dark) pre code span.im { color: #1a3a5c !important; font-weight: 700; }
+body:not(.quarto-dark) pre code span.co { color: #0f5132 !important; font-style: italic; }
+body:not(.quarto-dark) pre code span.st,
+body:not(.quarto-dark) pre code span.ss,
+body:not(.quarto-dark) pre code span.vs { color: #8a2f2f !important; }
+body:not(.quarto-dark) pre code span.fu,
+body:not(.quarto-dark) pre code span.kf { color: #6b21a8 !important; }
+body:not(.quarto-dark) pre code span.dv,
+body:not(.quarto-dark) pre code span.fl,
+body:not(.quarto-dark) pre code span.cn,
+body:not(.quarto-dark) pre code span.bn,
+body:not(.quarto-dark) pre code span.sc { color: #0e7490 !important; }
+body:not(.quarto-dark) pre code span.op { color: #374151 !important; }
+body:not(.quarto-dark) pre code span.va,
+body:not(.quarto-dark) pre code span.ot,
+body:not(.quarto-dark) pre code span.er { color: #1f2937 !important; }
+body:not(.quarto-dark) pre code span.at,
+body:not(.quarto-dark) pre code span.an { color: #0f766e !important; }
+
+/* Tema oscuro: mismos roles con tonos claros sobre el fondo oscuro */
+body.quarto-dark pre code span.kw,
+body.quarto-dark pre code span.im { color: #7cc4e8 !important; font-weight: 700; }
+body.quarto-dark pre code span.co { color: #86c99a !important; font-style: italic; }
+body.quarto-dark pre code span.st,
+body.quarto-dark pre code span.ss,
+body.quarto-dark pre code span.vs { color: #f0ab4b !important; }
+body.quarto-dark pre code span.fu,
+body.quarto-dark pre code span.kf { color: #c9a6ff !important; }
+body.quarto-dark pre code span.dv,
+body.quarto-dark pre code span.fl,
+body.quarto-dark pre code span.cn,
+body.quarto-dark pre code span.bn,
+body.quarto-dark pre code span.sc { color: #7fd1c0 !important; }
+body.quarto-dark pre code span.op { color: #cbd5e1 !important; }
+body.quarto-dark pre code span.va,
+body.quarto-dark pre code span.ot,
+body.quarto-dark pre code span.er { color: #e8eef7 !important; }
+body.quarto-dark pre code span.at,
+body.quarto-dark pre code span.an { color: #6fb6d1 !important; }
+
 .sourceCode {
   background: transparent;
 }
@@ -481,9 +526,9 @@ code.sourceCode > span {
 }
 
 .code-copy-button {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  color: #ffffff !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.18) !important;
+  color: #1a1a1a !important;
   border-radius: var(--radius-sm);
 }
 
