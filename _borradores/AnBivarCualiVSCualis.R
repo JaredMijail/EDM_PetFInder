@@ -6,7 +6,10 @@ library(knitr)       # kable()
 library(RColorBrewer)
 
 # Dataset PetFinder enriquecido
-petfinder_enriquecido_final <- read_csv("Documents/UN/2026-2S/EDM/petfinder_enriquecido_final.csv")
+petfinder_enriquecido_final <- readr::read_csv(
+  here::here("data", "petfinder_enriquecido_final.csv")
+)
+  
 colnames(petfinder_enriquecido_final)
 
 # Variables cualitativas

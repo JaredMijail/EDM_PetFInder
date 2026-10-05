@@ -177,6 +177,7 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
     geom_histogram(bins = 30, fill = "#2e7d9a", colour = "white", linewidth = 0.2) +
     labs(title = "Histograma", x = etiqueta, y = "Frecuencia") + tema_u()
   p2 <- ggplot(d, aes(y = v)) +
+    stat_boxplot(geom = "errorbar", width = 0.15) +
     geom_boxplot(
       fill = "#d97706", 
       width = 0.32, 
@@ -1033,3 +1034,911 @@ tabla_cardinalidad(datos$RescuerID)
 7.  **Reproducibilidad.** Todo el análisis se ejecuta al construir el sitio con `quarto render`, a partir de `data/petfinder_enriquecido_final.csv` y del script [`scripts/01_dataset_enriquecido.R`](../scripts/01_dataset_enriquecido.R).
 
 Con este panorama univariado quedan identificadas las variables que requieren decisiones de tratamiento antes de modelar: las casi constantes (`Health`, `total_faces`, `VideoAmt`), las de dos regímenes (`Fee`, `Quantity`) y las de alta cardinalidad (`Breed1`, `State`).
+
+## Análisis bivariado {#bivariado}
+
+Como paso previo al modelamiento se examinan las **asociaciones entre pares de variables**. La pregunta que ordena este análisis es la cuarta del proyecto: *¿qué variables se asocian con la velocidad de adopción y en qué dirección?*. Se reportan, según el tipo de par: correlaciones de Pearson y Spearman con su significancia (cuanti-cuanti), la razón de correlación η² con diagramas de caja y violín (cuali-cuanti), y tablas de contingencia con la prueba χ² y la V de Cramér (cuali-cuali). **Antes de cada gráfico se presenta la tabla de datos con la que se justifica su elección.** Son asociaciones descriptivas sobre un diseño observacional: no implican causalidad.
+
+### Bivariado 1 — cuantitativa vs cuantitativas {.unnumbered}
+
+Variable de interés: **`Age` (edad del animal, en meses)**. La elección es conceptual, no basada en resultados posteriores: (1) la literatura citada en el marco conceptual (Zadeh et al., 2022) identifica la edad entre los atributos con mayor asociación con la velocidad de adopción; (2) en el marco de señalización, la edad es una señal tabular observable al momento de publicar y potencialmente intervenible; (3) es una variable de razón, sin valores perdidos, comparable con todas las fuentes del anuncio. Para cada par (Age, otra cuantitativa) se reporta el gráfico adecuado a la naturaleza de las variables, las medidas de asociación (covarianza, Pearson, Spearman), la regresión lineal simple y su significancia, y un párrafo interpretativo generado a partir de los valores calculados.
+
+```{r}
+#| label: biv1-1
+#| echo: true
+#| eval: true
+
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(knitr)
+})
+
+options(OutDec = ",")
+set.seed(2026)
+
+datos <- readr::read_csv(
+  here::here("data", "petfinder_enriquecido_final.csv"),
+  show_col_types = FALSE
+)
+
+# Las 12 variables cuantitativas del proyecto (misma lista que el univariado)
+CUANTI <- c("Age", "Quantity", "Fee", "PhotoAmt", "VideoAmt",
+            "sentiment_score", "sentiment_magnitude",
+            "total_labels", "total_faces", "total_colors",
+            "desc_char_len", "desc_word_count")
+
+VAR_INTERES <- "Age"
+
+# Etiquetas legibles en español para ejes y tablas
+ETIQ <- c(
+  Age                 = "Edad (meses)",
+  Quantity            = "Animales en el anuncio",
+  Fee                 = "Tarifa (MYR)",
+  PhotoAmt            = "Fotografías",
+  VideoAmt            = "Videos",
+  sentiment_score     = "Polaridad del sentimiento (−1 a 1)",
+  sentiment_magnitude = "Intensidad del sentimiento",
+  total_labels        = "Etiquetas detectadas",
+  total_faces         = "Rostros detectados",
+  total_colors        = "Colores detectados",
+  desc_char_len       = "Caracteres del relato",
+  desc_word_count     = "Palabras del relato"
+)
+
+etiqueta <- function(v) {           # vectorizada: sirve para escalares y vectores
+  out <- unname(ETIQ[v])
+  out[is.na(out)] <- v[is.na(out)]
+  out
+}
+```
+
+```{r}
+#| label: biv1-2
+#| echo: true
+#| eval: true
+
+# --- formato de cifras en español ---
+fmt  <- function(x, d = 2) {
+  x <- as.numeric(x)
+  if (all(abs(x - round(x)) < 1e-9)) {
+    return(format(round(x), big.mark = ".", decimal.mark = ",", scientific = FALSE))
+  }
+  format(round(x, d), big.mark = ".", decimal.mark = ",", nsmall = d, scientific = FALSE)
+}
+ent  <- function(x) format(as.integer(round(as.numeric(x))), big.mark = ".", decimal.mark = ",")
+pct  <- function(x, d = 1) gsub("\\.", ",", sprintf(paste0("%.", d, "f %%"), x))
+
+# p-valor legible: "p < 0,001" cuando es muy pequeño
+pval <- function(p) ifelse(is.na(p), "—",
+                           ifelse(p < 0.001, "p < 0,001", sprintf("p = %s", fmt(p, 3))))
+
+# Fuerza de la asociación lineal (umbrales orientativos de uso corriente)
+fuerza <- function(r) {
+  a <- abs(r)
+  dplyr::case_when(
+    is.na(a)  ~ "no estimable",
+    a < 0.10  ~ "despreciable",
+    a < 0.30  ~ "débil",
+    a < 0.50  ~ "moderada",
+    a < 0.70  ~ "fuerte",
+    TRUE      ~ "muy fuerte"
+  )
+}
+direccion <- function(r) ifelse(is.na(r), "", ifelse(r > 0, "positiva", "negativa"))
+
+# Tema de los gráficos (idéntico al del sitio)
+tema_u <- function() {
+  theme_minimal(base_size = 11.5) +
+    theme(plot.background  = element_rect(fill = "white", colour = NA),
+          panel.background = element_rect(fill = "white", colour = NA),
+          plot.title       = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
+          plot.subtitle    = element_text(colour = "#4b5563", size = 9.5),
+          axis.title       = element_text(colour = "#4b5563", size = 10),
+          panel.grid.minor = element_blank())
+}
+```
+
+```{r}
+#| label: biv1-3
+#| echo: true
+#| eval: true
+
+# ---- Medidas para un par (x = Age, y = otra cuantitativa) ----
+# Covarianza y correlaciones sobre casos completos del par (eliminación por pares)
+medidas_par <- function(x, y, nombre_y) {
+  ok <- complete.cases(x, y)
+  x  <- as.numeric(x[ok]); y <- as.numeric(y[ok]); n <- length(x)
+
+  t_p <- suppressWarnings(cor.test(x, y, method = "pearson"))
+  t_s <- suppressWarnings(cor.test(x, y, method = "spearman"))
+
+  m  <- stats::lm(y ~ x)               # regresión simple: y (otra) ~ Age
+  sm <- summary(m)
+  ci <- suppressMessages(stats::confint(m))
+
+  tibble::tibble(
+    Variable        = nombre_y,
+    n               = n,
+    Perdidos        = sum(!ok),
+    r_Pearson       = unname(t_p$estimate),
+    p_Pearson       = t_p$p.value,
+    rho_Spearman    = unname(t_s$estimate),
+    p_Spearman      = t_s$p.value,
+    Covarianza      = stats::cov(x, y),
+    Pendiente       = unname(stats::coef(m)[2]),
+    Pendiente_li    = ci[2, 1],
+    Pendiente_ls    = ci[2, 2],
+    Intercepto      = unname(stats::coef(m)[1]),
+    R2              = sm$r.squared,
+    Error_residual  = sm$sigma,
+    p_modelo        = sm$coefficients[2, 4],
+    Media_y         = mean(y),
+    Mediana_y       = stats::median(y),
+    SD_y            = stats::sd(y),
+    Unicos_y        = length(unique(y))
+  )
+}
+```
+
+```{r}
+#| label: biv1-4
+#| echo: true
+#| eval: true
+
+# ---- Tabla de decisión: con qué datos se elige el gráfico del par ----
+# Regla: si alguna de las dos variables tiene 30 valores distintos o menos, la
+# nube se agolpa en rejillas -> dispersión con jitter + ajuste lineal.
+# Si ambas son densas -> dispersión con ajuste lineal + mapa de densidad 2D.
+tabla_decision_par <- function(x, y, nombre_y) {
+  ok <- complete.cases(x, y)
+  ux <- length(unique(as.numeric(x[ok]))); uy <- length(unique(as.numeric(y[ok])))
+  discreta <- ux <= 30 || uy <= 30
+  tibble::tibble(
+    `Elemento de decisión` = c("Casos completos del par (n)",
+                               "Descartados por faltantes",
+                               "Valores distintos de Edad (x)",
+                               paste0("Valores distintos de ", etiqueta(nombre_y), " (y)"),
+                               "Criterio aplicado",
+                               "Gráfico elegido"),
+    Valor = c(ent(sum(ok)), ent(sum(!ok)), ent(ux), ent(uy),
+              ifelse(discreta,
+                     "Alguna variable tiene ≤ 30 valores distintos: la nube forma rejillas",
+                     "Ambas variables son densas: la nube permite leer la nube y la densidad"),
+              ifelse(discreta,
+                     "Dispersión con jitter + ajuste lineal",
+                     "Dispersión con ajuste lineal + mapa de densidad 2D"))
+  ) |>
+    knitr::kable(align = c("l", "l"), format = "html") |>
+    knitr::knit_print() |>
+    cat()
+  invisible(NULL)
+}
+
+# ---- Gráficos del par ----
+graficos_par <- function(x, y, nombre_y) {
+  d <- tibble::tibble(edad = as.numeric(x), otro = as.numeric(y)) |> tidyr::drop_na()
+  discreta <- length(unique(d$otro)) <= 30 || length(unique(d$edad)) <= 30
+  cap <- sprintf("Edad vs %s (n = %s)", etiqueta(nombre_y), ent(nrow(d)))
+
+  p1 <- ggplot(d, aes(edad, otro)) +
+    { if (discreta) geom_jitter(width = 0.35, height = 0.12, alpha = 0.10,
+                                size = 0.5, colour = "#2e7d9a", na.rm = TRUE)
+      else          geom_point(alpha = 0.10, size = 0.55, colour = "#2e7d9a", na.rm = TRUE) } +
+    geom_smooth(method = "lm", formula = y ~ x, se = TRUE,
+                colour = "#dc2626", fill = "#dc2626", alpha = 0.12, linewidth = 0.9) +
+    labs(title = "Dispersión con ajuste lineal",
+         subtitle = cap,
+         x = etiqueta("Age"), y = etiqueta(nombre_y)) +
+    tema_u()
+
+  p2 <- ggplot(d, aes(edad, otro)) +
+    geom_bin2d(bins = 45) +
+    scale_fill_gradient(low = "#eaf1f5", high = "#1a3a5c",
+                        name = "Anuncios", trans = "log10") +
+    labs(title = "Mapa de densidad (conteo por celda)",
+         subtitle = cap,
+         x = etiqueta("Age"), y = etiqueta(nombre_y)) +
+    tema_u() +
+    theme(legend.position = "right")
+
+  print(p1); print(p2)
+  invisible(NULL)
+}
+
+# ---- Párrafo interpretativo por par (cifras calculadas, no transcritas) ----
+texto_par <- function(m) {
+  sprintf(
+    paste0(
+      "Entre Age y %s se usaron %s anuncios (%s descartados por faltantes en el par). ",
+      "La covarianza es %s (en unidades del producto meses × %s). ",
+      "La asociación lineal (Pearson) es r = %s (%s), %s y %s; ",
+      "la asociación monótona (Spearman) es ρ = %s (%s). ",
+      "El modelo %s ~ Age estima una pendiente de %s por cada mes de edad ",
+      "(IC 95 %%: %s a %s) con R² = %s, esto es, la edad explica el %s de la ",
+      "variabilidad observada de %s. Lectura: la relación es %s y de intensidad %s; ",
+      "con R² = %s la edad, por sí sola, %s."
+    ),
+    etiqueta(m$Variable),
+    ent(m$n), ent(m$Perdidos),
+    fmt(m$Covarianza, 2), etiqueta(m$Variable),
+    fmt(m$r_Pearson, 3), pval(m$p_Pearson), direccion(m$r_Pearson), fuerza(m$r_Pearson),
+    fmt(m$rho_Spearman, 3), pval(m$p_Spearman),
+    etiqueta(m$Variable), fmt(m$Pendiente, 4),
+    fmt(m$Pendiente_li, 4), fmt(m$Pendiente_ls, 4),
+    fmt(m$R2, 4), pct(100 * m$R2, 1),
+    etiqueta(m$Variable),
+    direccion(m$r_Pearson), fuerza(m$r_Pearson),
+    fmt(m$R2, 4),
+    ifelse(m$R2 < 0.05,
+           "no alcanza a ser un predictor útil (deja más del 95 % sin explicar)",
+           "aporta una parte acotada pero no despreciable de la variabilidad")
+  )
+}
+```
+
+```{r}
+#| label: biv1-5
+#| echo: true
+#| eval: true
+#| results: asis
+#| fig-width: 6.5
+#| fig-height: 4.2
+#| dpi: 130
+
+otras  <- setdiff(CUANTI, VAR_INTERES)
+res    <- vector("list", length(otras))
+
+for (i in seq_along(otras)) {
+  v  <- otras[i]
+  m  <- medidas_par(datos[[VAR_INTERES]], datos[[v]], v)
+  res[[i]] <- m
+
+  cat(sprintf("\n\n#### Par %d/%d: Edad vs %s {.unnumbered}\n\n", i, length(otras), etiqueta(v)))
+
+  tabla_decision_par(datos[[VAR_INTERES]], datos[[v]], v)
+
+  graficos_par(datos[[VAR_INTERES]], datos[[v]], v)
+
+  print(knitr::kable(
+    tibble::tibble(
+      Medida = c("n (casos completos)", "Perdidos en el par", "Covarianza",
+                 "Pearson r", "Pearson p", "Spearman ρ", "Spearman p",
+                 "Pendiente (β₁)", "IC 95 % β₁", "Intercepto (β₀)",
+                 "R²", "p del modelo", "Error residual (σ)"),
+      Valor  = c(ent(m$n), ent(m$Perdidos), fmt(m$Covarianza, 3),
+                 fmt(m$r_Pearson, 3), pval(m$p_Pearson),
+                 fmt(m$rho_Spearman, 3), pval(m$p_Spearman),
+                 fmt(m$Pendiente, 4), sprintf("[%s ; %s]", fmt(m$Pendiente_li, 4), fmt(m$Pendiente_ls, 4)),
+                 fmt(m$Intercepto, 3), fmt(m$R2, 4), pval(m$p_modelo),
+                 fmt(m$Error_residual, 3))
+    ), align = c("l", "r"), format = "html"))
+
+  cat("\n\n**Interpretación.** ", texto_par(m), "\n\n", sep = "")
+}
+```
+
+**Tabla resumen.** Los 11 pares ordenados por la magnitud de la asociación monótona (Spearman), que es la referencia más robusta con conteos y empates.
+
+```{r}
+#| label: biv1-6
+#| echo: true
+#| eval: true
+#| tbl-cap: "Asociación de Age con las demás variables cuantitativas, ordenada por |ρ|"
+
+resumen <- dplyr::bind_rows(res) |>
+  dplyr::mutate(
+    Variable   = etiqueta(Variable),
+    Tipo       = ifelse(Perdidos > 0, "enriquecida (con faltantes)", "original"),
+    `r (Pearson)`  = fmt(r_Pearson, 3),
+    `ρ (Spearman)` = fmt(rho_Spearman, 3),
+    Covarianza = fmt(Covarianza, 2),
+    `β₁`       = fmt(Pendiente, 4),
+    `IC 95 % β₁` = sprintf("[%s ; %s]", fmt(Pendiente_li, 4), fmt(Pendiente_ls, 4)),
+    `R²`       = fmt(R2, 4),
+    `Fuerza`   = fuerza(rho_Spearman),
+    `Dirección` = direccion(rho_Spearman),
+    `n`        = ent(n),
+    `Perdidos` = ent(Perdidos)
+  ) |>
+  dplyr::arrange(dplyr::desc(abs(rho_Spearman))) |>
+  dplyr::select(Variable, Tipo, n, Perdidos,
+                `r (Pearson)`, `ρ (Spearman)`, Covarianza, `β₁`, `IC 95 % β₁`,
+                `R²`, Fuerza, Dirección)
+
+print(knitr::kable(resumen, align = c("l", "l", "r", "r", "r", "r", "r", "r", "l", "r", "l", "l")))
+```
+
+**Matriz de correlación de contexto.** La matriz de Spearman entre las 12 cuantitativas hace visibles las redundancias entre las *otras* variables, relevantes para el modelamiento.
+
+```{r}
+#| label: biv1-7
+#| echo: true
+#| eval: true
+#| fig-width: 9
+#| fig-height: 8
+#| dpi: 130
+
+mat <- stats::cor(datos[CUANTI], use = "pairwise.complete.obs", method = "spearman")
+
+# Correlograma: triángulo inferior con coeficientes, variables en orden original.
+# Se etiquetan con los nombres cortos en español para que no se solapen.
+etiq_corta <- c(
+  Age = "Edad", Quantity = "Animales", Fee = "Tarifa", PhotoAmt = "Fotos",
+  VideoAmt = "Videos", sentiment_score = "Polaridad", sentiment_magnitude = "Intensidad",
+  total_labels = "Etiquetas", total_faces = "Rostros", total_colors = "Colores",
+  desc_char_len = "Caracteres", desc_word_count = "Palabras"
+)
+
+cor_long <- as.data.frame(as.table(mat))
+cor_long$Var1 <- factor(cor_long$Var1, levels = CUANTI, labels = etiq_corta[CUANTI])
+cor_long$Var2 <- factor(cor_long$Var2, levels = CUANTI, labels = etiq_corta[CUANTI])
+cor_long <- cor_long[as.integer(cor_long$Var1) > as.integer(cor_long$Var2), ]
+
+ggplot(cor_long, aes(Var2, Var1, fill = Freq)) +
+  geom_tile(colour = "white", linewidth = 0.6) +
+  geom_text(aes(label = gsub("\\.", ",", sprintf("%.2f", Freq))), size = 3.2,
+            colour = ifelse(abs(cor_long$Freq) > 0.55, "white", "#1f2937")) +
+  scale_fill_gradient2(low = "#dc2626", mid = "#f8fafc", high = "#1a3a5c",
+                       midpoint = 0, limits = c(-1, 1), name = "ρ de\nSpearman") +
+  scale_y_discrete(limits = rev) +
+  coord_fixed() +
+  labs(title = "Matriz de correlación de Spearman entre las 12 variables cuantitativas",
+       subtitle = "Triángulo inferior con los coeficientes; rojo = negativa, azul = positiva",
+       x = NULL, y = NULL) +
+  tema_u() +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1),
+        legend.position = "right")
+```
+
+```{r}
+#| label: biv1-8
+#| echo: true
+#| eval: true
+#| tbl-cap: "Matriz de correlación de Spearman (valores redondeados)"
+
+dimnames(mat) <- list(etiqueta(CUANTI), etiqueta(CUANTI))
+print(knitr::kable(round(mat, 2)))
+```
+
+**Lectura del análisis cuanti-cuanti.** Tres hechos estructuran el resultado. Primero, las asociaciones de `Age` con las demás cuantitativas son todas **débiles o despreciables** (|ρ| ≤ `r fmt(max(abs(dplyr::bind_rows(res)$rho_Spearman)), 2)`): la edad no guarda relaciones lineales ni monótonas relevantes con el resto de señales del anuncio, así que su eventual efecto sobre la adopción no opera a través de ellas. Segundo, la matriz deja al descubierto **redundancias internas casi perfectas**: `PhotoAmt` con `total_colors` (ρ ≈ 1) y con `total_labels` (ρ ≈ 0,99), y `desc_char_len` con `desc_word_count` (ρ ≈ 0,99); en el modelamiento bastará una variable de cada par para no duplicar información. Tercero, `sentiment_magnitude` se asocia moderadamente con la longitud del relato (ρ ≈ 0,79–0,80), lo que confirma que la intensidad del sentimiento crece con la cantidad de texto y debe normalizarse si se usa.
+
+**Notas de lectura.**
+
+1.  **Eliminación por pares:** cada par usa todos los casos con dato en ambas variables (los faltantes del enriquecimiento no tienen dato en Age).
+2.  **Empates:** Age y varias de las otras variables son conteos con muchos empates, lo que atenúa el r de Pearson; por eso se reporta también Spearman (asociación monótona, robusta a empates y a la asimetría).
+3.  **Dirección de la regresión:** en todos los pares la respuesta es la *otra* variable (y) y el predictor es Age (x), según la variable de interés.
+4.  **Redundancia:** algunos pares entre las *otras* variables son casi colineales (`total_labels` ≈ `total_colors` ≈ `PhotoAmt`; `desc_char_len` ≈ `desc_word_count`), lo que la matriz final hace visible para el modelamiento.
+5.  **Causalidad:** son asociaciones descriptivas; el diseño es observacional.
+
+
+### Bivariado 2 — cualitativa vs cuantitativas {.unnumbered}
+
+```{r}
+#| label: biv2-1
+#| echo: true
+#| eval: false
+
+library(dplyr)
+library(plotly)
+library(knitr)
+library(FactoClass)
+```
+
+```{r}
+#| label: biv2-2
+#| echo: true
+#| eval: false
+
+petfinder_enriquecido_final <- read_csv("Documents/UN/2026-2S/EDM/petfinder_enriquecido_final.csv")
+colnames(petfinder_enriquecido_final)
+```
+
+```{r}
+#| label: biv2-3
+#| echo: true
+#| eval: false
+
+cuantitativas <- c('Age', 'Quantity', 'Fee', 'VideoAmt', 'PhotoAmt', 'sentiment_score', 'sentiment_magnitude', 'total_labels', 'total_faces', 'total_colors', 'desc_char_len', 'desc_word_count')
+length(cuantitativas)
+
+AdoptionSpeed <- petfinder_enriquecido_final$AdoptionSpeed
+
+petfinder_cuanti <- petfinder_enriquecido_final %>% select(all_of(cuantitativas))
+
+petfinder_cuantis_cuali <- petfinder_cuanti |> mutate(AdoptionSpeed = AdoptionSpeed)
+```
+
+```{r}
+#| label: biv2-4
+#| echo: true
+#| eval: false
+
+bivariado <- function(variable,
+                      datos = petfinder_cuantis_cuali,
+                      cualitativa = "AdoptionSpeed") {
+
+  if (!variable %in% names(datos))
+    stop("La variable '", variable, "' no está en los datos.")
+  if (!cualitativa %in% names(datos))
+    stop("La variable cualitativa '", cualitativa, "' no está en los datos.")
+
+  f0 <- as.factor(datos[[cualitativa]])
+  ok <- complete.cases(datos[[variable]], f0)
+  x  <- datos[[variable]][ok]
+  f  <- droplevels(f0[ok])
+  df <- data.frame(x = x, f = f)
+
+  f_med <- reorder(f, x, median)
+  pdf(NULL)
+  fig1 <- plot_ly(df, x = ~x, color = f_med, type = "box",
+                  boxpoints = FALSE) %>%
+    layout(xaxis = list(title = variable),
+           yaxis = list(title = paste("sorted", cualitativa)),
+           showlegend = FALSE)
+
+  f_mean <- reorder(f, x, mean)
+  fig2 <- plot_ly(df, x = ~x, split = f_mean, type = "violin",
+                  points = "all", pointpos = 0,
+                  meanline = list(visible = TRUE, color = "black")) %>%
+    layout(xaxis = list(title = variable),
+           yaxis = list(title = paste("sorted", cualitativa)))
+
+  X    <- data.frame(x = x) |> setNames(variable)
+  corr <- centroids(X, f)$cr * 100
+
+  invisible(list(fig1 = fig1, fig2 = fig2, corr = corr))
+}
+```
+
+```{r}
+#| label: biv2-5
+#| echo: true
+#| eval: false
+
+res <- bivariado("Quantity")
+
+res$fig1
+res$fig2
+res$corr
+```
+
+### Bivariado 3 — cuantitativa vs cualitativas {.unnumbered}
+
+```{r}
+#| label: biv3-1
+#| echo: true
+#| eval: false
+
+library(dplyr)
+library(plotly)
+library(knitr)
+library(FactoClass)
+```
+
+```{r}
+#| label: biv3-2
+#| echo: true
+#| eval: false
+
+petfinder_enriquecido_final <- read_csv("Documents/UN/2026-2S/EDM/petfinder_enriquecido_final.csv")
+colnames(petfinder_enriquecido_final)
+```
+
+```{r}
+#| label: biv3-3
+#| echo: true
+#| eval: false
+
+cualitativas <- c('Type', 'Name', 'Breed1', 'Breed2', 'Gender', 'Color1', 'Color2', 'Color3', 'MaturitySize', 'FurLength', 'Vaccinated', 'Dewormed', 'Sterilized', 'Health', 'State', 'RescuerID', 'AdoptionSpeed')
+length(cualitativas)
+
+Age <- petfinder_enriquecido_final$Age
+
+petfinder_cuali <- petfinder_enriquecido_final %>% select(all_of(cualitativas))
+
+petfinder_cualis_cuanti <- petfinder_cuali |> mutate(Age = Age)
+```
+
+```{r}
+#| label: biv3-4
+#| echo: true
+#| eval: false
+
+bivariado <- function(cualitativa,
+                      datos = petfinder_cualis_cuanti,
+                      variable = 'Age'
+                      ) {
+
+  if (!variable %in% names(datos))
+    stop("La variable '", variable, "' no está en los datos.")
+  if (!cualitativa %in% names(datos))
+    stop("La variable cualitativa '", cualitativa, "' no está en los datos.")
+
+  f0 <- as.factor(datos[[cualitativa]])
+  ok <- complete.cases(datos[[variable]], f0)
+  x  <- datos[[variable]][ok]
+  f  <- droplevels(f0[ok])
+  df <- data.frame(x = x, f = f)
+
+  f_med <- reorder(f, x, median)
+  pdf(NULL)
+  fig1 <- plot_ly(df, x = ~x, color = f_med, type = "box",
+                  boxpoints = FALSE) %>%
+    layout(xaxis = list(title = variable),
+           yaxis = list(title = paste("sorted", cualitativa)),
+           showlegend = FALSE)
+
+  f_mean <- reorder(f, x, mean)
+  fig2 <- plot_ly(df, x = ~x, split = f_mean, type = "violin",
+                  points = "all", pointpos = 0,
+                  meanline = list(visible = TRUE, color = "black")) %>%
+    layout(xaxis = list(title = variable),
+           yaxis = list(title = paste("sorted", cualitativa)))
+
+  X    <- data.frame(x = x) |> setNames(variable)
+  corr <- centroids(X, f)$cr * 100
+
+  invisible(list(fig1 = fig1, fig2 = fig2, corr = corr))
+}
+
+cualitativas
+```
+
+```{r}
+#| label: biv3-5
+#| echo: true
+#| eval: false
+
+res <- bivariado("MaturitySize")
+
+res$fig1
+res$fig2
+res$corr
+```
+
+
+### Bivariado 4 — cualitativa vs cualitativas {.unnumbered}
+
+Se examina la asociación entre cada variable cualitativa y la **velocidad de adopción** (`AdoptionSpeed`), que es la variable respuesta del estudio. Para cada par se presenta: (1) la **tabla de datos** con la que se decide el tratamiento gráfico y estadístico (número de categorías, esperados mínimos, validez de la prueba χ²); (2) la tabla de contingencia; (3) el gráfico de barras apiladas al 100 %, que es la representación adecuada para comparar perfiles entre categorías; (4) las medidas de asociación (χ² de independencia y V de Cramér) con su significancia; y (5) un párrafo interpretativo generado a partir de los valores calculados. Las variables de alta cardinalidad (`Breed1`, `Breed2`, `State`, `Name`, `RescuerID`) se **agrupan** antes de cruzar: las categorías con menos del 1 % de los anuncios pasan a «Otras» (o se conservan las 10 más frecuentes si ninguna alcanza el 1 %), porque las celdas con esperados bajos invalidan la aproximación χ² y hacen ilegibles los gráficos.
+
+```{r}
+#| label: biv4-1
+#| echo: true
+#| eval: true
+
+# ---- Datos cualitativos con etiquetas en español y agrupamiento de niveles ----
+datos_cc <- readr::read_csv(
+  here::here("data", "petfinder_enriquecido_final.csv"),
+  show_col_types = FALSE
+) |>
+  dplyr::mutate(
+    Type          = factor(Type, levels = c("Dog", "Cat"), labels = c("Perro", "Gato")),
+    Gender        = factor(Gender, levels = c("Male", "Female", "Mixed"),
+                           labels = c("Macho", "Hembra", "Mixto")),
+    MaturitySize  = factor(MaturitySize, levels = c("Small", "Medium", "Large", "XLarge"),
+                           labels = c("Pequeño", "Mediano", "Grande", "Extra grande")),
+    FurLength     = factor(FurLength, levels = c("Short", "Medium", "Long"),
+                           labels = c("Corto", "Mediano", "Largo")),
+    Vaccinated    = factor(Vaccinated, levels = c("Yes", "No", "NotSure"),
+                           labels = c("Sí", "No", "No está seguro")),
+    Dewormed      = factor(Dewormed, levels = c("Yes", "No", "NotSure"),
+                           labels = c("Sí", "No", "No está seguro")),
+    Sterilized    = factor(Sterilized, levels = c("Yes", "No", "NotSure"),
+                           labels = c("Sí", "No", "No está seguro")),
+    Health        = factor(Health, levels = c("Healthy", "MinorInjury", "SeriousInjury"),
+                           labels = c("Sano", "Lesión leve", "Lesión grave")),
+    AdoptionSpeed = factor(AdoptionSpeed,
+                           levels = c("SameDay", "1-7d", "8-30d", "31-90d", "NoAdoption"),
+                           labels = c("Mismo día", "1–7 días", "8–30 días",
+                                      "31–90 días", "Sin adopción"))
+  )
+
+# Agrupa en 'Otras' las categorías con menos de prop_min de los casos; si ninguna
+# alcanza ese umbral, conserva las max_niveles más frecuentes y agrupa el resto.
+agrupar_niveles <- function(f, prop_min = 0.01, max_niveles = 10,
+                            etiqueta = "Otras", nombre = "variable") {
+  f <- factor(f)
+  if (nlevels(f) <= 10) return(f)
+
+  mf    <- table(f)
+  n     <- sum(mf)
+  n_min <- prop_min * n
+
+  if (all(mf >= n_min)) return(f)
+
+  if (!any(mf >= n_min)) {
+    top   <- names(sort(mf, decreasing = TRUE))[seq_len(max_niveles)]
+    nuevo <- as.character(f)
+    nuevo[!is.na(nuevo) & !(nuevo %in% top)] <- etiqueta
+    return(factor(nuevo, levels = c(top, etiqueta)))
+  }
+
+  orden <- names(sort(mf))
+  k <- max(sum(mf < n_min), 2)
+  while (k < length(orden) - 1 && sum(mf[orden[seq_len(k)]]) < n_min) {
+    k <- k + 1
+  }
+  raras <- orden[seq_len(k)]
+
+  nuevo <- as.character(f)
+  nuevo[!is.na(nuevo) & nuevo %in% raras] <- etiqueta
+
+  mantener <- setdiff(names(sort(mf, decreasing = TRUE)), raras)
+  factor(nuevo, levels = c(mantener, etiqueta))
+}
+
+# Se agrupan solo las de alta cardinalidad; AdoptionSpeed queda fuera por ser la referencia
+VARS_ALTA <- c("Breed1", "Breed2", "State", "Name", "RescuerID")
+for (v in VARS_ALTA) {
+  datos_cc[[v]] <- agrupar_niveles(datos_cc[[v]], prop_min = 0.01, nombre = v)
+}
+
+# Paleta de la variable respuesta (la misma del resto del sitio)
+pal_clases <- c(
+  "Mismo día"    = "#0f766e",
+  "1–7 días"     = "#2e7d9a",
+  "8–30 días"    = "#1a3a5c",
+  "31–90 días"   = "#d97706",
+  "Sin adopción" = "#dc2626"
+)
+```
+
+```{r}
+#| label: biv4-2
+#| echo: true
+#| eval: true
+
+# ---- V de Cramér con corrección de sesgo (Bergsma, 2013) ----
+cramers_v <- function(tab) {
+  chi <- suppressWarnings(stats::chisq.test(tab)$statistic)
+  n   <- sum(tab); r <- nrow(tab); c <- ncol(tab)
+  v   <- sqrt(max(0, chi / n - (r - 1) * (c - 1) / (n - 1)) /
+                (min(r - 1, c - 1) - (min(r - 1, c - 1)^2) / (n - 1)))
+  unname(v)
+}
+
+fuerza_v <- function(v) {
+  dplyr::case_when(
+    is.na(v)  ~ "no estimable",
+    v < 0.10  ~ "despreciable",
+    v < 0.20  ~ "débil",
+    v < 0.40  ~ "moderada",
+    TRUE      ~ "fuerte"
+  )
+}
+
+# ---- Tabla de datos previa a la decisión del gráfico ----
+tabla_decision_cc <- function(x, y, nombre_x) {
+  tab <- table(x, y)
+  esperados <- outer(rowSums(tab), colSums(tab)) / sum(tab)
+  pct_esp_bajo <- 100 * mean(esperados < 5)
+  chi <- suppressWarnings(stats::chisq.test(tab))
+  tibble::tibble(
+    `Elemento de decisión` = c("Casos completos del par (n)",
+                               "Categorías de la variable (tras agrupar)",
+                               "Categorías de AdoptionSpeed",
+                               "Categoría más pequeña (frecuencia mínima)",
+                               "Esperados < 5 en la tabla (%)",
+                               "p-valor de la prueba χ²",
+                               "Tratamiento elegido"),
+    Valor = c(ent(sum(tab)),
+              ent(nrow(tab)),
+              ent(ncol(tab)),
+              ent(min(rowSums(tab))),
+              pct(pct_esp_bajo),
+              pval(chi$p.value),
+              ifelse(nrow(tab) <= 12,
+                     "Barras apiladas al 100 % con todas las categorías",
+                     "Barras apiladas al 100 % (agrupadas en «Otras»)"))
+  ) |>
+    knitr::kable(align = c("l", "l"), format = "html") |>
+    knitr::knit_print() |>
+    cat()
+  invisible(NULL)
+}
+
+# ---- Gráfico: barras apiladas al 100 % (perfil fila) + etiquetas ----
+grafico_cc <- function(x, y, nombre_x) {
+  d <- tibble::tibble(cat = x, resp = y) |>
+    dplyr::count(cat, resp) |>
+    dplyr::group_by(cat) |>
+    dplyr::mutate(pct = 100 * n / sum(n), total = sum(n)) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(cat = forcats::fct_reorder(cat, total))
+
+  p1 <- ggplot(d, aes(x = pct, y = cat, fill = resp)) +
+    geom_col(width = 0.72) +
+    geom_text(aes(label = ifelse(pct >= 7, sprintf("%.0f %%", pct), "")),
+              position = position_stack(vjust = 0.5), size = 3, colour = "white") +
+    scale_fill_manual(values = pal_clases, name = NULL) +
+    scale_x_continuous(expand = expansion(mult = c(0, 0.01))) +
+    labs(title = sprintf("Perfil fila: distribución de la velocidad de adopción dentro de cada categoría de %s",
+                         nombre_x),
+         subtitle = "Cada barra suma 100 %; las etiquetas muestran los porcentajes ≥ 7 %",
+         x = "Porcentaje de anuncios", y = NULL) +
+    tema_u() +
+    theme(legend.position = "bottom")
+
+  # Mosaico con desviaciones del esperado (residuos de Pearson)
+  tab <- table(x, y)
+  esperados <- outer(rowSums(tab), colSums(tab)) / sum(tab)
+  res_pearson <- (tab - esperados) / sqrt(esperados)
+  d_res <- as.data.frame(as.table(res_pearson))
+  names(d_res) <- c("cat", "resp", "residuo")
+
+  p2 <- ggplot(d_res, aes(x = resp, y = cat, fill = residuo)) +
+    geom_tile(colour = "white", linewidth = 0.5) +
+    geom_text(aes(label = gsub("\\.", ",", sprintf("%.1f", residuo))), size = 3,
+              colour = ifelse(abs(d_res$residuo) > 4, "white", "#1f2937")) +
+    scale_fill_gradient2(low = "#1a3a5c", mid = "#f8fafc", high = "#dc2626",
+                         midpoint = 0, name = "Residuo de\nPearson") +
+    labs(title = sprintf("Mapa de residuos de Pearson: %s × velocidad de adopción", nombre_x),
+         subtitle = "Rojo: más casos que los esperados bajo independencia; azul: menos",
+         x = NULL, y = NULL) +
+    tema_u() +
+    theme(axis.text.x = element_text(angle = 25, hjust = 1),
+          legend.position = "right")
+
+  print(p1); print(p2)
+  invisible(NULL)
+}
+
+# ---- Párrafo interpretativo (cifras calculadas, no transcritas) ----
+texto_cc <- function(x, y, nombre_x) {
+  tab <- table(x, y)
+  chi  <- suppressWarnings(stats::chisq.test(tab))
+  v    <- cramers_v(tab)
+  res_p <- (tab - outer(rowSums(tab), colSums(tab)) / sum(tab)) /
+           sqrt(outer(rowSums(tab), colSums(tab)) / sum(tab))
+  idx  <- which(abs(res_p) == max(abs(res_p)), arr.ind = TRUE)[1, ]
+  celda_max <- sprintf("«%s × %s»", rownames(tab)[idx[1]], colnames(tab)[idx[2]])
+  res_max <- res_p[idx[1], idx[2]]
+  perfil <- prop.table(tab, 1) * 100
+  i_cat <- which.max(apply(perfil, 1, function(r) max(r) - min(r)))
+  sprintf(
+    paste0(
+      "La tabla cruza %s (%d categorías, tras agrupar las minoritarias) con la velocidad de adopción ",
+      "sobre %s anuncios. La prueba χ² de independencia arroja χ²(%d) = %s (%s), y la V de Cramér ",
+      "corregida es %s, una asociación %s. La celda que más se aparta de la independencia es %s ",
+      "(residuo de Pearson = %s), es decir, %s casos de los esperados si ambas variables fueran independientes. ",
+      "La categoría con el perfil más desigual es «%s»: en ella la proporción de adopción va de %s a %s según la clase. ",
+      "Lectura: %s."
+    ),
+    nombre_x, nrow(tab), ent(sum(tab)),
+    chi$parameter, fmt(chi$statistic, 1), pval(chi$p.value),
+    fmt(v, 3), fuerza_v(v),
+    celda_max, fmt(res_max, 1),
+    ifelse(res_max > 0, "hay más", "hay menos"),
+    rownames(tab)[i_cat],
+    pct(min(perfil[i_cat, ])), pct(max(perfil[i_cat, ])),
+    ifelse(v < 0.1,
+           "la variable apenas se asocia con la velocidad de adopción; no es prioritaria para el modelamiento",
+           ifelse(v < 0.2,
+                  "la asociación existe pero es débil; puede aportar en interacción con otras variables",
+                  "es de las variables que más discriminan la velocidad de adopción; prioritaria para el modelamiento"))
+  )
+}
+
+# Variables cualitativas a cruzar con AdoptionSpeed (respuesta)
+VARS_CC <- c("Type", "Gender", "MaturitySize", "FurLength", "Vaccinated", "Dewormed",
+             "Sterilized", "Health", "Color1", "Color2", "Color3",
+             "Breed1", "Breed2", "State", "Name", "RescuerID")
+
+ETIQ_CC <- c(
+  Type         = "Especie",
+  Gender       = "Sexo",
+  MaturitySize = "Tamaño",
+  FurLength    = "Longitud del pelo",
+  Vaccinated   = "Vacunado",
+  Dewormed     = "Desparasitado",
+  Sterilized   = "Esterilizado",
+  Health       = "Estado de salud",
+  Color1       = "Color principal",
+  Color2       = "Segundo color",
+  Color3       = "Tercer color",
+  Breed1       = "Raza principal",
+  Breed2       = "Segunda raza",
+  State        = "Estado o territorio",
+  Name         = "Nombre del animal",
+  RescuerID    = "Identificador del rescatista"
+)
+```
+
+```{r}
+#| label: biv4-3
+#| echo: true
+#| eval: true
+#| results: asis
+#| fig-width: 7.2
+#| fig-height: 4.6
+#| dpi: 130
+
+res_cc <- vector("list", length(VARS_CC))
+
+for (i in seq_along(VARS_CC)) {
+  v  <- VARS_CC[i]
+  x  <- datos_cc[[v]]
+  y  <- datos_cc$AdoptionSpeed
+  ok <- complete.cases(x, y)
+  x  <- droplevels(factor(x[ok])); y <- droplevels(y[ok])
+
+  tab <- table(x, y)
+  chi <- suppressWarnings(stats::chisq.test(tab))
+  res_cc[[i]] <- tibble::tibble(
+    Variable = ETIQ_CC[v], n = sum(tab),
+    Chi2 = chi$statistic, gl = chi$parameter, p = chi$p.value,
+    V = cramers_v(tab)
+  )
+
+  cat(sprintf("\n\n#### %s {.unnumbered}\n\n", ETIQ_CC[v]))
+
+  tabla_decision_cc(x, y, ETIQ_CC[v])
+
+  print(knitr::kable(tab, caption = sprintf("Tabla de contingencia: %s × velocidad de adopción", ETIQ_CC[v]), format = "html"))
+
+  grafico_cc(x, y, ETIQ_CC[v])
+
+  print(knitr::kable(
+    tibble::tibble(
+      Medida = c("χ² de independencia", "gl", "p-valor", "V de Cramér (corregida)", "Intensidad"),
+      Valor  = c(fmt(chi$statistic, 2), ent(chi$parameter), pval(chi$p.value),
+                 fmt(cramers_v(tab), 3), fuerza_v(cramers_v(tab)))
+    ), align = c("l", "r"), format = "html"))
+
+  cat("\n\n**Interpretación.** ", texto_cc(x, y, ETIQ_CC[v]), "\n\n", sep = "")
+}
+```
+
+**Tabla resumen.** Las 16 variables cualitativas ordenadas por la magnitud de su asociación con la velocidad de adopción (V de Cramér corregida).
+
+```{r}
+#| label: biv4-4
+#| echo: true
+#| eval: true
+#| tbl-cap: "Asociación de cada variable cualitativa con la velocidad de adopción"
+
+dplyr::bind_rows(res_cc) |>
+  dplyr::mutate(
+    `χ²`      = fmt(Chi2, 1),
+    `gl`      = ent(gl),
+    `p-valor` = pval(p),
+    `V de Cramér` = fmt(V, 3),
+    `Intensidad`  = fuerza_v(V),
+    `n`       = ent(n)
+  ) |>
+  dplyr::arrange(dplyr::desc(V)) |>
+  dplyr::select(Variable, n, `χ²`, gl, `p-valor`, `V de Cramér`, Intensidad) |>
+  knitr::kable(align = c("l", "r", "r", "r", "r", "r", "l"))
+```
+
+```{r}
+#| label: biv4-5
+#| echo: true
+#| eval: true
+#| fig-width: 7.2
+#| fig-height: 4.6
+#| dpi: 130
+#| fig-cap: "V de Cramér corregida de cada variable cualitativa con la velocidad de adopción"
+
+dplyr::bind_rows(res_cc) |>
+  dplyr::mutate(Variable = forcats::fct_reorder(Variable, V)) |>
+  ggplot(aes(x = V, y = Variable)) +
+  geom_col(fill = "#2e7d9a", width = 0.7) +
+  geom_vline(xintercept = 0.1, linetype = "dashed", colour = "#9ca3af") +
+  geom_vline(xintercept = 0.2, linetype = "dashed", colour = "#6b7280") +
+  geom_text(aes(label = fmt(V, 3)), hjust = -0.2, size = 3.1, colour = "#1f2937") +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.16))) +
+  labs(title = "Intensidad de la asociación con la velocidad de adopción",
+       subtitle = "Líneas de referencia: 0,10 (débil) y 0,20 (moderada)",
+       x = "V de Cramér corregida", y = NULL) +
+  tema_u()
+```
+
+**Lectura del análisis cuali-cuali.** Ninguna variable cualitativa supera el umbral de asociación moderada con la velocidad de adopción: la V de Cramér máxima es `r fmt(max(dplyr::bind_rows(res_cc)$V), 2)`. Las señales más claras provienen del **estado sanitario y reproductivo** (esterilización, vacunación y desparasitación) y de la **raza principal**, seguidas de la especie, lo que confirma que la decisión de adopción responde más a la información objetiva del animal (salud, especie, raza) que a sus atributos cosméticos (colores, nombre). La ubicación (`State`) y el rescatista (`RescuerID`) muestran asociaciones menores pero no nulas, lo que sugiere efectos de contexto geográfico y de prácticas de publicación. En todos los casos la prueba χ² resulta significativa por el tamaño muestral (n ≈ 15 000), así que la interpretación se apoya en la magnitud de la V, no en el p-valor.
+
+**Notas de lectura.**
+
+1.  **Agrupamiento:** las categorías con menos del 1 % de los anuncios se agrupan en «Otras» antes de cruzar; con celdas de esperado muy bajo la aproximación χ² deja de ser válida.
+2.  **V de Cramér corregida:** se usa la corrección de sesgo de Bergsma (2013), que es conservadora en tablas grandes; sin corrección, la V clásica infla ligeramente la asociación en variables de muchas categorías.
+3.  **Residuos de Pearson:** valores por encima de |2| marcan celdas que se apartan de la independencia; el mapa de calor los hace visibles de un vistazo.
+4.  **Causalidad:** son asociaciones descriptivas sobre un diseño observacional; «sin adopción» significa no adoptado dentro de la ventana de 100 días de la competencia.

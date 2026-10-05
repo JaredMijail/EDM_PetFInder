@@ -39,6 +39,7 @@ for (v in c("AdoptionSpeed","MaturitySize","FurLength","Health","Vaccinated","St
   print(table(datos[[v]], useNA="ifany"))
 }
 cat("\n### faltantes\n"); print(colSums(is.na(datos)))
+
 cat("\n### duplicados: filas", sum(duplicated(datos)), "| PetID", sum(duplicated(datos$PetID)), "\n")
 cat("\n### dim:", nrow(datos), "x", ncol(datos), "| memoria:", format(object.size(datos), units="MB"), "\n")
 print(rownames(installed.packages())[rownames(installed.packages()) %in% c("e1071","patchwork","gridExtra","gt","moments","cowplot","ggpubr","scales","knitr","kableExtra")])
