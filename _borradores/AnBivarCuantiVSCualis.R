@@ -1,4 +1,5 @@
 # Ambiente
+library(readr)
 library(dplyr)
 library(plotly)
 library(knitr)
@@ -23,8 +24,7 @@ petfinder_cualis_cuanti <- petfinder_cuali |> mutate(Age = Age)
 
 bivariado <- function(cualitativa,
                       datos = petfinder_cualis_cuanti,
-                      variable = 'Age'
-                      ) {
+                      variable = 'Age') {
   
   # Validación de nombres
   if (!variable %in% names(datos))
@@ -39,34 +39,37 @@ bivariado <- function(cualitativa,
   f  <- droplevels(f0[ok])
   df <- data.frame(x = x, f = f)
   
-  # fig1: diagrama de cajas (niveles ordenados por mediana).
-  # Se dibuja en un dispositivo nulo para guardarlo sin mostrarlo.
+  # Razón de correlación (porcentaje)
+  X    <- data.frame(x = x) |> setNames(variable)
+  corr <- centroids(X, f)$cr * 100
+  
+  # Boxplot (niveles ordenados por mediana)
   f_med <- reorder(f, x, median)
-  pdf(NULL)
-  fig1 <- plot_ly(df, x = ~x, color = f_med, type = "box",
-                  boxpoints = FALSE) %>%
+  fig1 <- plot_ly(df, x = ~x, y = ~f_med, color = ~f_med, type = "box",
+                  boxpoints = FALSE, orientation = "h") %>%
     layout(xaxis = list(title = variable),
            yaxis = list(title = paste("sorted", cualitativa)),
            showlegend = FALSE)
   
-  # fig2: gráfico de violín con puntos y media (niveles ordenados por media)
+  # Violín (niveles ordenados por media)
   f_mean <- reorder(f, x, mean)
-  fig2 <- plot_ly(df, x = ~x, split = f_mean, type = "violin",
+  fig2 <- plot_ly(df, x = ~x, y = ~f_mean, color = ~f_mean, type = "violin",
+                  orientation = "h",
                   points = "all", pointpos = 0,
                   meanline = list(visible = TRUE, color = "black")) %>%
     layout(xaxis = list(title = variable),
-           yaxis = list(title = paste("sorted", cualitativa)))
+           yaxis = list(title = paste("sorted", cualitativa)),
+           showlegend = FALSE)
   
-  # corr: razón de correlación (porcentaje)
-  X    <- data.frame(x = x) |> setNames(variable)
-  corr <- centroids(X, f)$cr * 100
-  
-  invisible(list(fig1 = fig1, fig2 = fig2, corr = corr))
+  # Panel combinado con la razón de correlación en el título
+  subplot(fig1, fig2, nrows = 1, shareX = TRUE, shareY = FALSE,
+          titleX = TRUE, titleY = TRUE, margin = 0.05) %>%
+    layout(
+      title = list(
+        text = sprintf("%s vs %s &nbsp;|&nbsp; Razón de correlación: %.2f%%",
+                       variable, cualitativa, corr),
+        x = 0.5
+      ),
+      margin = list(t = 80)
+    )
 }
-
-cualitativas
-res <- bivariado("MaturitySize")
-
-res$fig1    # boxplot
-res$fig2    # gráfico de violín
-res$corr    # razón de correlación (%)
