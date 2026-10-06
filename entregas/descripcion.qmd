@@ -226,3 +226,5 @@ tibble::tibble(Variable = names(datos), Perdidos = as.integer(colSums(is.na(dato
   knitr::kable(col.names = c("Variable", "Valores perdidos", "% de las filas"),
                align = c("l", "r", "r"))
 ```
+
+Valores perdidos. Cinco variables presentan datos faltantes y todas pertenecen al enriquecimiento: el nombre del animal (1.257 casos), las dos variables de sentimiento (551 cada una) y las tres variables derivadas de la imagen (341 cada una, los anuncios sin fotografía).
