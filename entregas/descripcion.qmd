@@ -1,6 +1,6 @@
 ---
-title: "Análisis exploratorio"
-subtitle: "Entrega 1 — Análisis univariado del dataset PetFinder.my"
+title: "Descripción"
+subtitle: "Estructura global del conjunto de datos PetFinder."
 author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
 
