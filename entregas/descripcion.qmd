@@ -8,9 +8,6 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 [Dataset y enriquecimiento](dataset.qmd){.btn-ghost} [Metodología](../proyecto/metodologia.qmd){.btn-ghost} <button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
 :::
 
-A continuación se describe el contenido del conjunto datos PetFinder según el número de unidades de observación
-(anuncios), el número de variables y su tipificación y los valores faltantes a nivel general y particular.
-
 ```{r}
 #| label: librerias
 #| echo: true
@@ -25,7 +22,7 @@ library(knitr)       # kable() para tablas
 ```{r}
 #| label: setup-descripcion
 #| echo: true
-
+# Carga y traducción de los niveles de las variables cualitativas del conjunto de datos
 options(OutDec = ",")   # separador decimal en español
 knitr::opts_chunk$set(fig.width = 4.6, fig.height = 3.3, dpi = 120, out.width = "100%")
 
@@ -84,8 +81,11 @@ tema_u <- function() {
 }
 ```
 
+A continuación se describe el contenido del conjunto datos PetFinder según el número de unidades de observación
+(anuncios), el número de variables y su tipificación y los valores faltantes a nivel general y particular.
+
 ```{r}
-#| echo: false
+#| echo: true
 #| message: false
 
 est <- c(
@@ -191,7 +191,7 @@ clasificacion_cuanti |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 
 ```{r}
 #| label: general-tipos-cuanti
-#| echo: false
+#| echo: true
 #| layout-ncol: 2
 #| fig-cap: ["Número de variables cuantitativas por escala", "Composición porcentual de las variables cuantitativas por escala"]
 clasificacion_cuanti |> count(Escala) |>
