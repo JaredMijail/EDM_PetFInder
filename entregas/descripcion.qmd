@@ -1,6 +1,6 @@
 ---
 title: "Descripción"
-subtitle: "Estructura global del conjunto de datos PetFinder."
+subtitle: "Composición del conjunto de datos PetFinder."
 author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
 
@@ -8,7 +8,7 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 [Dataset y enriquecimiento](dataset.qmd){.btn-ghost} [Metodología](../proyecto/metodologia.qmd){.btn-ghost} <button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
 :::
 
-Aquí se describe la **estructura global** de la base. No se analiza variable por variable: eso se hace en las dos partes siguientes.
+A continuación se describe el contenido del conjunto datos PetFinder.
 
 ```{r}
 #| label: setup-univariado
@@ -250,8 +250,9 @@ tibble::tibble(
   knitr::kable(align = c("l", "l"))
 ```
 
-**Tipos de variables.** Las 31 variables se clasifican por su naturaleza y su escala de medición. 
-La columna *Fuente* distingue las variables originales de la competencia de las que se construyeron 
+### Tipos de Variables
+Las 31 variables se clasifican por su naturaleza y su escala de medición. 
+La columna *Fuente* distingue las variables originales de las que se construyeron 
 en el enriquecimiento (texto e imagen).
 
 ```{r}
@@ -340,7 +341,7 @@ clasificacion_cuanti |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 #| fig-cap: ["Número de variables cuantitativas por escala", "Composición porcentual de las variables cuantitativas por escala"]
 clasificacion_cuanti |> count(Escala) |>
   ggplot(aes(x = n, y = fct_reorder(Escala, n))) +
-  geom_col(fill = "#0f766e", width = 0.68) +
+  geom_col(fill = "#2e7d9a", width = 0.68) +
   geom_text(aes(label = n), hjust = -0.4, colour = "#1f2937", size = 3.4) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
   labs(title = "Variables cuantitativas por escala", x = "Número de variables", y = NULL) + tema_u()
