@@ -286,25 +286,50 @@ clasificacion_cuali |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 ```
 
 ```{r}
+#| label: general-tipos
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: ["Número de variables cualitativas por escala", "Composición porcentual de las variables cualitativas por escala"]
+clasificacion_cuali |> count(Escala) |>
+  ggplot(aes(x = n, y = fct_reorder(Escala, n))) +
+  geom_col(fill = "#2e7d9a", width = 0.68) +
+  geom_text(aes(label = n), hjust = -0.4, colour = "#1f2937", size = 3.4) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Variables cualitativas por escala", x = "Número de variables", y = NULL) + tema_u()
+
+clasificacion_cuali |> count(Escala) |>
+  ggplot(aes(x = "", y = n, fill = Escala)) +
+  geom_col(width = 1, colour = "white") + coord_polar("y") +
+  labs(title = "Composición por escala (cualitativas)", x = NULL, y = NULL) +
+  theme_minimal(base_size = 11.5) +
+  theme(plot.background = element_rect(fill = "white", colour = NA),
+        plot.title = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
+        legend.title = element_blank(), legend.text = element_text(size = 9),
+        axis.text = element_blank(), panel.grid = element_blank())
+```
+
+
+```{r}
 #| label: general-clasificacion-cuanti
 #| tbl-cap: "Clasificación de las variables cuantitativas por tipo, escala y origen"
 
 clasificacion_cuanti <- tibble::tribble(
   ~Variable, ~`Tipo`, ~Escala, ~Fuente,
-  "Age",                "Entero",    "De razón",  "Original",
-  "Quantity",           "Entero",    "De razón",  "Original",
-  "Fee",                "Entero",    "De razón",  "Original",
-  "VideoAmt",           "Entero",    "De razón",  "Original",
-  "PhotoAmt",           "Entero",    "De razón",  "Original",
-  "sentiment_score",    "Numérico",  "De intervalo", "Enriquecimiento (texto)",
-  "sentiment_magnitude","Numérico",  "De razón",  "Enriquecimiento (texto)",
-  "total_labels",       "Entero",    "De razón",  "Enriquecimiento (imagen)",
-  "total_faces",        "Entero",    "De razón",  "Enriquecimiento (imagen)",
-  "total_colors",       "Entero",    "De razón",  "Enriquecimiento (imagen)",
-  "desc_char_len",      "Entero",    "De razón",  "Derivada del texto",
-  "desc_word_count",    "Entero",    "De razón",  "Derivada del texto"
+  "Age",                "Entero",    "Razón",  "Original",
+  "Quantity",           "Entero",    "Razón",  "Original",
+  "Fee",                "Entero",    "Razón",  "Original",
+  "VideoAmt",           "Entero",    "Razón",  "Original",
+  "PhotoAmt",           "Entero",    "Razón",  "Original",
+  "sentiment_score",    "Numérico",  "Intervalo", "Enriquecimiento (texto)",
+  "sentiment_magnitude","Numérico",  "Razón",  "Enriquecimiento (texto)",
+  "total_labels",       "Entero",    "Razón",  "Enriquecimiento (imagen)",
+  "total_faces",        "Entero",    "Razón",  "Enriquecimiento (imagen)",
+  "total_colors",       "Entero",    "Razón",  "Enriquecimiento (imagen)",
+  "desc_char_len",      "Entero",    "Razón",  "Derivada del texto",
+  "desc_word_count",    "Entero",    "Razón",  "Derivada del texto"
 ) |>
   dplyr::arrange(Escala)
 
 clasificacion_cuanti |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 ```
+
