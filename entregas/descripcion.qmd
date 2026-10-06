@@ -257,3 +257,34 @@ tibble::tibble(
 **Tipos de variables.** Las 31 variables se clasifican por su naturaleza y su escala de medición. 
 La columna *Fuente* distingue las variables originales de la competencia de las que se construyeron 
 en el enriquecimiento (texto e imagen).
+
+```{r}
+#| label: general-clasificacion-cuali
+#| tbl-cap: "Clasificación de las variables cualitativas por tipo, escala y origen"
+
+clasificacion_cuali <- tibble::tribble(
+  ~Variable, ~`Tipo en R`, ~Grupo, ~Escala, ~Fuente,
+  "PetID",              "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
+  "Name",               "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
+  "Type",               "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Breed1",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Breed2",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Gender",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Color1",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Color2",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Color3",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Vaccinated",         "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Dewormed",           "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "Sterilized",         "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "State",              "factor",    "Cualitativa nominal",   "Nominal",   "Original",
+  "RescuerID",          "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
+  "Description",        "texto",     "Cualitativa nominal",   "Nominal",   "Original",
+  "MaturitySize",       "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
+  "FurLength",          "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
+  "Health",             "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
+  "AdoptionSpeed",      "factor",    "Cualitativa ordinal",   "Ordinal",   "Original"
+) |>
+  dplyr::arrange(Grupo, Variable)
+
+clasificacion_cuali |> knitr::kable(align = c("l", "l", "l", "l", "l"))
+```
