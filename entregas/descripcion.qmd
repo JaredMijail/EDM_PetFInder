@@ -11,15 +11,9 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 A continuación se describe el contenido del conjunto datos PetFinder.
 
 ```{r}
-#| label: setup-univariado
-#| echo: true
-
-library(tidyverse)
-
-```
-```{r}
 #| label: general-estructura
 #| tbl-cap: "Dimensión y estructura general de la base"
+library(tidyverse)
 
 tibble::tibble(
   Aspecto = c("Unidades de análisis", "Variables", "Celdas de datos", "Valores perdidos",
