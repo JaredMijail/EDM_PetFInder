@@ -259,26 +259,26 @@ en el enriquecimiento (texto e imagen).
 #| tbl-cap: "Clasificación de las variables cualitativas por tipo, escala y origen"
 
 clasificacion_cuali <- tibble::tribble(
-  ~Variable, ~`Tipo en R`, ~Escala, ~Fuente,
-  "PetID",              "caracter",  "Nominal",   "Original",
-  "Name",               "caracter",  "Nominal",   "Original",
-  "Type",               "factor",    "Nominal",   "Original",
-  "Breed1",             "factor",    "Nominal",   "Original",
-  "Breed2",             "factor",    "Nominal",   "Original",
-  "Gender",             "factor",    "Nominal",   "Original",
-  "Color1",             "factor",    "Nominal",   "Original",
-  "Color2",             "factor",    "Nominal",   "Original",
-  "Color3",             "factor",    "Nominal",   "Original",
-  "Vaccinated",         "factor",    "Nominal",   "Original",
-  "Dewormed",           "factor",    "Nominal",   "Original",
-  "Sterilized",         "factor",    "Nominal",   "Original",
-  "State",              "factor",    "Nominal",   "Original",
-  "RescuerID",          "caracter",  "Nominal",   "Original",
-  "Description",        "texto",     "Nominal",   "Original",
-  "MaturitySize",       "factor",    "Ordinal",   "Original",
-  "FurLength",          "factor",    "Ordinal",   "Original",
-  "Health",             "factor",    "Ordinal",   "Original",
-  "AdoptionSpeed",      "factor",    "Ordinal",   "Original"
+  ~Variable, ~`Tipo`, ~Escala, ~Fuente,
+  "PetID",              "Caracter",  "Nominal",   "Original",
+  "Name",               "Caracter",  "Nominal",   "Original",
+  "Type",               "Factor",    "Nominal",   "Original",
+  "Breed1",             "Factor",    "Nominal",   "Original",
+  "Breed2",             "Factor",    "Nominal",   "Original",
+  "Gender",             "Factor",    "Nominal",   "Original",
+  "Color1",             "Factor",    "Nominal",   "Original",
+  "Color2",             "Factor",    "Nominal",   "Original",
+  "Color3",             "Factor",    "Nominal",   "Original",
+  "Vaccinated",         "Factor",    "Nominal",   "Original",
+  "Dewormed",           "Factor",    "Nominal",   "Original",
+  "Sterilized",         "Factor",    "Nominal",   "Original",
+  "State",              "Factor",    "Nominal",   "Original",
+  "RescuerID",          "Caracter",  "Nominal",   "Original",
+  "Description",        "Texto",     "Nominal",   "Original",
+  "MaturitySize",       "Factor",    "Ordinal",   "Original",
+  "FurLength",          "Factor",    "Ordinal",   "Original",
+  "Health",             "Factor",    "Ordinal",   "Original",
+  "AdoptionSpeed",      "Factor",    "Ordinal",   "Original"
 ) |>
   dplyr::arrange(Escala)
 
@@ -290,22 +290,21 @@ clasificacion_cuali |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 #| tbl-cap: "Clasificación de las variables cuantitativas por tipo, escala y origen"
 
 clasificacion_cuanti <- tibble::tribble(
-  ~Variable, ~`Tipo en R`, ~Escala, ~Fuente,
-  "Age",                "entero",    "De razón",  "Original",
-  "Quantity",           "entero",    "De razón",  "Original",
-  "Fee",                "entero",    "De razón",  "Original",
-  "VideoAmt",           "entero",    "De razón",  "Original",
-  "PhotoAmt",           "entero",    "De razón",  "Original",
-  "sentiment_score",    "numérico",  "De intervalo", "Enriquecimiento (texto)",
-  "sentiment_magnitude","numérico",  "De razón",  "Enriquecimiento (texto)",
-  "total_labels",       "entero",    "De razón",  "Enriquecimiento (imagen)",
-  "total_faces",        "entero",    "De razón",  "Enriquecimiento (imagen)",
-  "total_colors",       "entero",    "De razón",  "Enriquecimiento (imagen)",
-  "desc_char_len",      "entero",    "De razón",  "Derivada del texto",
-  "desc_word_count",    "entero",    "De razón",  "Derivada del texto"
+  ~Variable, ~`Tipo`, ~Escala, ~Fuente,
+  "Age",                "Entero",    "De razón",  "Original",
+  "Quantity",           "Entero",    "De razón",  "Original",
+  "Fee",                "Entero",    "De razón",  "Original",
+  "VideoAmt",           "Entero",    "De razón",  "Original",
+  "PhotoAmt",           "Entero",    "De razón",  "Original",
+  "sentiment_score",    "Numérico",  "De intervalo", "Enriquecimiento (texto)",
+  "sentiment_magnitude","Numérico",  "De razón",  "Enriquecimiento (texto)",
+  "total_labels",       "Entero",    "De razón",  "Enriquecimiento (imagen)",
+  "total_faces",        "Entero",    "De razón",  "Enriquecimiento (imagen)",
+  "total_colors",       "Entero",    "De razón",  "Enriquecimiento (imagen)",
+  "desc_char_len",      "Entero",    "De razón",  "Derivada del texto",
+  "desc_word_count",    "Entero",    "De razón",  "Derivada del texto"
 ) |>
   dplyr::arrange(Escala)
 
 clasificacion_cuanti |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 ```
-
