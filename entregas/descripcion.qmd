@@ -214,7 +214,7 @@ clasificacion_cuanti |> count(Tipo) |>
         axis.text = element_blank(), panel.grid = element_blank())
 ```
 
-Entre las 12 variables cuantitativas se cuenta con 11 en escala de razón y 1 en escala de intervalo. Hay presencia de variables de tipo entero y numérico asociadas a conteos y puntajes respectivamente. Se tiene que 7 de estas variables hacen parte del conjunto de datos original mientras que otras 5 fueron agregadas con enriquecimiento.
+Entre las 12 variables cuantitativas se cuenta con 11 en escala de razón y 1 en escala de intervalo. Hay presencia de variables de tipo entero y numérico asociadas a conteos y puntajes respectivamente. Se tiene que 7 de estas variables hacen parte del conjunto de datos original mientras que otras 5 fueron agregadas con enriquecimiento (Ver [Conjunto de Datos y Enriquecimiento](entregas/dataset.qmd)).
 
 ### Valores faltantes
 ```{r}
