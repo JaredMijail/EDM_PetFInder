@@ -212,3 +212,17 @@ clasificacion_cuanti |> count(Escala) |>
         legend.title = element_blank(), legend.text = element_text(size = 9),
         axis.text = element_blank(), panel.grid = element_blank())
 ```
+
+### Valores faltantes
+```{r}
+#| label: general-perdidos
+#| tbl-cap: "Valores perdidos por variable"
+
+tibble::tibble(Variable = names(datos), Perdidos = as.integer(colSums(is.na(datos)))) |>
+  dplyr::filter(Perdidos > 0) |>
+  dplyr::mutate(`% de las filas` = pct(100 * Perdidos / nrow(datos))) |>
+  dplyr::arrange(dplyr::desc(Perdidos)) |>
+  dplyr::mutate(Perdidos = ent(Perdidos)) |>
+  knitr::kable(col.names = c("Variable", "Valores perdidos", "% de las filas"),
+               align = c("l", "r", "r"))
+```
