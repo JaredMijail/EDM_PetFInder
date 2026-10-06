@@ -8,7 +8,9 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 [Dataset y enriquecimiento](dataset.qmd){.btn-ghost} [Metodología](../proyecto/metodologia.qmd){.btn-ghost} <button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
 :::
 
-A continuación se describe el contenido del conjunto datos PetFinder.
+A continuación se describe el contenido del conjunto datos PetFinder según el número de unidades de observación
+(anuncios), el número de variables y su tipificación y los valores faltantes a nivel general y particular.
+
 ```{r}
 #| label: librerias
 #| echo: true
