@@ -48,8 +48,9 @@ website:
         menu:
           - text: "Descripción"
             href: entregas/descripcion.qmd
-          - text: "Análisis Univariado Diagnóstico"
+          - text: "Análisis Univariado"
             href: entregas/analisis_univariado.qmd
+          - text: "Análisis Bivariado"
           - text: "Análisis exploratorio"
             href: entregas/analisis-exploratorio.qmd
           - text: "Dataset y enriquecimiento"
@@ -81,6 +82,7 @@ website:
         contents:
           - entregas/descripcion.qmd
           - entregas/analisis_univariado.qmd
+          - entregas/analisis_bivariado.qmd
           - entregas/analisis-exploratorio.qmd
           - entregas/dataset.qmd
       - section: "Información"
