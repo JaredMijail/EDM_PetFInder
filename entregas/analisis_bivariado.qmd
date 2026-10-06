@@ -1,5 +1,5 @@
 ---
-title: "Análisis exploratorio"
-subtitle: "Entrega 1 — Análisis univariado del dataset PetFinder.my"
+title: "Análisis Bivariado Diagnóstico"
+subtitle: "Análisis descriptivo bivariado de las variables del conjunto de datos PetFinder."
 author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
