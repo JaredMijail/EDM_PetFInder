@@ -163,7 +163,7 @@ clasificacion_cuali |> count(Tipo) |>
         legend.title = element_blank(), legend.text = element_text(size = 9),
         axis.text = element_blank(), panel.grid = element_blank())
 ```
-De las 19 variables cualitativas se tiene que 15 de ellas son nominales frente a las 4 restantes que son ordinales. Se cuenta con variables de tipo caracter.
+De las 19 variables cualitativas se tiene que 15 de ellas son nominales frente a las 4 restantes que son ordinales. Se cuenta con variables de tipo caracter, factor y texto donde la categoría predominante es factor. Todas las variables hacen parte del conjunto de datos original.
 
 
 
@@ -213,6 +213,8 @@ clasificacion_cuanti |> count(Tipo) |>
         legend.title = element_blank(), legend.text = element_text(size = 9),
         axis.text = element_blank(), panel.grid = element_blank())
 ```
+
+Entre las 12 variables cuantitativas se cuenta con 11 en escala de razón y 1 en escala de intervalo. Hay presencia de variables de tipo entero y numérico asociadas a conteos y puntajes respectivamente. Se tiene que 7 de estas variables hacen parte del conjunto de datos original mientras que otras 5 fueron agregadas con enriquecimiento.
 
 ### Valores faltantes
 ```{r}
