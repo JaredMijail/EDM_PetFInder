@@ -309,27 +309,3 @@ clasificacion_cuanti <- tibble::tribble(
 clasificacion_cuanti |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 ```
 
-```{r}
-#| label: general-tipos
-#| echo: false
-#| layout-ncol: 2
-#| fig-cap: ["Número de variables por tipo", "Composición porcentual por tipo de variable"]
-clasificacion <- dplyr::bind_rows(clasificacion_cuali, clasificacion_cuanti)
-
-p1 <- clasificacion |> count(Grupo) |>
-  ggplot(aes(x = n, y = fct_reorder(Grupo, n))) +
-  geom_col(fill = "#2e7d9a", width = 0.68) +
-  geom_text(aes(label = n), hjust = -0.4, colour = "#1f2937", size = 3.4) +
-  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
-  labs(title = "Variables por tipo", x = "Número de variables", y = NULL) + tema_u()
-p2 <- clasificacion |> count(Grupo) |>
-  ggplot(aes(x = "", y = n, fill = Grupo)) +
-  geom_col(width = 1, colour = "white") + coord_polar("y") +
-  labs(title = "Composición por tipo", x = NULL, y = NULL) +
-  theme_minimal(base_size = 11.5) +
-  theme(plot.background = element_rect(fill = "white", colour = NA),
-        plot.title = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
-        legend.title = element_blank(), legend.text = element_text(size = 9),
-        axis.text = element_blank(), panel.grid = element_blank())
-print(p1); print(p2)
-```
