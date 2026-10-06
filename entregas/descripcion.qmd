@@ -144,7 +144,6 @@ clasificacion_cuali |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 
 ```{r}
 #| label: general-tipos
-#| echo: false
 #| layout-ncol: 2
 #| fig-cap: ["Número de variables cualitativas por escala", "Composición porcentual de las variables cualitativas por escala"]
 clasificacion_cuali |> count(Escala) |>
