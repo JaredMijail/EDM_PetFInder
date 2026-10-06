@@ -44,8 +44,10 @@ website:
             href: proyecto/productos.qmd
           - text: "Bibliografía"
             href: proyecto/bibliografia.qmd
-      - text: "Entrega 1"
+      - text: "Entrega 01"
         menu:
+          - text: "Descripción"
+            href: entregas/descripcion.qmd
           - text: "Análisis exploratorio"
             href: entregas/analisis-exploratorio.qmd
           - text: "Dataset y enriquecimiento"
