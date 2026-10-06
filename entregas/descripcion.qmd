@@ -234,3 +234,4 @@ graficos_cuali <- function(x, etiqueta, pastel = FALSE, n_top = 10) {
   print(p1); print(p2)
   invisible(NULL)
 }
+```
