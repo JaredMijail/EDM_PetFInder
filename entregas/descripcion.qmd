@@ -85,7 +85,6 @@ tema_u <- function() {
 ```{r}
 #| echo: false
 #| message: false
-datos <- readr::read_csv("petfinder_enriquecido_final.csv", show_col_types = FALSE)
 
 est <- c(
   "Unidades de observación"   = paste(ent(nrow(datos)), "anuncios"),
