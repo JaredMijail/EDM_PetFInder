@@ -231,3 +231,25 @@ graficos_cuali <- function(x, etiqueta, pastel = FALSE, n_top = 10) {
   invisible(NULL)
 }
 ```
+```{r}
+#| label: general-estructura
+#| tbl-cap: "Dimensión y estructura general de la base"
+
+tibble::tibble(
+  Aspecto = c("Unidades de análisis", "Variables", "Celdas de datos", "Valores perdidos",
+              "Porcentaje de celdas completas", "Filas duplicadas",
+              "Identificadores duplicados (PetID)", "Tamaño en memoria",
+              "Variables cuantitativas", "Variables cualitativas"),
+  Resultado = c(paste(ent(nrow(datos)), "anuncios"),
+                paste(ncol(datos), "variables"),
+                ent(nrow(datos) * ncol(datos)),
+                sprintf("%s (%.2f %%)", ent(sum(is.na(datos))), 100 * mean(is.na(datos))),
+                pct(100 - 100 * mean(is.na(datos)), 2),
+                ent(sum(duplicated(datos))),
+                ent(sum(duplicated(datos$PetID))),
+                format(object.size(datos), units = "MB"),
+                sprintf("%d (%.1f %%)", length(VARS_NUM), 100 * length(VARS_NUM) / ncol(datos)),
+                sprintf("%d (%.1f %%)", length(VARS_CAT), 100 * length(VARS_CAT) / ncol(datos)))
+) |>
+  knitr::kable(align = c("l", "l"))
+```
