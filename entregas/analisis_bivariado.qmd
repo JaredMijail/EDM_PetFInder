@@ -1,0 +1,5 @@
+---
+title: "Análisis exploratorio"
+subtitle: "Entrega 1 — Análisis univariado del dataset PetFinder.my"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
