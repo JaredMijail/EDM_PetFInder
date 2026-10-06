@@ -4,6 +4,7 @@ library(dplyr)
 library(FactoClass)  # plotct() y cluster.carac()
 library(knitr)       # kable()
 library(RColorBrewer)
+library(here)
 
 # Dataset PetFinder enriquecido
 petfinder_enriquecido_final <- readr::read_csv(
