@@ -153,7 +153,7 @@ clasificacion_cuali |> count(Escala) |>
   scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
   labs(title = "Variables cualitativas por escala", x = "Número de variables", y = NULL) + tema_u()
 
-clasificacion_cuali |> count(Escala) |>
+clasificacion_cuali |> count(Tipo) |>
   ggplot(aes(x = "", y = n, fill = Escala)) +
   geom_col(width = 1, colour = "white") + coord_polar("y") +
   labs(title = "Composición por escala (cualitativas)", x = NULL, y = NULL) +
@@ -163,6 +163,8 @@ clasificacion_cuali |> count(Escala) |>
         legend.title = element_blank(), legend.text = element_text(size = 9),
         axis.text = element_blank(), panel.grid = element_blank())
 ```
+De las 19 variables cualitativas se tiene que 15 de ellas son nominales frente a las 4 restantes que son ordinales. Se cuenta con variables de tipo caracter.
+
 
 
 ```{r}
