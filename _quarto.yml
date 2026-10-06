@@ -51,6 +51,7 @@ website:
           - text: "Análisis Univariado"
             href: entregas/analisis_univariado.qmd
           - text: "Análisis Bivariado"
+            href: entregas/analisis_bivariado.qmd
           - text: "Análisis exploratorio"
             href: entregas/analisis-exploratorio.qmd
           - text: "Dataset y enriquecimiento"
