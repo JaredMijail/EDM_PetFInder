@@ -12,10 +12,6 @@ Esta entrega corresponde al **análisis univariado** de la base enriquecida: se 
 
 Base de trabajo: `data/petfinder_enriquecido_final.csv` (14 993 anuncios × 31 variables), descrita en la página de [Dataset y enriquecimiento](dataset.qmd). Todas las cifras de esta página se calculan al construir el sitio: no hay resultados transcritos a mano.
 
-## Análisis univariado {#univariado}
-
-### Análisis general {#general}
-
 Aquí se describe la **estructura global** de la base. No se analiza variable por variable: eso se hace en las dos partes siguientes.
 
 ```{r}
