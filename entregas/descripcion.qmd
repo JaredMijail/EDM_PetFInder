@@ -154,7 +154,7 @@ clasificacion_cuali |> count(Escala) |>
   labs(title = "Variables cualitativas por escala", x = "Número de variables", y = NULL) + tema_u()
 
 clasificacion_cuali |> count(Tipo) |>
-  ggplot(aes(x = "", y = n, fill = Escala)) +
+  ggplot(aes(x = "", y = n, fill = Tipo)) +
   geom_col(width = 1, colour = "white") + coord_polar("y") +
   labs(title = "Composición por escala (cualitativas)", x = NULL, y = NULL) +
   theme_minimal(base_size = 11.5) +
