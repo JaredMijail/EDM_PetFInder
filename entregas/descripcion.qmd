@@ -253,3 +253,7 @@ tibble::tibble(
 ) |>
   knitr::kable(align = c("l", "l"))
 ```
+
+**Tipos de variables.** Las 31 variables se clasifican por su naturaleza y su escala de medición. 
+La columna *Fuente* distingue las variables originales de la competencia de las que se construyeron 
+en el enriquecimiento (texto e imagen).
