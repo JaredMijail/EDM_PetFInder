@@ -333,3 +333,25 @@ clasificacion_cuanti <- tibble::tribble(
 clasificacion_cuanti |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 ```
 
+```{r}
+#| label: general-tipos-cuanti
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: ["Número de variables cuantitativas por escala", "Composición porcentual de las variables cuantitativas por escala"]
+clasificacion_cuanti |> count(Escala) |>
+  ggplot(aes(x = n, y = fct_reorder(Escala, n))) +
+  geom_col(fill = "#0f766e", width = 0.68) +
+  geom_text(aes(label = n), hjust = -0.4, colour = "#1f2937", size = 3.4) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Variables cuantitativas por escala", x = "Número de variables", y = NULL) + tema_u()
+
+clasificacion_cuanti |> count(Escala) |>
+  ggplot(aes(x = "", y = n, fill = Escala)) +
+  geom_col(width = 1, colour = "white") + coord_polar("y") +
+  labs(title = "Composición por escala (cuantitativas)", x = NULL, y = NULL) +
+  theme_minimal(base_size = 11.5) +
+  theme(plot.background = element_rect(fill = "white", colour = NA),
+        plot.title = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
+        legend.title = element_blank(), legend.text = element_text(size = 9),
+        axis.text = element_blank(), panel.grid = element_blank())
+```
