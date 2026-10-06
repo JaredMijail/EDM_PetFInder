@@ -5,7 +5,7 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
 
 ::: action-bar
-[Dataset y enriquecimiento](dataset.qmd){.btn-ghost} [Metodología](../proyecto/metodologia.qmd){.btn-ghost} <button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
+<button class="btn-print" onclick="window.print()">PDF</button>
 :::
 
 ```{r}
