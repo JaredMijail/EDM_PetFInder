@@ -75,8 +75,9 @@ website:
           - proyecto/metodologia.qmd
           - proyecto/productos.qmd
           - proyecto/bibliografia.qmd
-      - section: "Entrega 1"
+      - section: "Entrega 01"
         contents:
+          - entregas/descripcion.qmd
           - entregas/analisis-exploratorio.qmd
           - entregas/dataset.qmd
       - section: "Información"
