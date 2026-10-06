@@ -80,7 +80,7 @@ website:
       - section: "Entrega 01"
         contents:
           - entregas/descripcion.qmd
-          - analisis_univariado.qmd
+          - entregas/analisis_univariado.qmd
           - entregas/analisis-exploratorio.qmd
           - entregas/dataset.qmd
       - section: "Información"
