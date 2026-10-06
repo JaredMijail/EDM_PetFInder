@@ -263,28 +263,28 @@ en el enriquecimiento (texto e imagen).
 #| tbl-cap: "Clasificación de las variables cualitativas por tipo, escala y origen"
 
 clasificacion_cuali <- tibble::tribble(
-  ~Variable, ~`Tipo en R`, ~Grupo, ~Escala, ~Fuente,
-  "PetID",              "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
-  "Name",               "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
-  "Type",               "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Breed1",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Breed2",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Gender",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Color1",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Color2",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Color3",             "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Vaccinated",         "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Dewormed",           "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "Sterilized",         "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "State",              "factor",    "Cualitativa nominal",   "Nominal",   "Original",
-  "RescuerID",          "carácter",  "Cualitativa nominal",   "Nominal",   "Original",
-  "Description",        "texto",     "Cualitativa nominal",   "Nominal",   "Original",
-  "MaturitySize",       "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
-  "FurLength",          "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
-  "Health",             "factor",    "Cualitativa ordinal",   "Ordinal",   "Original",
-  "AdoptionSpeed",      "factor",    "Cualitativa ordinal",   "Ordinal",   "Original"
+  ~Variable, ~`Tipo en R`, ~Escala, ~Fuente,
+  "PetID",              "caracter",  "Nominal",   "Original",
+  "Name",               "caracter",  "Nominal",   "Original",
+  "Type",               "factor",    "Nominal",   "Original",
+  "Breed1",             "factor",    "Nominal",   "Original",
+  "Breed2",             "factor",    "Nominal",   "Original",
+  "Gender",             "factor",    "Nominal",   "Original",
+  "Color1",             "factor",    "Nominal",   "Original",
+  "Color2",             "factor",    "Nominal",   "Original",
+  "Color3",             "factor",    "Nominal",   "Original",
+  "Vaccinated",         "factor",    "Nominal",   "Original",
+  "Dewormed",           "factor",    "Nominal",   "Original",
+  "Sterilized",         "factor",    "Nominal",   "Original",
+  "State",              "factor",    "Nominal",   "Original",
+  "RescuerID",          "caracter",  "Nominal",   "Original",
+  "Description",        "texto",     "Nominal",   "Original",
+  "MaturitySize",       "factor",    "Ordinal",   "Original",
+  "FurLength",          "factor",    "Ordinal",   "Original",
+  "Health",             "factor",    "Ordinal",   "Original",
+  "AdoptionSpeed",      "factor",    "Ordinal",   "Original"
 ) |>
-  dplyr::arrange(Grupo, Variable)
+  dplyr::arrange(Escala)
 
 clasificacion_cuali |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 ```
