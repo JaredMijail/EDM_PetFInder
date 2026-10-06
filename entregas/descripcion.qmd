@@ -288,3 +288,27 @@ clasificacion_cuali <- tibble::tribble(
 
 clasificacion_cuali |> knitr::kable(align = c("l", "l", "l", "l", "l"))
 ```
+
+```{r}
+#| label: general-clasificacion-cuanti
+#| tbl-cap: "Clasificación de las variables cuantitativas por tipo, escala y origen"
+
+clasificacion_cuanti <- tibble::tribble(
+  ~Variable, ~`Tipo en R`, ~Escala, ~Fuente,
+  "Age",                "entero",    "De razón",  "Original",
+  "Quantity",           "entero",    "De razón",  "Original",
+  "Fee",                "entero",    "De razón",  "Original",
+  "VideoAmt",           "entero",    "De razón",  "Original",
+  "PhotoAmt",           "entero",    "De razón",  "Original",
+  "sentiment_score",    "numérico",  "De intervalo", "Enriquecimiento (texto)",
+  "sentiment_magnitude","numérico",  "De razón",  "Enriquecimiento (texto)",
+  "total_labels",       "entero",    "De razón",  "Enriquecimiento (imagen)",
+  "total_faces",        "entero",    "De razón",  "Enriquecimiento (imagen)",
+  "total_colors",       "entero",    "De razón",  "Enriquecimiento (imagen)",
+  "desc_char_len",      "entero",    "De razón",  "Derivada del texto",
+  "desc_word_count",    "entero",    "De razón",  "Derivada del texto"
+) |>
+  dplyr::arrange(Escala)
+
+clasificacion_cuanti |> knitr::kable(align = c("l", "l", "l", "l", "l"))
+```
