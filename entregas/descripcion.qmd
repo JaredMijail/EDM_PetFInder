@@ -8,10 +8,6 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 [Dataset y enriquecimiento](dataset.qmd){.btn-ghost} [Metodología](../proyecto/metodologia.qmd){.btn-ghost} <button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
 :::
 
-Esta entrega corresponde al **análisis univariado** de la base enriquecida: se describe cada variable **por separado** (distribución, tendencia central, dispersión, forma, valores atípicos y frecuencias, según su tipo). Por el alcance de esta entrega **no** se incluyen cruces entre variables, medidas de asociación, correlaciones, reducción de dimensionalidad ni modelos; esos análisis corresponden a las entregas siguientes.
-
-Base de trabajo: `data/petfinder_enriquecido_final.csv` (14 993 anuncios × 31 variables), descrita en la página de [Dataset y enriquecimiento](dataset.qmd). Todas las cifras de esta página se calculan al construir el sitio: no hay resultados transcritos a mano.
-
 Aquí se describe la **estructura global** de la base. No se analiza variable por variable: eso se hace en las dos partes siguientes.
 
 ```{r}
