@@ -1,0 +1,8 @@
+---
+title: "Análisis Univariado Diagnóstico"
+subtitle: "Análisis descriptivo univariado de las variables del conjunto de datos PetFinder"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+--- 
+
+
+
