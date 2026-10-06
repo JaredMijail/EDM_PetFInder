@@ -83,6 +83,29 @@ tema_u <- function() {
 ```
 
 ```{r}
+#| echo: false
+#| message: false
+datos <- readr::read_csv("petfinder_enriquecido_final.csv", show_col_types = FALSE)
+
+est <- c(
+  "Unidades de observación"   = paste(ent(nrow(datos)), "anuncios"),
+  "Variables cualitativas"    = sprintf("%d (%.1f %%)", length(VARS_CAT),
+                                        100 * length(VARS_CAT) / ncol(datos)),
+  "Variables cuantitativas"   = sprintf("%d (%.1f %%)", length(VARS_NUM),
+                                        100 * length(VARS_NUM) / ncol(datos)),
+  "Valores faltantes"         = sprintf("%s (%.2f %%)", ent(sum(is.na(datos))),
+                                        100 * mean(is.na(datos))),
+  "Filas duplicadas"          = ent(sum(duplicated(datos))),
+  "Identificadores duplicados" = ent(sum(duplicated(datos$PetID)))
+)
+
+celdas <- sprintf("**%s**: %s", names(est), est)
+grilla <- matrix(celdas, nrow = 2, byrow = TRUE)
+
+knitr::kable(grilla, col.names = rep("", 3), align = "ccc")
+```
+
+```{r}
 #| label: general-estructura
 #| tbl-cap: "Dimensión y estructura general de la base"
 
