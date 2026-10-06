@@ -9,12 +9,20 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 :::
 
 A continuación se describe el contenido del conjunto datos PetFinder.
+```{r}
+#| label: librerias
+#| echo: true
+#| message: false
+
+# Librerías usadas en esta sección 
+library(tidyverse)   # dplyr, ggplot2, readr, purrr, tibble, stringr, forcats, tidyr
+library(here)        # rutas relativas al proyecto
+library(knitr)       # kable() para tablas
+```
 
 ```{r}
 #| label: setup-descripcion
 #| echo: true
-
-library(tidyverse)
 
 options(OutDec = ",")   # separador decimal en español
 knitr::opts_chunk$set(fig.width = 4.6, fig.height = 3.3, dpi = 120, out.width = "100%")
@@ -77,7 +85,6 @@ tema_u <- function() {
 ```{r}
 #| label: general-estructura
 #| tbl-cap: "Dimensión y estructura general de la base"
-library(tidyverse)
 
 tibble::tibble(
   Aspecto = c("Unidades de análisis", "Variables", "Celdas de datos", "Valores perdidos",
