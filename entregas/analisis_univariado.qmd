@@ -132,5 +132,9 @@ tabla_atipicos(datos$Age)
 ```
 
 ```{r}
+#| label: graf-Age
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de edad", "Diagrama de caja de edad", "Gráfico de densidad de edad", "Valores más frecuentes de edad"]
 graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
 ```
