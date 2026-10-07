@@ -71,45 +71,40 @@ tabla_estadisticos <- function(x, caption = NULL) {
   caption = caption)
 }
 
-tabla_atipicos <- function(x, k = 3, caption = NULL, extremos = TRUE) {
+tabla_atipicos <- function(x, caption = NULL) {
   v <- as.numeric(x)
   v <- v[!is.na(v)]
   n <- length(v)
 
   q   <- unname(quantile(v, c(.25, .75)))
   riq <- q[2] - q[1]
-  m   <- mean(v)
-  s   <- sd(v)
 
-  cerca <- function(c) c(q[1] - c * riq, q[2] + c * riq)
+  # Multiplicadores de las cercas de Tukey
+  c_tukey <- c("Atípicos (1,5 × RIQ)" = 1.5,
+               "Extremos (3 × RIQ)"   = 3)
 
-  # Un criterio = una fila de límites; el conteo es el mismo para todos
-  lim <- rbind(
-    "Atípicos (1,5 × RIQ)"            = cerca(1.5),
-    "Extremos (3 × RIQ)"              = cerca(3),
-    setNames(list(c(m - k * s, m + k * s)), paste0("Puntaje z (|z| > ", k, ")"))[[1]] |>
-      (\(r) { out <- rbind(r); rownames(out) <- paste0("Puntaje z (|z| > ", k, ")"); out })()
-  )
-  if (!extremos) lim <- lim[-2, , drop = FALSE]
-
-  n_at <- apply(lim, 1, function(l) sum(v < l[1] | v > l[2]))
+  li   <- unname(q[1] - c_tukey * riq)
+  ls   <- unname(q[2] + c_tukey * riq)
+  n_at <- vapply(seq_along(c_tukey),
+                 function(i) sum(v < li[i] | v > ls[i]),
+                 numeric(1))
 
   tab <- tibble::tibble(
-    Criterio          = rownames(lim),
-    `Límite inferior` = fmt(lim[, 1]),
-    `Límite superior` = fmt(lim[, 2]),
+    Criterio          = names(c_tukey),
+    `Límite inferior` = fmt(li),
+    `Límite superior` = fmt(ls),
     Atípicos          = ent(n_at),
     `% del total`     = pct(100 * n_at / n)
   )
 
   knitr::kable(
     tab,
-    format    = if (knitr::is_latex_output()) "latex" else "pipe",
-    booktabs  = TRUE,
-    linesep   = "",
-    align     = c("l", "r", "r", "r", "r"),
-    caption   = caption,
-    escape    = FALSE
+    format   = if (knitr::is_latex_output()) "latex" else "pipe",
+    booktabs = TRUE,
+    linesep  = "",
+    align    = c("l", "r", "r", "r", "r"),
+    caption  = caption,
+    escape   = FALSE
   )
 }
 
