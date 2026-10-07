@@ -67,13 +67,8 @@ tabla_estadisticos <- function(x, caption = NULL) {
   knitr::kables(list(
     knitr::kable(izq, align = c("l", "r")),
     knitr::kable(der, align = c("l", "r"))
-  ))
-
-  htmltools::tags$figure(
-    class = "tabla-stats",
-    htmltools::HTML(as.character(tablas)),
-    if (!is.null(caption)) htmltools::tags$figcaption(caption)
-  )
+  ),
+  caption = caption)
 }
 
 tabla_atipicos <- function(x, k = 3) {
