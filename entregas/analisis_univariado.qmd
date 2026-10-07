@@ -15,8 +15,6 @@ Jared Mijail Ramírez Escalante · María Paula Silva Capera
 </div>
 :::
 
-
-
 ```{r}
 #| label: setup-comun
 #| echo: false
@@ -25,7 +23,10 @@ Jared Mijail Ramírez Escalante · María Paula Silva Capera
 source(here::here("_setup.R"))
 ```
 
-# Análisis de variables cuantitativas
+## Análisis de variables cuantitativas
+
+A continuación se describen cada una de las variables del conjunto de datos [PetFinder](dataset.qmd) enriquecido por separado
+con el apoyo de estadísticas de tendencia central y dispersión, gráficos de distribución, tablas de frecuencia e identificación de valores atípicos/extremos.
 
 ```{r}
 #| layout-ncol: 2
