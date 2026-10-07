@@ -1,5 +1,5 @@
 ---
-title: "Descripción"
+title: "Descripción del Conjunto de Datos"
 subtitle: "Composición del conjunto de datos PetFinder."
 author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
