@@ -109,7 +109,7 @@ knitr::kable(grilla, col.names = rep("", 3), align = "ccc")
 ### Tipos de Variables
 Las 31 variables se clasifican por su naturaleza y su escala de medición. 
 La columna *Fuente* distingue las variables originales de las que se construyeron 
-en el enriquecimiento (texto e imagen).
+en el [enriquecimiento](dataset.qmd) (texto e imagen).
 
 ```{r}
 #| label: general-clasificacion-cuali
