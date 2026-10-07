@@ -951,6 +951,10 @@ a.btn-print {
               box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.action-bar .btn-print {
+  margin-left: auto;
+}
+
 button.btn-print:hover,
 a.btn-print:hover {
   transform: translateY(-2px);
