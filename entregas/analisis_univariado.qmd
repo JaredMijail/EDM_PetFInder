@@ -39,30 +39,25 @@ esc_num <- function(x) {
 
 # --- Tablas ---
 tabla_estadisticos <- function(x) {
-s <- esc_num(datos$Age)
+  s <- esc_num(x)
 
-# --- mitad izquierda ---
-etiquetas_1 <- c("Observaciones válidas", "Valores perdidos", "Media", "Mediana",
-                 "Moda", "Mínimo", "Máximo", "Primer cuartil (Q1)")
-valores_1 <- c(ent(s$n), ent(s$na), fmt(s$media), fmt(s$mediana),
-               fmt(s$moda), fmt(s$min), fmt(s$max), fmt(s$q1))
+  tab <- tibble::tibble(
+    `Estadístico` = c("Observaciones válidas", "Valores perdidos", "Media", "Mediana", "Moda",
+                      "Mínimo", "Máximo", "Primer cuartil (Q1)", "Tercer cuartil (Q3)",
+                      "Rango intercuartílico (IQR)", "Rango", "Varianza", "Desviación estándar",
+                      "Coeficiente de variación", "Asimetría", "Curtosis"),
+    Valor = c(ent(s$n), ent(s$na), fmt(s$media), fmt(s$mediana), fmt(s$moda), fmt(s$min),
+              fmt(s$max), fmt(s$q1), fmt(s$q3), fmt(s$iqr), fmt(s$rango), fmt(s$var),
+              fmt(s$sd), pct(s$cv), fmt(s$asim, 3), fmt(s$curt, 3))
+  )
 
-tabla_izq <- tibble::tibble(Estadístico = etiquetas_1, Valor = valores_1) |>
-  knitr::kable(align = c("l", "r"), booktabs = TRUE, linesep = "")
+  izq <- tab[1:8, ]
+  der <- tab[9:16, ]
 
-# --- mitad derecha ---
-etiquetas_2 <- c("Tercer cuartil (Q3)", "Rango intercuartílico (IQR)", "Rango",
-                 "Varianza", "Desviación estándar", "Coeficiente de variación",
-                 "Asimetría", "Curtosis")
-valores_2 <- c(fmt(s$q3), fmt(s$iqr), fmt(s$rango), fmt(s$var),
-               fmt(s$sd), pct(s$cv), fmt(s$asim, 3), fmt(s$curt, 3))
-
-tabla_der <- tibble::tibble(Estadístico = etiquetas_2, Valor = valores_2) |>
-  knitr::kable(align = c("l", "r"), booktabs = TRUE, linesep = "")
-
-# --- ¡importante! imprimir las dos explícitamente ---
-print(tabla_izq)
-print(tabla_der)
+  knitr::kables(list(
+    knitr::kable(izq, align = c("l", "r")),
+    knitr::kable(der, align = c("l", "r"))
+  ))
 }
 
 tabla_atipicos <- function(x, k = 3) {
