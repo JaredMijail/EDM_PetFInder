@@ -186,50 +186,43 @@ graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
 ```{r}
 #| label: cuanti-Quantity
 #| echo: true
-#| tbl-cap: "Estadísticos descriptivos — Cantidad de animales en el anuncio (animales)"
-tabla_estadisticos(datos$Quantity)
+tabla_estadisticos(datos$Quantity, caption = "Estadísticos descriptivos — Cantidad de animales en el anuncio")
 ```
 
 
 ```{r}
 #| label: atip-Quantity
 #| echo: true
-#| tbl-cap: "Detección de valores atípicos — Cantidad de animales en el anuncio (animales)"
-tabla_atipicos(datos$Quantity)
+tabla_atipicos(datos$Quantity, caption = "Detección de valores atípicos — Cantidad de animales en el anuncio")
 ```
 
 
 ```{r}
 #| label: graf-Quantity
 #| echo: true
-#| layout-ncol: 2
-#| fig-cap: ["Histograma de cantidad de animales en el anuncio", "Diagrama de caja de cantidad de animales en el anuncio", "Gráfico de densidad de cantidad de animales en el anuncio", "Valores más frecuentes de cantidad de animales en el anuncio"]
+#| layout-ncol: 4
 graficos_cuanti(datos$Quantity, "Animales en el anuncio", tipo = "conteo")
 ```
 
 ### `Fee`- Tarifa de adopción
 
-
 ```{r}
 #| label: cuanti-Fee
 #| echo: true
-#| tbl-cap: "Estadísticos descriptivos — Tarifa de adopción (USD)"
-tabla_estadisticos(datos$Fee)
+tabla_estadisticos(datos$Fee, caption = "Estadísticos descriptivos — Tarifa de adopción")
 ```
 
 
 ```{r}
 #| label: atip-Fee
 #| echo: true
-#| tbl-cap: "Detección de valores atípicos — Tarifa de adopción (USD)"
-tabla_atipicos(datos$Fee)
+tabla_atipicos(datos$Fee, caption = "Detección de valores atípicos — Tarifa de adopción")
 ```
 
 
 ```{r}
 #| label: graf-Fee
 #| echo: true
-#| layout-ncol: 2
-#| fig-cap: ["Histograma de tarifa de adopción", "Diagrama de caja de tarifa de adopción", "Gráfico de densidad de tarifa de adopción", "Valores más frecuentes de tarifa de adopción"]
-graficos_cuanti(datos$Fee, "Tarifa de adopción (USD)", tipo = "conteo")
+#| layout-ncol: 4
+graficos_cuanti(datos$Fee, "Tarifa de adopción", tipo = "conteo")
 ```
