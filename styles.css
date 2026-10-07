@@ -947,7 +947,7 @@ figcaption,
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;           /* que no se estire */
-  margin: 0;                /* quita márgenes verticales que tenías */
+  margin: 0.2;                /* quita márgenes verticales que tenías */
 }
 
 /* Botón (mantén tus estilos actuales) */
