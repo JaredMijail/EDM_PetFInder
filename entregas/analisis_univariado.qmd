@@ -76,7 +76,7 @@ tabla_estadisticos <- function(x) {
   ) |>
     knitr::kable(
       col.names = c("Estadístico", "Valor", "Estadístico", "Valor"),
-      align     = c("l", "r", "l", "r")
+      align     = c("l", "c", "l", "c")
     )
 }
 
