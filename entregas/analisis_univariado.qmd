@@ -4,5 +4,88 @@ subtitle: "Análisis descriptivo univariado de las variables del conjunto de dat
 author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 --- 
 
+```{r}
+#| label: setup-comun
+#| echo: false
+#| include: false
+source(here::here("_setup.R"))
+```
 
+```{r}
+# --- Tablas ---
+tabla_estadisticos <- function(x) {
+  s <- esc_num(x)
+  tibble::tibble(
+    `Estadístico` = c("Observaciones válidas", "Valores perdidos", "Media", "Mediana", "Moda",
+                      "Mínimo", "Máximo", "Primer cuartil (Q1)", "Tercer cuartil (Q3)",
+                      "Rango intercuartílico (IQR)", "Rango", "Varianza", "Desviación estándar",
+                      "Coeficiente de variación", "Asimetría", "Curtosis"),
+    Valor = c(ent(s$n), ent(s$na), fmt(s$media), fmt(s$mediana), fmt(s$moda), fmt(s$min),
+              fmt(s$max), fmt(s$q1), fmt(s$q3), fmt(s$iqr), fmt(s$rango), fmt(s$var),
+              fmt(s$sd), pct(s$cv), fmt(s$asim, 3), fmt(s$curt, 3))
+  ) |> knitr::kable(align = c("l", "r"))
+}
 
+tabla_atipicos <- function(x, k = 3) {
+  x <- as.numeric(x); v <- x[!is.na(x)]; q <- quantile(v, c(.25, .75)); iqr <- diff(q)
+  z <- (v - mean(v))/sd(v); li <- q[1] - 1.5*iqr; ls <- q[2] + 1.5*iqr
+  tibble::tibble(
+    Criterio = c("Regla de 1,5 × IQR", paste0("Puntaje z (|z| > ", k, ")")),
+    `Límite inferior` = c(fmt(li), fmt(mean(v) - k*sd(v))),
+    `Límite superior` = c(fmt(ls), fmt(mean(v) + k*sd(v))),
+    Atípicos = c(ent(sum(v < li | v > ls)), ent(sum(abs(z) > k))),
+    `% del total` = c(pct(100*mean(v < li | v > ls)), pct(100*mean(abs(z) > k)))
+  ) |> knitr::kable(align = c("l", "r", "r", "r", "r"))
+}
+```
+
+```{r}
+# --- Gráficos ---
+tema_u <- function() {
+  theme_minimal(base_size = 11.5) +
+    theme(plot.background = element_rect(fill = "white", colour = NA),
+          panel.background = element_rect(fill = "white", colour = NA),
+          plot.title = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
+          axis.title = element_text(colour = "#4b5563", size = 10),
+          panel.grid.minor = element_blank())
+}
+
+graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
+  tipo <- match.arg(tipo)
+  d <- tibble::tibble(v = as.numeric(x))
+  p1 <- ggplot(d, aes(v)) +
+    geom_histogram(bins = 30, fill = "#2e7d9a", colour = "white", linewidth = 0.2) +
+    labs(title = "Histograma", x = etiqueta, y = "Frecuencia") + tema_u()
+  p2 <- ggplot(d, aes(y = v)) +
+    stat_boxplot(geom = "errorbar", width = 0.15) +
+    geom_boxplot(
+      fill = "#d97706", 
+      width = 0.32, 
+      outlier.shape = 1,       
+      outlier.colour = "black",  
+      outlier.alpha = 1,       
+      outlier.size = 1.5        
+    ) +
+    labs(title = "Diagrama de caja", x = NULL, y = etiqueta) +
+    tema_u() +
+    theme(
+      axis.text.x = element_blank(),
+      aspect.ratio = 1.8
+    )
+  p3 <- ggplot(d, aes(v)) +
+    geom_density(fill = "#0f766e", alpha = 0.35, colour = "#0f766e") +
+    labs(title = "Densidad", x = etiqueta, y = "Densidad") + tema_u()
+  p4 <- if (tipo == "continuo") {
+    ggplot(d, aes(sample = v)) +
+      stat_qq(colour = "#1a3a5c", alpha = 0.4, size = 0.8) +
+      stat_qq_line(colour = "#d97706") +
+      labs(title = "QQ-plot (referencia normal)", x = "Cuantiles teóricos", y = "Cuantiles muestrales") + tema_u()
+  } else {
+    d |> count(v) |> slice_max(n, n = 8) |> mutate(v = factor(v)) |>
+      ggplot(aes(x = v, y = n)) + geom_col(fill = "#1a3a5c") +
+      labs(title = "Valores más frecuentes", x = etiqueta, y = "Frecuencia") + tema_u()
+  }
+  for (p in list(p1, p2, p3, p4)) print(p)
+  invisible(NULL)
+}
+```
