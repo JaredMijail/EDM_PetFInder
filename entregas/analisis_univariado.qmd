@@ -16,6 +16,8 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 source(here::here("_setup.R"))
 ```
 
+# Análisis de variables cuantitativas
+
 ```{r}
 # --- Tablas ---
 tabla_estadisticos <- function(x) {
@@ -42,9 +44,7 @@ tabla_atipicos <- function(x, k = 3) {
     `% del total` = c(pct(100*mean(v < li | v > ls)), pct(100*mean(abs(z) > k)))
   ) |> knitr::kable(align = c("l", "r", "r", "r", "r"))
 }
-```
 
-```{r}
 # --- Gráficos ---
 tema_u <- function() {
   theme_minimal(base_size = 11.5) +
@@ -93,4 +93,9 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
   for (p in list(p1, p2, p3, p4)) print(p)
   invisible(NULL)
 }
+```
+
+## `Age` - Edad
+```{r}
+tabla_estadisticos(datos$Age)
 ```
