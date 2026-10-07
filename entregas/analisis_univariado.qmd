@@ -94,3 +94,7 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
   invisible(NULL)
 }
 ```
+
+```{r}
+tabla_estadisticos(datos$Age)
+```
