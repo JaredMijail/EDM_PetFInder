@@ -47,8 +47,8 @@ etiquetas_1 <- c("Observaciones válidas", "Valores perdidos", "Media", "Mediana
 valores_1 <- c(ent(s$n), ent(s$na), fmt(s$media), fmt(s$mediana),
                fmt(s$moda), fmt(s$min), fmt(s$max), fmt(s$q1))
 
-tibble::tibble(Estadístico = etiquetas_1, Valor = valores_1) |>
-  knitr::kable(align = c("l", "r"))
+tabla_izq <- tibble::tibble(Estadístico = etiquetas_1, Valor = valores_1) |>
+  knitr::kable(align = c("l", "r"), booktabs = TRUE, linesep = "")
 
 # --- mitad derecha ---
 etiquetas_2 <- c("Tercer cuartil (Q3)", "Rango intercuartílico (IQR)", "Rango",
@@ -57,8 +57,12 @@ etiquetas_2 <- c("Tercer cuartil (Q3)", "Rango intercuartílico (IQR)", "Rango",
 valores_2 <- c(fmt(s$q3), fmt(s$iqr), fmt(s$rango), fmt(s$var),
                fmt(s$sd), pct(s$cv), fmt(s$asim, 3), fmt(s$curt, 3))
 
-tibble::tibble(Estadístico = etiquetas_2, Valor = valores_2) |>
-  knitr::kable(align = c("l", "r"))
+tabla_der <- tibble::tibble(Estadístico = etiquetas_2, Valor = valores_2) |>
+  knitr::kable(align = c("l", "r"), booktabs = TRUE, linesep = "")
+
+# --- ¡importante! imprimir las dos explícitamente ---
+print(tabla_izq)
+print(tabla_der)
 }
 
 tabla_atipicos <- function(x, k = 3) {
