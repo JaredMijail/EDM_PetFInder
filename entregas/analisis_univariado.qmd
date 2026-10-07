@@ -133,6 +133,7 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
 ```
 
 ### `Age` - Edad
+
 ```{r}
 #| label: cuanti-Age
 #| echo: true
@@ -140,12 +141,14 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
 tabla_estadisticos(datos$Age)
 ```
 
+
 ```{r}
 #| label: atip-Age
 #| echo: true
 #| tbl-cap: "Detección de valores atípicos — Edad (meses)"
 tabla_atipicos(datos$Age)
 ```
+
 
 ```{r}
 #| label: graf-Age
@@ -155,7 +158,7 @@ tabla_atipicos(datos$Age)
 graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
 ```
 
-### `Quantity` - Cantidad de animales en el anuncio
+### `Quantity`- Cantidad de animales en el anuncio
 
 ```{r}
 #| label: cuanti-Quantity
@@ -164,6 +167,7 @@ graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
 tabla_estadisticos(datos$Quantity)
 ```
 
+
 ```{r}
 #| label: atip-Quantity
 #| echo: true
@@ -171,10 +175,38 @@ tabla_estadisticos(datos$Quantity)
 tabla_atipicos(datos$Quantity)
 ```
 
+
 ```{r}
 #| label: graf-Quantity
 #| echo: true
 #| layout-ncol: 2
 #| fig-cap: ["Histograma de cantidad de animales en el anuncio", "Diagrama de caja de cantidad de animales en el anuncio", "Gráfico de densidad de cantidad de animales en el anuncio", "Valores más frecuentes de cantidad de animales en el anuncio"]
 graficos_cuanti(datos$Quantity, "Animales en el anuncio", tipo = "conteo")
+```
+
+### `Fee`- Tarifa de adopción
+
+
+```{r}
+#| label: cuanti-Fee
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Tarifa de adopción (USD)"
+tabla_estadisticos(datos$Fee)
+```
+
+
+```{r}
+#| label: atip-Fee
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Tarifa de adopción (USD)"
+tabla_atipicos(datos$Fee)
+```
+
+
+```{r}
+#| label: graf-Fee
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de tarifa de adopción", "Diagrama de caja de tarifa de adopción", "Gráfico de densidad de tarifa de adopción", "Valores más frecuentes de tarifa de adopción"]
+graficos_cuanti(datos$Fee, "Tarifa de adopción (USD)", tipo = "conteo")
 ```
