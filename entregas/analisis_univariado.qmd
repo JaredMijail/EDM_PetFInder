@@ -19,6 +19,18 @@ source(here::here("_setup.R"))
 # Análisis de variables cuantitativas
 
 ```{r}
+
+esc_num <- function(x) {
+  x <- as.numeric(x); v <- x[!is.na(x)]; q <- quantile(v, c(.25, .75)); iqr <- diff(q)
+  z <- (v - mean(v)) / sd(v); li <- q[1] - 1.5*iqr; ls <- q[2] + 1.5*iqr
+  list(n = length(v), na = sum(is.na(x)), media = mean(v), mediana = median(v), moda = as.numeric(moda(v)),
+       min = min(v), max = max(v), q1 = q[1], q3 = q[2], iqr = iqr, rango = max(v) - min(v),
+       var = var(v), sd = sd(v), cv = 100*sd(v)/mean(v), asim = asimetria(v), curt = curtosis(v),
+       out_iqr = sum(v < li | v > ls), pct_out_iqr = 100*mean(v < li | v > ls),
+       out_z = sum(abs(z) > 3), pct_out_z = 100*mean(abs(z) > 3), pct_ceros = 100*mean(v == 0),
+       unicos = length(unique(v)))
+}
+
 # --- Tablas ---
 tabla_estadisticos <- function(x) {
   s <- esc_num(x)
