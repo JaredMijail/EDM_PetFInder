@@ -928,7 +928,7 @@ figcaption,
 
 /* Botón de impresión / exportar a PDF */
 .action-bar {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   gap: 0.6rem;
   align-items: center;
