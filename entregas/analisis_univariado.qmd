@@ -71,7 +71,7 @@ tabla_estadisticos <- function(x, caption = NULL) {
   caption = caption)
 }
 
-tabla_atipicos <- function(x, k = 3) {
+tabla_atipicos <- function(x, k = 3, caption = NULL) {
   x <- as.numeric(x); v <- x[!is.na(x)]; q <- quantile(v, c(.25, .75)); iqr <- diff(q)
   z <- (v - mean(v))/sd(v); li <- q[1] - 1.5*iqr; ls <- q[2] + 1.5*iqr
   tibble::tibble(
@@ -80,7 +80,7 @@ tabla_atipicos <- function(x, k = 3) {
     `Límite superior` = c(fmt(ls), fmt(mean(v) + k*sd(v))),
     Atípicos = c(ent(sum(v < li | v > ls)), ent(sum(abs(z) > k))),
     `% del total` = c(pct(100*mean(v < li | v > ls)), pct(100*mean(abs(z) > k)))
-  ) |> knitr::kable(align = c("l", "r", "r", "r", "r"))
+  ) |> knitr::kable(align = c("l", "r", "r", "r", "r"), caption = caption)
 }
 
 # --- Gráficos ---
@@ -145,16 +145,14 @@ tabla_estadisticos(datos$Age, caption = "Estadísticos descriptivos — Edad (me
 ```{r}
 #| label: atip-Age
 #| echo: true
-#| tbl-cap: "Detección de valores atípicos — Edad (meses)"
-tabla_atipicos(datos$Age)
+tabla_atipicos(datos$Age, caption = "Detección de valores atípicos — Edad (meses)")
 ```
 
 
 ```{r}
 #| label: graf-Age
 #| echo: true
-#| layout-ncol: 2
-#| fig-cap: ["Histograma de edad", "Diagrama de caja de edad", "Gráfico de densidad de edad", "Valores más frecuentes de edad"]
+#| layout-ncol: 4
 graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
 ```
 
