@@ -1,11 +1,18 @@
 ---
 title: "Descripción del Conjunto de Datos"
 subtitle: "Composición del conjunto de datos PetFinder."
-author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
 
-::: action-bar
+::: autor-pdf-row
+::: autor-info
+**AUTORES**
+
+Jared Mijail Ramírez Escalante · María Paula Silva Capera
+:::
+
+<div class="action-bar">
 <button class="btn-print" onclick="window.print()">PDF</button>
+</div>
 :::
 
 ```{r}
@@ -16,8 +23,7 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 source(here::here("_setup.R"))
 ```
 
-A continuación se describe el contenido del conjunto datos PetFinder según el número de unidades de observación
-(anuncios), el número de variables y su tipificación y los valores faltantes a nivel general y particular.
+A continuación se describe el contenido del conjunto datos PetFinder según el número de unidades de observación (anuncios), el número de variables y su tipificación y los valores faltantes a nivel general y particular.
 
 ```{r}
 #| echo: true
@@ -42,9 +48,8 @@ knitr::kable(grilla, col.names = rep("", 3), align = "ccc")
 ```
 
 ### Tipos de Variables
-Las 31 variables se clasifican por su naturaleza y su escala de medición. 
-La columna *Fuente* distingue las variables originales de las que se construyeron 
-en el [enriquecimiento](dataset.qmd) (texto e imagen).
+
+Las 31 variables se clasifican por su naturaleza y su escala de medición. La columna *Fuente* distingue las variables originales de las que se construyeron en el [enriquecimiento](dataset.qmd) (texto e imagen).
 
 ```{r}
 #| label: general-clasificacion-cuali
@@ -98,9 +103,8 @@ clasificacion_cuali |> count(Tipo) |>
         legend.title = element_blank(), legend.text = element_text(size = 9),
         axis.text = element_blank(), panel.grid = element_blank())
 ```
+
 De las 19 variables cualitativas se tiene que 15 de ellas son nominales frente a las 4 restantes que son ordinales. Se cuenta con variables de tipo caracter, factor y texto donde la categoría predominante es factor. Todas las variables hacen parte del conjunto de datos original.
-
-
 
 ```{r}
 #| label: general-clasificacion-cuanti
@@ -152,6 +156,7 @@ clasificacion_cuanti |> count(Tipo) |>
 Entre las 12 variables cuantitativas se cuenta con 11 en escala de razón y 1 en escala de intervalo. Hay presencia de variables de tipo entero y numérico asociadas a conteos y puntajes respectivamente. Se tiene que 7 de estas variables hacen parte del conjunto de datos original mientras que otras 5 fueron agregadas con enriquecimiento (Ver [Conjunto de Datos y Enriquecimiento](dataset.qmd)).
 
 ### Valores faltantes
+
 ```{r}
 #| label: general-perdidos
 #| tbl-cap: "Valores perdidos por variable"
@@ -168,4 +173,5 @@ tibble::tibble(Variable = names(datos), Perdidos = as.integer(colSums(is.na(dato
 La variable nombre y otras cinco variables derivadas del enriquecimiento presentan datos faltantes. El nombre del animal tiene 1.257 casos faltantes, las dos variables de sentimiento 551 cada una y las tres variables derivadas de la imagen 341 cada una (son anuncios sin fotografía).
 
 ### Resumen
+
 El conjunto de datos tiene `r ent(nrow(datos))` unidades de observación (los anuncios), `r ncol(datos)` variables y `r ent(nrow(datos) * ncol(datos))` celdas, de las cuales se pierde el `r pct(100*mean(is.na(datos)), 2)`; ese porcentaje es bajo y está concentrado en seis variables de las cuales cinco variables pertenecen al enriquecimiento. Los `r ent(sum(duplicated(datos)))` duplicados de fila y de identificador confirman que no hay anuncios repetidos. En cuanto a la composición, hay `r length(VARS_NUM)` variables cuantitativas (`r pct(100*length(VARS_NUM)/ncol(datos), 0)` del total) y `r length(VARS_CAT)` cualitativas (`r pct(100*length(VARS_CAT)/ncol(datos), 0)`), de modo que el análisis descriptivo es parcialmente balanceado respecto al tipo de variables. Se considera importante tener presente que hay variables **casi constantes** (`Health`, `total_faces`, `VideoAmt`) y variables **de alta cardinalidad** (`Breed1`, `State`, `Name`, `Description`) que requieren un tratamiento distinto. Los detalles se retoman en las secciones siguientes.
