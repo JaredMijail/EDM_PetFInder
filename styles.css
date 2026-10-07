@@ -929,7 +929,7 @@ figcaption,
 /* Botón de impresión / exportar a PDF */
 /* Fila que contiene autores + botón */
 .autor-pdf-row {
-  display: flex;
+  display: inline-flex;
   justify-content: space-between;
   align-items: center;      /* centra verticalmente el botón respecto a los autores */
   gap: 1.5rem;
