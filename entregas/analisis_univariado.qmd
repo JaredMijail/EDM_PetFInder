@@ -4,17 +4,15 @@ subtitle: "Análisis descriptivo univariado de las variables del conjunto de dat
 --- 
 
 ::: autor-pdf-row
-
 ::: autor-info
-**AUTORES**
-
-:::
+**AUTOR/A**
 
 Jared Mijail Ramírez Escalante · María Paula Silva Capera
 :::
 
-::: action-bar
+<div class="action-bar">
 <button class="btn-print" onclick="window.print()">PDF</button>
+</div>
 :::
 
 
