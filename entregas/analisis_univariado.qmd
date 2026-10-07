@@ -4,5 +4,320 @@ subtitle: "Análisis descriptivo univariado de las variables del conjunto de dat
 author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 --- 
 
+### Análisis cuantitativo {#cuantitativo}
+
+Se analizan las 12 variables cuantitativas. Para cada una se reportan: tamaño de la muestra y valores perdidos; tendencia central (media, mediana y moda); posición (mínimo, máximo y cuartiles); dispersión (rango, IQR, varianza, desviación estándar y coeficiente de variación); forma (asimetría y curtosis) y detección de valores atípicos con dos criterios (regla de 1,5 × IQR y puntaje z con \|z\| \> 3). La asimetría y la curtosis usan los estimadores muestrales tipo 2 de `e1071`, de modo que la curtosis es *exceso* respecto de la normal (0 = normal). Para las variables de **conteo** el cuarto panel muestra los valores más frecuentes en lugar del QQ-plot, porque la referencia normal no aplica a ese tipo de datos.
+
+#### `Age` — Edad {.unnumbered}
+
+```{r}
+#| label: cuanti-Age
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Edad (meses)"
+tabla_estadisticos(datos$Age)
+```
+
+```{r}
+#| label: atip-Age
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Edad (meses)"
+tabla_atipicos(datos$Age)
+```
+
+```{r}
+#| label: graf-Age
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de edad", "Diagrama de caja de edad", "Gráfico de densidad de edad", "Valores más frecuentes de edad"]
+graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
+```
+
+**Interpretación.** La edad se concentra en animales muy jóvenes: el `r pct(100*mean(datos$Age <= 6, na.rm = TRUE))` de los anuncios corresponde a animales de seis meses o menos, y el 50 % central de la distribución está entre `r fmt(E$Age$q1)` y `r fmt(E$Age$q3)` meses. La distribución es **`r lectura_asim(E$Age$asim)`** (asimetría = `r fmt(E$Age$asim, 2)`; curtosis = `r fmt(E$Age$curt, 2)`), con una media (`r fmt(E$Age$media)` meses) que casi cuadruplica la mediana (`r fmt(E$Age$mediana)` meses) porque la cola derecha la estiran los animales adultos: `r pct(100*mean(datos$Age > 24, na.rm = TRUE))` de los anuncios supera los dos años y el máximo es de `r ent(E$Age$max)` meses (`r fmt(E$Age$max/12, 1)` años). El coeficiente de variación (`r pct(E$Age$cv)`) es **muy alto**, señal de gran heterogeneidad. La regla de 1,5 × IQR marca `r ent(E$Age$out_iqr)` atípicos (`r pct(E$Age$pct_out_iqr)`), todos por la cola alta. **Lectura:** la base está dominada por cachorros y animales jóvenes; los casos de animales mayores son reales, no errores, por lo que en el modelamiento la edad conviene tratarla en escala logarítmica o por tramos de edad.
+
+#### `Quantity` — Cantidad de animales en el anuncio {.unnumbered}
+
+```{r}
+#| label: cuanti-Quantity
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Cantidad de animales en el anuncio (animales)"
+tabla_estadisticos(datos$Quantity)
+```
+
+```{r}
+#| label: atip-Quantity
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Cantidad de animales en el anuncio (animales)"
+tabla_atipicos(datos$Quantity)
+```
+
+```{r}
+#| label: graf-Quantity
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de cantidad de animales en el anuncio", "Diagrama de caja de cantidad de animales en el anuncio", "Gráfico de densidad de cantidad de animales en el anuncio", "Valores más frecuentes de cantidad de animales en el anuncio"]
+graficos_cuanti(datos$Quantity, "Animales en el anuncio", tipo = "conteo")
+```
+
+**Interpretación.** La variable es **esencialmente binaria**: el `r pct(100*mean(datos$Quantity == 1))` de los anuncios describe un solo animal, y los anuncios con más de uno son poco frecuentes (2 animales, `r pct(100*mean(datos$Quantity == 2))`; 3 o más, `r pct(100*mean(datos$Quantity >= 3))`). Como el IQR es exactamente 0 (Q1 = Q3 = `r fmt(E$Quantity$q1, 0)`), la regla de 1,5 × IQR marca como atípico **cualquier** valor distinto de 1, lo que explica los `r ent(E$Quantity$out_iqr)` «atípicos» (`r pct(E$Quantity$pct_out_iqr)`): no son errores, sino la consecuencia esperable de una distribución con el 50 % de los datos en un único valor. El criterio del puntaje z es más razonable aquí y detecta `r ent(E$Quantity$out_z)` anuncios (`r pct(E$Quantity$pct_out_z)`), que corresponden a los grupos grandes (hasta `r ent(E$Quantity$max)` animales). **Lectura:** conviene usarla como variable binaria (un animal vs. varios) o por tramos; su máximo refleja anuncios de refugios que publican camadas completas.
+
+#### `Fee` — Tarifa de adopción {.unnumbered}
+
+```{r}
+#| label: cuanti-Fee
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Tarifa de adopción (ringgit malayo (MYR))"
+tabla_estadisticos(datos$Fee)
+```
+
+```{r}
+#| label: atip-Fee
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Tarifa de adopción (ringgit malayo (MYR))"
+tabla_atipicos(datos$Fee)
+```
+
+```{r}
+#| label: graf-Fee
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de tarifa de adopción", "Diagrama de caja de tarifa de adopción", "Gráfico de densidad de tarifa de adopción", "Valores más frecuentes de tarifa de adopción"]
+graficos_cuanti(datos$Fee, "Tarifa (MYR)", tipo = "conteo")
+```
+
+**Interpretación.** Es una variable **de dos regímenes**: el `r pct(E$Fee$pct_ceros)` de los anuncios no cobra tarifa (mediana = Q1 = Q3 = 0), mientras que el `r pct(100 - E$Fee$pct_ceros)` restante sí lo hace y, entre esos casos, la mediana es de `r fmt(median(datos$Fee[datos$Fee > 0]))` MYR. Esa mezcla produce la asimetría y curtosis más extremas de la base (asimetría = `r fmt(E$Fee$asim, 2)`, curtosis = `r fmt(E$Fee$curt, 1)`), una media (`r fmt(E$Fee$media)` MYR) muy superior a la mediana (`r fmt(E$Fee$mediana)` MYR) y un máximo de `r ent(E$Fee$max)` MYR. El coeficiente de variación (`r pct(E$Fee$cv)`) es el más alto entre las variables cuantitativas. **Lectura:** la tarifa debe analizarse como variable mixta (indicador de «¿cobra?» más el monto cuando cobra); tratada como continua, sus medidas de tendencia central son engañosas porque el 0 domina la distribución.
+
+#### `PhotoAmt` — Número de fotografías {.unnumbered}
+
+```{r}
+#| label: cuanti-PhotoAmt
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Número de fotografías (fotos)"
+tabla_estadisticos(datos$PhotoAmt)
+```
+
+```{r}
+#| label: atip-PhotoAmt
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Número de fotografías (fotos)"
+tabla_atipicos(datos$PhotoAmt)
+```
+
+```{r}
+#| label: graf-PhotoAmt
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de número de fotografías", "Diagrama de caja de número de fotografías", "Gráfico de densidad de número de fotografías", "Valores más frecuentes de número de fotografías"]
+graficos_cuanti(datos$PhotoAmt, "Fotografías", tipo = "conteo")
+```
+
+**Interpretación.** El número de fotos es una variable discreta con moda en `r fmt(E$PhotoAmt$moda, 0)` foto (`r pct(C$PhotoAmt$pct_moda)` de los anuncios), mediana `r fmt(E$PhotoAmt$mediana, 0)` y media `r fmt(E$PhotoAmt$media)`; el `r pct(E$PhotoAmt$pct_ceros)` de los anuncios no tiene ninguna foto y el máximo es de `r ent(E$PhotoAmt$max)`. La distribución es **`r lectura_asim(E$PhotoAmt$asim)`** con curtosis `r fmt(E$PhotoAmt$curt, 2)`, y la regla de 1,5 × IQR detecta `r ent(E$PhotoAmt$out_iqr)` anuncios con muchas fotos (`r pct(E$PhotoAmt$pct_out_iqr)`), que son casos legítimos de rescatistas muy documentados. **Lectura:** la mayoría de los anuncios tiene entre `r fmt(E$PhotoAmt$q1, 0)` y `r fmt(E$PhotoAmt$q3, 0)` fotos; los anuncios sin fotos merecen seguimiento porque su ficha está incompleta.
+
+#### `VideoAmt` — Número de videos {.unnumbered}
+
+```{r}
+#| label: cuanti-VideoAmt
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Número de videos (videos)"
+tabla_estadisticos(datos$VideoAmt)
+```
+
+```{r}
+#| label: atip-VideoAmt
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Número de videos (videos)"
+tabla_atipicos(datos$VideoAmt)
+```
+
+```{r}
+#| label: graf-VideoAmt
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de número de videos", "Diagrama de caja de número de videos", "Gráfico de densidad de número de videos", "Valores más frecuentes de número de videos"]
+graficos_cuanti(datos$VideoAmt, "Videos", tipo = "conteo")
+```
+
+**Interpretación.** La variable es **casi constante**: el `r pct(E$VideoAmt$pct_ceros)` de los anuncios no incluye video, solo el `r pct(100 - E$VideoAmt$pct_ceros)` tiene al menos uno y el máximo es `r ent(E$VideoAmt$max)`. Su media (`r fmt(E$VideoAmt$media)`), mediana y moda son 0, y el coeficiente de variación (`r pct(E$VideoAmt$cv)`) es enorme justamente porque la media es casi nula. Los `r ent(E$VideoAmt$out_iqr)` atípicos que marca el IQR (`r pct(E$VideoAmt$pct_out_iqr)`) son simplemente los anuncios con video. **Lectura:** con tan poca variabilidad, la variable aporta poca información descriptiva; se recomienda tratarla como dicotómica (tiene o no video) y evaluar en la fase de modelamiento si vale la pena conservarla.
+
+#### `sentiment_score` — Sentimiento del relato (polaridad) {.unnumbered}
+
+```{r}
+#| label: cuanti-sentiment_score
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Sentimiento del relato (polaridad) (índice de −1 a 1)"
+tabla_estadisticos(datos$sentiment_score)
+```
+
+```{r}
+#| label: atip-sentiment_score
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Sentimiento del relato (polaridad) (índice de −1 a 1)"
+tabla_atipicos(datos$sentiment_score)
+```
+
+```{r}
+#| label: graf-sentiment_score
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de sentimiento del relato (polaridad)", "Diagrama de caja de sentimiento del relato (polaridad)", "Gráfico de densidad de sentimiento del relato (polaridad)", "QQ-plot (referencia normal) de sentimiento del relato (polaridad)"]
+graficos_cuanti(datos$sentiment_score, "Polaridad (−1 a 1)", tipo = "continuo")
+```
+
+**Interpretación.** La polaridad del relato es la variable cuantitativa **mejor comportada**: su distribución es `r lectura_asim(E$sentiment_score$asim)` (asimetría = `r fmt(E$sentiment_score$asim, 2)`, curtosis = `r fmt(E$sentiment_score$curt, 2)`, prácticamente la de una normal). La media (`r fmt(E$sentiment_score$media)`) y la mediana (`r fmt(E$sentiment_score$mediana)`) son casi iguales, el 50 % central está entre `r fmt(E$sentiment_score$q1)` y `r fmt(E$sentiment_score$q3)` y el rango observado va de `r fmt(E$sentiment_score$min)` a `r fmt(E$sentiment_score$max)`. El `r pct(E$sentiment_score$pct_ceros)` de los relatos obtiene una polaridad de exactamente 0 (texto neutro) y los atípicos por IQR (`r ent(E$sentiment_score$out_iqr)`, `r pct(E$sentiment_score$pct_out_iqr)`) aparecen en los dos extremos. Los `r ent(E$sentiment_score$na)` valores perdidos corresponden a anuncios para los que no se recuperó la anotación (no son relatos vacíos: en esos casos la mediana de longitud es de `r fmt(median(datos$desc_char_len[is.na(datos$sentiment_score)]))` caracteres). **Lectura:** en conjunto, los relatos tienden a ser levemente positivos, con poca polaridad extrema.
+
+#### `sentiment_magnitude` — Sentimiento del relato (intensidad) {.unnumbered}
+
+```{r}
+#| label: cuanti-sentiment_magnitude
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Sentimiento del relato (intensidad) (índice ≥ 0)"
+tabla_estadisticos(datos$sentiment_magnitude)
+```
+
+```{r}
+#| label: atip-sentiment_magnitude
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Sentimiento del relato (intensidad) (índice ≥ 0)"
+tabla_atipicos(datos$sentiment_magnitude)
+```
+
+```{r}
+#| label: graf-sentiment_magnitude
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de sentimiento del relato (intensidad)", "Diagrama de caja de sentimiento del relato (intensidad)", "Gráfico de densidad de sentimiento del relato (intensidad)", "QQ-plot (referencia normal) de sentimiento del relato (intensidad)"]
+graficos_cuanti(datos$sentiment_magnitude, "Intensidad del sentimiento", tipo = "continuo")
+```
+
+**Interpretación.** Mide **cuánta** carga emocional hay en el relato (no su signo) y es una variable acumulativa: crece con la cantidad de texto anotado, por lo que no es directamente comparable entre relatos de distinta extensión. Su distribución es **`r lectura_asim(E$sentiment_magnitude$asim)`** (asimetría = `r fmt(E$sentiment_magnitude$asim, 2)`), con mediana `r fmt(E$sentiment_magnitude$mediana)` y media `r fmt(E$sentiment_magnitude$media)`; el `r pct(E$sentiment_magnitude$pct_ceros)` de los casos tiene intensidad 0 y el máximo llega a `r fmt(E$sentiment_magnitude$max)` en relatos muy largos. Comparte los `r ent(E$sentiment_magnitude$na)` valores perdidos de `sentiment_score`. **Lectura:** es una medida de exposición emocional, no de tono; si se usa en el modelamiento conviene normalizarla por la longitud del relato y documentar esa decisión.
+
+#### `total_labels` — Etiquetas de contenido detectadas en las fotos {.unnumbered}
+
+```{r}
+#| label: cuanti-total_labels
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Etiquetas de contenido detectadas en las fotos (etiquetas)"
+tabla_estadisticos(datos$total_labels)
+```
+
+```{r}
+#| label: atip-total_labels
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Etiquetas de contenido detectadas en las fotos (etiquetas)"
+tabla_atipicos(datos$total_labels)
+```
+
+```{r}
+#| label: graf-total_labels
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de etiquetas de contenido detectadas en las fotos", "Diagrama de caja de etiquetas de contenido detectadas en las fotos", "Gráfico de densidad de etiquetas de contenido detectadas en las fotos", "Valores más frecuentes de etiquetas de contenido detectadas en las fotos"]
+graficos_cuanti(datos$total_labels, "Etiquetas detectadas", tipo = "conteo")
+```
+
+**Interpretación.** Es un **conteo acumulado** de las etiquetas que la API de visión detectó en el conjunto de fotografías del anuncio (no un promedio por foto), de modo que su magnitud está ligada al número de imágenes de la ficha; interpretarla como «riqueza visual media» exigiría normalizarla. La distribución es **`r lectura_asim(E$total_labels$asim)`** (asimetría = `r fmt(E$total_labels$asim, 2)`, curtosis = `r fmt(E$total_labels$curt, 2)`), con mínimo `r ent(E$total_labels$min)`, mediana `r fmt(E$total_labels$mediana, 0)`, media `r fmt(E$total_labels$media)` y máximo `r ent(E$total_labels$max)` etiquetas. Presenta `r ent(E$total_labels$na)` valores perdidos (anuncios sin fotografía) y `r ent(E$total_labels$out_iqr)` atípicos altos por IQR (`r pct(E$total_labels$pct_out_iqr)`). **Lectura:** variable de conteo con cola derecha marcada; útil como indicador de cuánta información visual contiene la ficha.
+
+#### `total_faces` — Rostros humanos detectados en las fotos {.unnumbered}
+
+```{r}
+#| label: cuanti-total_faces
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Rostros humanos detectados en las fotos (rostros)"
+tabla_estadisticos(datos$total_faces)
+```
+
+```{r}
+#| label: atip-total_faces
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Rostros humanos detectados en las fotos (rostros)"
+tabla_atipicos(datos$total_faces)
+```
+
+```{r}
+#| label: graf-total_faces
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de rostros humanos detectados en las fotos", "Diagrama de caja de rostros humanos detectados en las fotos", "Gráfico de densidad de rostros humanos detectados en las fotos", "Valores más frecuentes de rostros humanos detectados en las fotos"]
+graficos_cuanti(datos$total_faces, "Rostros detectados", tipo = "conteo")
+```
+
+**Interpretación.** La variable es **casi constante y casi toda cero**: el `r pct(E$total_faces$pct_ceros)` de los anuncios no tiene rostros detectados, la media es `r fmt(E$total_faces$media)` y el máximo `r ent(E$total_faces$max)` (aparecen personas, por ejemplo voluntarios o adoptantes). Como Q1 = Q3 = 0, la regla de 1,5 × IQR marca como atípico todo valor mayor que cero (`r ent(E$total_faces$out_iqr)` casos, `r pct(E$total_faces$pct_out_iqr)`), y el puntaje z detecta exactamente los mismos casos. **Lectura:** es una variable prácticamente dicotómica («¿hay personas en las fotos?»); su utilidad está en esa distinción, no en su valor numérico.
+
+#### `total_colors` — Colores dominantes detectados en las fotos {.unnumbered}
+
+```{r}
+#| label: cuanti-total_colors
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Colores dominantes detectados en las fotos (colores)"
+tabla_estadisticos(datos$total_colors)
+```
+
+```{r}
+#| label: atip-total_colors
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Colores dominantes detectados en las fotos (colores)"
+tabla_atipicos(datos$total_colors)
+```
+
+```{r}
+#| label: graf-total_colors
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de colores dominantes detectados en las fotos", "Diagrama de caja de colores dominantes detectados en las fotos", "Gráfico de densidad de colores dominantes detectados en las fotos", "Valores más frecuentes de colores dominantes detectados en las fotos"]
+graficos_cuanti(datos$total_colors, "Colores dominantes", tipo = "conteo")
+```
+
+**Interpretación.** Conteo acumulado de los colores dominantes de todas las fotografías del anuncio; el servicio de visión devuelve hasta diez colores por imagen, de ahí que los valores sean múltiplos de 10 en la mayoría de los casos. El mínimo es `r ent(E$total_colors$min)` (todo anuncio con foto tiene al menos una imagen procesada), la mediana `r fmt(E$total_colors$mediana, 0)`, la media `r fmt(E$total_colors$media)` y el máximo `r ent(E$total_colors$max)`; la asimetría es `r fmt(E$total_colors$asim, 2)` y el `r pct(E$total_colors$pct_out_iqr)` de los anuncios queda fuera de los límites de 1,5 × IQR. Comparte los `r ent(E$total_colors$na)` valores perdidos de los anuncios sin foto. **Lectura:** igual que `total_labels`, es un indicador del volumen de información visual, sensible al número de fotos.
+
+#### `desc_char_len` — Longitud del relato (caracteres) {.unnumbered}
+
+```{r}
+#| label: cuanti-desc_char_len
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Longitud del relato (caracteres) (caracteres)"
+tabla_estadisticos(datos$desc_char_len)
+```
+
+```{r}
+#| label: atip-desc_char_len
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Longitud del relato (caracteres) (caracteres)"
+tabla_atipicos(datos$desc_char_len)
+```
+
+```{r}
+#| label: graf-desc_char_len
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de longitud del relato (caracteres)", "Diagrama de caja de longitud del relato (caracteres)", "Gráfico de densidad de longitud del relato (caracteres)", "QQ-plot (referencia normal) de longitud del relato (caracteres)"]
+graficos_cuanti(datos$desc_char_len, "Caracteres del relato", tipo = "continuo")
+```
+
+**Interpretación.** El relato del rescatista tiene una extensión muy variable: la mediana es de `r fmt(E$desc_char_len$mediana, 0)` caracteres, el 50 % central va de `r fmt(E$desc_char_len$q1, 0)` a `r fmt(E$desc_char_len$q3, 0)` y el máximo alcanza `r ent(E$desc_char_len$max)` caracteres. La distribución es **`r lectura_asim(E$desc_char_len$asim)`** (asimetría = `r fmt(E$desc_char_len$asim, 2)`, curtosis = `r fmt(E$desc_char_len$curt, 2)`): una mayoría de relatos breves y una minoría de textos extensos. La media (`r fmt(E$desc_char_len$media)` caracteres) supera la mediana, y la regla de 1,5 × IQR marca `r ent(E$desc_char_len$out_iqr)` relatos largos como atípicos (`r pct(E$desc_char_len$pct_out_iqr)`). No hay relatos vacíos: el mínimo es de `r ent(E$desc_char_len$min)` carácter. **Lectura:** la extensión del relato es una de las variables con mayor dispersión relativa (CV = `r pct(E$desc_char_len$cv)`); conviene tratarla en escala logarítmica.
+
+#### `desc_word_count` — Longitud del relato (palabras) {.unnumbered}
+
+```{r}
+#| label: cuanti-desc_word_count
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Longitud del relato (palabras) (palabras)"
+tabla_estadisticos(datos$desc_word_count)
+```
+
+```{r}
+#| label: atip-desc_word_count
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Longitud del relato (palabras) (palabras)"
+tabla_atipicos(datos$desc_word_count)
+```
+
+```{r}
+#| label: graf-desc_word_count
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de longitud del relato (palabras)", "Diagrama de caja de longitud del relato (palabras)", "Gráfico de densidad de longitud del relato (palabras)", "QQ-plot (referencia normal) de longitud del relato (palabras)"]
+graficos_cuanti(datos$desc_word_count, "Palabras del relato", tipo = "continuo")
+```
+
+**Interpretación.** Es la misma extensión del relato medida en palabras, así que reproduce el patrón anterior: mediana de `r fmt(E$desc_word_count$mediana, 0)` palabras, media `r fmt(E$desc_word_count$media)`, rango de `r fmt(E$desc_word_count$min, 0)` a `r ent(E$desc_word_count$max)` palabras y un 50 % central entre `r fmt(E$desc_word_count$q1, 0)` y `r fmt(E$desc_word_count$q3, 0)`. La asimetría (`r fmt(E$desc_word_count$asim, 2)`) y la curtosis (`r fmt(E$desc_word_count$curt, 2)`) confirman la cola derecha, con `r ent(E$desc_word_count$out_iqr)` atípicos por IQR (`r pct(E$desc_word_count$pct_out_iqr)`). **Lectura:** es una versión equivalente a `desc_char_len` en otra unidad; para el modelamiento basta conservar una de las dos (o estandarizar) para no duplicar la misma información.
 
 
