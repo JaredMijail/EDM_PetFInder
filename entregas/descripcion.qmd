@@ -12,6 +12,7 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 #| label: setup-comun
 #| echo: false
 #| include: false
+# Carga y traducción de las categorías del conjunto de datos
 source(here::here("_setup.R"))
 ```
 A continuación se describe el contenido del conjunto datos PetFinder según el número de unidades de observación

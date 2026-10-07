@@ -4,10 +4,15 @@ subtitle: "Análisis descriptivo univariado de las variables del conjunto de dat
 author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 --- 
 
+::: action-bar
+<button class="btn-print" onclick="window.print()">PDF</button>
+:::
+
 ```{r}
 #| label: setup-comun
 #| echo: false
 #| include: false
+# Carga y traducción de las categorías del conjunto de datos
 source(here::here("_setup.R"))
 ```
 
