@@ -226,3 +226,197 @@ tabla_atipicos(datos$Fee, caption = "Detección de valores atípicos — Tarifa 
 #| layout-ncol: 4
 graficos_cuanti(datos$Fee, "Tarifa de adopción", tipo = "conteo")
 ```
+
+### `PhotoAmt`- Cantidad de fotos
+
+
+```{r}
+#| label: cuanti-PhotoAmt
+#| echo: true
+tabla_estadisticos(datos$PhotoAmt, caption = "Estadísticos descriptivos — Cantidad de fotos")
+```
+
+
+```{r}
+#| label: atip-PhotoAmt
+#| echo: true
+tabla_atipicos(datos$PhotoAmt, caption = "Detección de valores atípicos — Cantidad de fotos")
+```
+
+
+```{r}
+#| label: graf-PhotoAmt
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$PhotoAmt, "Cantidad de fotos", tipo = "conteo")
+```
+
+### `VideoAmt` - Cantidad de videos
+
+```{r}
+#| label: cuanti-VideoAmt
+#| echo: true
+tabla_estadisticos(datos$VideoAmt, caption = "Estadísticos descriptivos — Cantidad de videos")
+```
+
+
+```{r}
+#| label: atip-VideoAmt
+#| echo: true
+tabla_atipicos(datos$VideoAmt, caption = "Detección de valores atípicos — Cantidad de videos")
+```
+
+
+```{r}
+#| label: graf-VideoAmt
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$VideoAmt, "Cantidad de videos", tipo = "conteo")
+```
+
+### `sentiment_score`- Puntaje de sentimiento
+
+```{r}
+#| label: cuanti-sentiment-score
+#| echo: true
+tabla_estadisticos(datos$sentiment_score, caption = "Estadísticos descriptivos — Puntaje de sentimiento")
+```
+
+```{r}
+#| label: atip-sentiment-score
+#| echo: true
+tabla_atipicos(datos$sentiment_score, caption = "Detección de valores atípicos — Puntaje de sentimiento")
+```
+
+```{r}
+#| label: graf-sentiment-score
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$sentiment_score, "Puntaje de sentimiento", tipo = "conteo")
+```
+
+### `sentiment_magnitude`- Magnitud de sentimiento
+
+```{r}
+#| label: cuanti-sentiment-magnitude
+#| echo: true
+tabla_estadisticos(datos$sentiment_magnitude, caption = "Estadísticos descriptivos — Magnitud de sentimiento")
+```
+
+```{r}
+#| label: atip-sentiment-magnitude
+#| echo: true
+tabla_atipicos(datos$sentiment_magnitude, caption = "Detección de valores atípicos — Magnitud de sentimiento")
+```
+
+```{r}
+#| label: graf-sentiment-magnitude
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$sentiment_magnitude, "Magnitud de sentimiento", tipo = "conteo")
+```
+
+### `total_labels`- Total de etiquetas
+
+```{r}
+#| label: cuanti-total-labels
+#| echo: true
+tabla_estadisticos(datos$total_labels, caption = "Estadísticos descriptivos — Total de etiquetas")
+```
+
+```{r}
+#| label: atip-total-labels
+#| echo: true
+tabla_atipicos(datos$total_labels, caption = "Detección de valores atípicos — Total de etiquetas")
+```
+
+```{r}
+#| label: graf-total-labels
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$total_labels, "Total de etiquetas", tipo = "conteo")
+```
+
+### `total_faces`- Total de rostros detectados
+
+```{r}
+#| label: cuanti-total-faces
+#| echo: true
+tabla_estadisticos(datos$total_faces, caption = "Estadísticos descriptivos — Total de rostros detectados")
+```
+
+```{r}
+#| label: atip-total-faces
+#| echo: true
+tabla_atipicos(datos$total_faces, caption = "Detección de valores atípicos — Total de rostros detectados")
+```
+
+```{r}
+#| label: graf-total-faces
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$total_faces, "Total de rostros detectados", tipo = "conteo")
+```
+
+### `total_colors`- Total de colores detectados
+
+```{r}
+#| label: cuanti-total-colors
+#| echo: true
+tabla_estadisticos(datos$total_colors, caption = "Estadísticos descriptivos — Total de colores detectados")
+```
+
+```{r}
+#| label: atip-total-colors
+#| echo: true
+tabla_atipicos(datos$total_colors, caption = "Detección de valores atípicos — Total de colores detectados")
+```
+
+```{r}
+#| label: graf-total-colors
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$total_colors, "Total de colores detectados", tipo = "conteo")
+```
+
+### `desc_char_len`- Longitud de la descripción (caracteres)
+
+```{r}
+#| label: cuanti-desc-char-len
+#| echo: true
+tabla_estadisticos(datos$desc_char_len, caption = "Estadísticos descriptivos — Longitud de la descripción (caracteres)")
+```
+
+```{r}
+#| label: atip-desc-char-len
+#| echo: true
+tabla_atipicos(datos$desc_char_len, caption = "Detección de valores atípicos — Longitud de la descripción (caracteres)")
+```
+
+```{r}
+#| label: graf-desc-char-len
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$desc_char_len, "Longitud de la descripción (caracteres)", tipo = "conteo")
+```
+
+### `desc_word_count`- Cantidad de palabras en la descripción
+
+```{r}
+#| label: cuanti-desc-word-count
+#| echo: true
+tabla_estadisticos(datos$desc_word_count, caption = "Estadísticos descriptivos — Cantidad de palabras en la descripción")
+```
+
+```{r}
+#| label: atip-desc-word-count
+#| echo: true
+tabla_atipicos(datos$desc_word_count, caption = "Detección de valores atípicos — Cantidad de palabras en la descripción")
+```
+
+```{r}
+#| label: graf-desc-word-count
+#| echo: true
+#| layout-ncol: 4
+graficos_cuanti(datos$desc_word_count, "Cantidad de palabras en la descripción", tipo = "conteo")
+```
