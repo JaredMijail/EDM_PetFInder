@@ -927,14 +927,30 @@ figcaption,
 }
 
 /* Botón de impresión / exportar a PDF */
-.action-bar {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  align-items: center;
-  margin: 1.2rem 0 2rem 0;
+/* Fila que contiene autores + botón */
+.autor-pdf-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;      /* centra verticalmente el botón respecto a los autores */
+  gap: 1.5rem;
+  flex-wrap: wrap;          /* si no caben, el botón baja (en móvil) */
 }
 
+/* Bloque de autores: ocupa el espacio disponible */
+.autor-info {
+  flex: 1 1 auto;
+  min-width: 0;             /* evita desbordes con textos largos */
+}
+
+/* Barra del botón: NO ocupa toda la línea */
+.action-bar {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;           /* que no se estire */
+  margin: 0;                /* quita márgenes verticales que tenías */
+}
+
+/* Botón (mantén tus estilos actuales) */
 button.btn-print,
 a.btn-print {
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
@@ -950,10 +966,6 @@ a.btn-print {
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-.action-bar .btn-print {
-  margin-left: auto;
-} 
 
 button.btn-print:hover,
 a.btn-print:hover {
