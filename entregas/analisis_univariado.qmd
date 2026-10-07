@@ -71,16 +71,46 @@ tabla_estadisticos <- function(x, caption = NULL) {
   caption = caption)
 }
 
-tabla_atipicos <- function(x, k = 3, caption = NULL) {
-  x <- as.numeric(x); v <- x[!is.na(x)]; q <- quantile(v, c(.25, .75)); iqr <- diff(q)
-  z <- (v - mean(v))/sd(v); li <- q[1] - 1.5*iqr; ls <- q[2] + 1.5*iqr
-  tibble::tibble(
-    Criterio = c("Regla de 1,5 × IQR", paste0("Puntaje z (|z| > ", k, ")")),
-    `Límite inferior` = c(fmt(li), fmt(mean(v) - k*sd(v))),
-    `Límite superior` = c(fmt(ls), fmt(mean(v) + k*sd(v))),
-    Atípicos = c(ent(sum(v < li | v > ls)), ent(sum(abs(z) > k))),
-    `% del total` = c(pct(100*mean(v < li | v > ls)), pct(100*mean(abs(z) > k)))
-  ) |> knitr::kable(align = c("l", "r", "r", "r", "r"), caption = caption)
+tabla_atipicos <- function(x, k = 3, caption = NULL, extremos = TRUE) {
+  v <- as.numeric(x)
+  v <- v[!is.na(v)]
+  n <- length(v)
+
+  q   <- unname(quantile(v, c(.25, .75)))
+  riq <- q[2] - q[1]
+  m   <- mean(v)
+  s   <- sd(v)
+
+  cerca <- function(c) c(q[1] - c * riq, q[2] + c * riq)
+
+  # Un criterio = una fila de límites; el conteo es el mismo para todos
+  lim <- rbind(
+    "Atípicos (1,5 × RIQ)"            = cerca(1.5),
+    "Extremos (3 × RIQ)"              = cerca(3),
+    setNames(list(c(m - k * s, m + k * s)), paste0("Puntaje z (|z| > ", k, ")"))[[1]] |>
+      (\(r) { out <- rbind(r); rownames(out) <- paste0("Puntaje z (|z| > ", k, ")"); out })()
+  )
+  if (!extremos) lim <- lim[-2, , drop = FALSE]
+
+  n_at <- apply(lim, 1, function(l) sum(v < l[1] | v > l[2]))
+
+  tab <- tibble::tibble(
+    Criterio          = rownames(lim),
+    `Límite inferior` = fmt(lim[, 1]),
+    `Límite superior` = fmt(lim[, 2]),
+    Atípicos          = ent(n_at),
+    `% del total`     = pct(100 * n_at / n)
+  )
+
+  knitr::kable(
+    tab,
+    format    = if (knitr::is_latex_output()) "latex" else "pipe",
+    booktabs  = TRUE,
+    linesep   = "",
+    align     = c("l", "r", "r", "r", "r"),
+    caption   = caption,
+    escape    = FALSE
+  )
 }
 
 # --- Gráficos ---
