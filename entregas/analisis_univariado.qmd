@@ -19,6 +19,7 @@ source(here::here("_setup.R"))
 # Análisis de variables cuantitativas
 
 ```{r}
+#| layout-ncol: 2
 # --- estadísticos ---
 moda      <- function(x) { x <- x[!is.na(x)]; ux <- unique(x); ux[which.max(tabulate(match(x, ux)))] }
 asimetria <- function(x) { x <- x[!is.na(x)]; n <- length(x); m <- mean(x); s <- sd(x); n/((n-1)*(n-2))*sum(((x-m)/s)^3) }
