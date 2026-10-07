@@ -132,12 +132,18 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
 }
 ```
 
-## `Age` - Edad
+### `Age` - Edad
 ```{r}
+#| label: cuanti-Age
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Edad (meses)"
 tabla_estadisticos(datos$Age)
 ```
 
 ```{r}
+#| label: atip-Age
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Edad (meses)"
 tabla_atipicos(datos$Age)
 ```
 
@@ -147,4 +153,28 @@ tabla_atipicos(datos$Age)
 #| layout-ncol: 2
 #| fig-cap: ["Histograma de edad", "Diagrama de caja de edad", "Gráfico de densidad de edad", "Valores más frecuentes de edad"]
 graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
+```
+
+### `Quantity` - Cantidad de animales en el anuncio
+
+```{r}
+#| label: cuanti-Quantity
+#| echo: true
+#| tbl-cap: "Estadísticos descriptivos — Cantidad de animales en el anuncio (animales)"
+tabla_estadisticos(datos$Quantity)
+```
+
+```{r}
+#| label: atip-Quantity
+#| echo: true
+#| tbl-cap: "Detección de valores atípicos — Cantidad de animales en el anuncio (animales)"
+tabla_atipicos(datos$Quantity)
+```
+
+```{r}
+#| label: graf-Quantity
+#| echo: true
+#| layout-ncol: 2
+#| fig-cap: ["Histograma de cantidad de animales en el anuncio", "Diagrama de caja de cantidad de animales en el anuncio", "Gráfico de densidad de cantidad de animales en el anuncio", "Valores más frecuentes de cantidad de animales en el anuncio"]
+graficos_cuanti(datos$Quantity, "Animales en el anuncio", tipo = "conteo")
 ```
