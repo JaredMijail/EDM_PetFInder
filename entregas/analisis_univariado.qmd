@@ -38,46 +38,26 @@ esc_num <- function(x) {
 
 # --- Tablas ---
 tabla_estadisticos <- function(x) {
-  s <- esc_num(x)
+s <- esc_num(datos$Age)
 
-  # Orden emparejado: cada fila agrupa dos estadísticos relacionados
-  pares <- list(
-    c("Observaciones válidas",  ent(s$n)),
-    c("Valores perdidos",       ent(s$na)),
-    c("Media",                  fmt(s$media)),
-    c("Mediana",                fmt(s$mediana)),
-    c("Moda",                   fmt(s$moda)),
-    c("Rango",                  fmt(s$rango)),
-    c("Mínimo",                 fmt(s$min)),
-    c("Máximo",                 fmt(s$max)),
-    c("Primer cuartil (Q1)",    fmt(s$q1)),
-    c("Tercer cuartil (Q3)",    fmt(s$q3)),
-    c("Rango intercuartílico (IQR)", fmt(s$iqr)),
-    c("Varianza",               fmt(s$var)),
-    c("Desviación estándar",    fmt(s$sd)),
-    c("Coeficiente de variación", pct(s$cv)),
-    c("Asimetría",              fmt(s$asim, 3)),
-    c("Curtosis",               fmt(s$curt, 3))
-  )
+# --- mitad izquierda ---
+etiquetas_1 <- c("Observaciones válidas", "Valores perdidos", "Media", "Mediana",
+                 "Moda", "Mínimo", "Máximo", "Primer cuartil (Q1)")
+valores_1 <- c(ent(s$n), ent(s$na), fmt(s$media), fmt(s$mediana),
+               fmt(s$moda), fmt(s$min), fmt(s$max), fmt(s$q1))
 
-  # Reorganizar en 4 columnas (Est | Val | Est | Val)
-  etiquetas <- vapply(pares, `[`, character(1), 1)
-  valores   <- vapply(pares, `[`, character(1), 2)
+tibble::tibble(Estadístico = etiquetas_1, Valor = valores_1) |>
+  knitr::kable(align = c("l", "r"))
 
-  mitad <- length(etiquetas) / 2
-  idx1  <- seq_len(mitad)
-  idx2  <- seq.int(mitad + 1, length(etiquetas))
+# --- mitad derecha ---
+etiquetas_2 <- c("Tercer cuartil (Q3)", "Rango intercuartílico (IQR)", "Rango",
+                 "Varianza", "Desviación estándar", "Coeficiente de variación",
+                 "Asimetría", "Curtosis")
+valores_2 <- c(fmt(s$q3), fmt(s$iqr), fmt(s$rango), fmt(s$var),
+               fmt(s$sd), pct(s$cv), fmt(s$asim, 3), fmt(s$curt, 3))
 
-  tibble::tibble(
-    `Estadístico_1` = etiquetas[idx1],
-    `Valor_1`       = valores[idx1],
-    `Estadístico_2` = etiquetas[idx2],
-    `Valor_2`       = valores[idx2]
-  ) |>
-    knitr::kable(
-      col.names = c("Estadístico", "Valor", "Estadístico", "Valor"),
-      align     = c("r", "c", "r", "c")
-    )
+tibble::tibble(Estadístico = etiquetas_2, Valor = valores_2) |>
+  knitr::kable(align = c("l", "r"))
 }
 
 tabla_atipicos <- function(x, k = 3) {
