@@ -138,8 +138,7 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
 ```{r}
 #| label: cuanti-Age
 #| echo: true
-#| tbl-cap: "Estadísticos descriptivos — Edad (meses)"
-tabla_estadisticos(datos$Age)
+tabla_estadisticos(datos$Age, caption = "Estadísticos descriptivos — Edad (meses)")
 ```
 
 
