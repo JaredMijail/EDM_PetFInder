@@ -1,6 +1,6 @@
 ---
 title: "Análisis Univariado Diagnóstico"
-subtitle: "Análisis descriptivo univariado de las variables del conjunto de datos PetFinder"
+subtitle: "Análisis descriptivo univariado de las variables del conjunto de datos PetFinder."
 --- 
 
 ::: autor-pdf-row
@@ -158,6 +158,7 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
 }
 ```
 
+::: {.panel-tabset}
 ### `Age` - Edad
 
 ```{r}
@@ -420,3 +421,6 @@ tabla_atipicos(datos$desc_word_count, caption = "Detección de valores atípicos
 #| layout-ncol: 4
 graficos_cuanti(datos$desc_word_count, "Cantidad de palabras en la descripción", tipo = "conteo")
 ```
+:::
+
+## Análisis de variables cualitativas
