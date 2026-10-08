@@ -52,9 +52,9 @@ tabla_estadisticos <- function(x, caption = NULL) {
   s <- esc_num(x)
 
   tab <- tibble::tibble(
-    `Estadístico` = c("Observaciones válidas", "Valores perdidos", "Media", "Mediana", "Moda",
-                      "Mínimo", "Máximo", "Primer cuartil (Q1)", "Tercer cuartil (Q3)",
-                      "Rango intercuartílico (IQR)", "Rango", "Varianza", "Desviación estándar",
+    `Estadístico` = c("Entradas válidas", "Valores faltantes", "Media", "Mediana", "Moda",
+                      "Mínimo", "Máximo", "Q1", "Q3",
+                      "IQR", "Rango", "Varianza", "Desviación estándar",
                       "Coeficiente de variación", "Asimetría", "Curtosis"),
     Valor = c(ent(s$n), ent(s$na), fmt(s$media), fmt(s$mediana), fmt(s$moda), fmt(s$min),
               fmt(s$max), fmt(s$q1), fmt(s$q3), fmt(s$iqr), fmt(s$rango), fmt(s$var),
