@@ -1427,3 +1427,85 @@ html[data-bs-theme="dark"] thead {
     margin: 1.8cm 1.6cm;
   }
 }
+
+/* ======================= Deslizador de variables ======================= */
+.slider-wrap {
+  margin: 1.5rem 0 3rem 0;
+  padding: 1.2rem 1.4rem 1.6rem 1.4rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Controles */
+.slider-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.slider-controls button {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.slider-controls button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.slider-controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.slider-counter {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
+}
+
+/* Slides */
+.slider-wrap .slide {
+  display: none;
+}
+
+.slider-wrap .slide.active {
+  display: block;
+  animation: fadeInUp 0.35s ease-out;
+}
+
+/* Título del slide (el h3 dentro) */
+.slider-wrap .slide > h3:first-child {
+  margin-top: 0.2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+/* Responsive: en pantallas pequeñas los botones quedan más juntos */
+@media (max-width: 600px) {
+  .slider-controls button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.88rem;
+  }
+  .slider-counter {
+    font-size: 0.85rem;
+  }
+}
