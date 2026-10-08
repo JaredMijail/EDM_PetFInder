@@ -15,6 +15,9 @@ Jared Mijail Ramírez Escalante · María Paula Silva Capera
 </div>
 :::
 
+A continuación se describen cada una de las variables del conjunto de datos [PetFinder](dataset.qmd) enriquecido por separado
+con el apoyo de estadísticas de tendencia central y dispersión, gráficos de distribución, tablas de frecuencia e identificación de valores atípicos/extremos.
+
 ```{r}
 #| label: setup-comun
 #| echo: false
@@ -24,9 +27,6 @@ source(here::here("_setup.R"))
 ```
 
 ## Análisis de variables cuantitativas
-
-A continuación se describen cada una de las variables del conjunto de datos [PetFinder](dataset.qmd) enriquecido por separado
-con el apoyo de estadísticas de tendencia central y dispersión, gráficos de distribución, tablas de frecuencia e identificación de valores atípicos/extremos.
 
 ```{r}
 #| layout-ncol: 2
@@ -424,3 +424,370 @@ graficos_cuanti(datos$desc_word_count, "Cantidad de palabras en la descripción"
 :::
 
 ## Análisis de variables cualitativas
+
+```{r}
+tabla_frecuencias <- function(x, etiqueta = "Categoría", n_top = 10) {
+  v <- as.character(x); tb <- sort(table(v), decreasing = TRUE); n <- length(tb); tot <- sum(tb)
+  if (n > n_top) {
+    tab <- tibble::tibble(
+      Categoría = c(names(tb)[1:(n_top - 1)], sprintf("Otras (%d categorías)", n - n_top + 1)),
+      Frecuencia = c(as.integer(tb[1:(n_top - 1)]), tot - sum(tb[1:(n_top - 1)])))
+  } else {
+    tab <- tibble::tibble(Categoría = names(tb), Frecuencia = as.integer(tb))
+  }
+  tab |>
+    mutate(`Frecuencia relativa` = 100*Frecuencia/sum(Frecuencia),
+           `Frecuencia acumulada` = cumsum(`Frecuencia relativa`)) |>
+    mutate(Frecuencia = ent(Frecuencia),
+           `Frecuencia relativa` = pct(`Frecuencia relativa`),
+           `Frecuencia acumulada` = pct(`Frecuencia acumulada`)) |>
+    knitr::kable(col.names = c(etiqueta, "Frecuencia absoluta", "Frecuencia relativa",
+                               "Frecuencia acumulada"), align = c("l", "r", "r", "r"))
+}
+
+tabla_cardinalidad <- function(x) {
+  v <- as.character(x)
+  tibble::tibble(
+    Verificación = c("Observaciones", "Valores perdidos", "Categorías distintas",
+                     "Proporción de valores distintos", "Categoría más frecuente",
+                     "Frecuencia de la moda"),
+    Resultado = c(ent(length(v)), ent(sum(is.na(x))), ent(length(unique(v))),
+                  pct(100*length(unique(v))/length(v)),
+                  names(sort(table(v), decreasing = TRUE))[1],
+                  pct(100*max(table(v))/length(v)))
+  ) |> knitr::kable(align = c("l", "r"))
+}
+
+graficos_cuali <- function(x, etiqueta, pastel = FALSE, n_top = 10) {
+  v <- as.character(x); tb <- sort(table(v), decreasing = TRUE); n <- length(tb); tot <- sum(tb)
+  d <- if (n > n_top) {
+    tibble::tibble(cat = c(names(tb)[1:(n_top - 1)], sprintf("Otras (%d)", n - n_top + 1)),
+                   n = c(as.integer(tb[1:(n_top - 1)]), tot - sum(tb[1:(n_top - 1)])))
+  } else tibble::tibble(cat = names(tb), n = as.integer(tb))
+  d <- d |> mutate(cat = factor(cat, levels = rev(cat)),
+                   pct = 100*n/sum(n))
+  p1 <- ggplot(d, aes(x = pct, y = cat)) +
+    geom_col(fill = "#2e7d9a", width = 0.7) +
+    geom_text(aes(label = sprintf("%.1f %%", pct)), hjust = -0.15, size = 3, colour = "#1f2937") +
+    scale_x_continuous(expand = expansion(mult = c(0, 0.22))) +
+    labs(title = "Distribución de frecuencias", x = "Porcentaje de anuncios", y = etiqueta) + tema_u()
+  if (!pastel) { print(p1); return(invisible(NULL)) }
+  p2 <- ggplot(d, aes(x = "", y = n, fill = cat)) +
+    geom_col(width = 1, colour = "white") + coord_polar("y") +
+    labs(title = "Composición porcentual", x = NULL, y = NULL) +
+    theme_minimal(base_size = 11.5) +
+    theme(plot.background = element_rect(fill = "white", colour = NA),
+          plot.title = element_text(colour = "#1a3a5c", face = "bold", size = 11.5),
+          legend.title = element_blank(), legend.text = element_text(size = 9),
+          legend.position = "right", axis.text = element_blank(), panel.grid = element_blank())
+  print(p1); print(p2)
+  invisible(NULL)
+}
+```
+
+::: {.panel-tabset}
+
+## `Type` - Especie
+### Especie
+
+```{r}
+#| label: cuali-Type
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Especie"
+tabla_frecuencias(datos$Type, "Especie")
+```
+
+```{r}
+#| label: graf-cuali-Type
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Type, "Especie", pastel = TRUE, n_top = 10)
+```
+
+## `Gender` - Género
+### Género
+
+```{r}
+#| label: cuali-Gender
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Género"
+tabla_frecuencias(datos$Gender, "Género")
+```
+
+```{r}
+#| label: graf-cuali-Gender
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Gender, "Género", pastel = TRUE, n_top = 10)
+```
+
+## `MaturitySize` - Tamaño de madurez
+### Tamaño de madurez
+
+```{r}
+#| label: cuali-MaturitySize
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Tamaño de madurez"
+tabla_frecuencias(datos$MaturitySize, "Tamaño de madurez")
+```
+
+```{r}
+#| label: graf-cuali-MaturitySize
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$MaturitySize, "Tamaño de madurez", pastel = TRUE, n_top = 10)
+```
+
+## `FurLength` - Longitud del pelaje
+### Longitud del pelaje
+
+```{r}
+#| label: cuali-FurLength
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Longitud del pelaje"
+tabla_frecuencias(datos$FurLength, "Longitud del pelaje")
+```
+
+```{r}
+#| label: graf-cuali-FurLength
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$FurLength, "Longitud del pelaje", pastel = TRUE, n_top = 10)
+```
+
+## `Vaccinated` - Vacunado
+### Vacunado
+
+```{r}
+#| label: cuali-Vaccinated
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Vacunado"
+tabla_frecuencias(datos$Vaccinated, "Vacunado")
+```
+
+```{r}
+#| label: graf-cuali-Vaccinated
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Vaccinated, "Vacunado", pastel = TRUE, n_top = 10)
+```
+
+## `Dewormed` - Desparasitado
+### Desparasitado
+
+```{r}
+#| label: cuali-Dewormed
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Desparasitado"
+tabla_frecuencias(datos$Dewormed, "Desparasitado")
+```
+
+```{r}
+#| label: graf-cuali-Dewormed
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Dewormed, "Desparasitado", pastel = TRUE, n_top = 10)
+```
+
+## `Sterilized` - Esterilizado
+### Esterilizado
+
+```{r}
+#| label: cuali-Sterilized
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Esterilizado"
+tabla_frecuencias(datos$Sterilized, "Esterilizado")
+```
+
+```{r}
+#| label: graf-cuali-Sterilized
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Sterilized, "Esterilizado", pastel = TRUE, n_top = 10)
+```
+
+## `Health` - Estado de salud
+### Estado de salud
+
+```{r}
+#| label: cuali-Health
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Estado de salud"
+tabla_frecuencias(datos$Health, "Estado de salud")
+```
+
+```{r}
+#| label: graf-cuali-Health
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Health, "Estado de salud", pastel = TRUE, n_top = 10)
+```
+
+## `AdoptionSpeed` - Velocidad de adopción
+### Velocidad de adopción
+
+```{r}
+#| label: cuali-AdoptionSpeed
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Velocidad de adopción"
+tabla_frecuencias(datos$AdoptionSpeed, "Velocidad de adopción")
+```
+
+```{r}
+#| label: graf-cuali-AdoptionSpeed
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$AdoptionSpeed, "Velocidad de adopción", pastel = TRUE, n_top = 10)
+```
+
+## `Color1` - Color principal
+### Color principal
+
+```{r}
+#| label: cuali-Color1
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Color principal"
+tabla_frecuencias(datos$Color1, "Color principal")
+```
+
+```{r}
+#| label: graf-cuali-Color1
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Color1, "Color principal", pastel = TRUE, n_top = 10)
+```
+
+## `Color2` - Color secundario
+### Color secundario
+
+```{r}
+#| label: cuali-Color2
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Color secundario"
+tabla_frecuencias(datos$Color2, "Color secundario")
+```
+
+```{r}
+#| label: graf-cuali-Color2
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Color2, "Color secundario", pastel = TRUE, n_top = 10)
+```
+
+## `Color3` - Color terciario
+### Color terciario
+
+```{r}
+#| label: cuali-Color3
+#| echo: true
+#| tbl-cap: "Distribución de frecuencias — Color terciario"
+tabla_frecuencias(datos$Color3, "Color terciario")
+```
+
+```{r}
+#| label: graf-cuali-Color3
+#| echo: true
+#| layout-ncol: 2
+graficos_cuali(datos$Color3, "Color terciario", pastel = TRUE, n_top = 10)
+```
+
+## `Breed1` - Raza principal
+### Raza principal
+
+```{r}
+#| label: cuali-Breed1
+#| echo: true
+#| tbl-cap: "Razas principales más frecuentes (top 15)"
+tabla_frecuencias(datos$Breed1, "Raza principal", n_top = 15)
+```
+
+```{r}
+#| label: graf-cuali-Breed1
+#| echo: true
+graficos_cuali(datos$Breed1, "Raza principal", pastel = FALSE, n_top = 15)
+```
+
+## `Breed2` - Raza secundaria
+### Raza secundaria
+
+```{r}
+#| label: cuali-Breed2
+#| echo: true
+#| tbl-cap: "Razas secundarias más frecuentes (top 15)"
+tabla_frecuencias(datos$Breed2, "Raza secundaria", n_top = 15)
+```
+
+```{r}
+#| label: graf-cuali-Breed2
+#| echo: true
+graficos_cuali(datos$Breed2, "Raza secundaria", pastel = FALSE, n_top = 15)
+```
+
+## `State` - Estado / región
+### Estado / región
+
+```{r}
+#| label: cuali-State
+#| echo: true
+#| tbl-cap: "Estados / regiones más frecuentes (top 15)"
+tabla_frecuencias(datos$State, "Estado / región", n_top = 15)
+```
+
+```{r}
+#| label: graf-cuali-State
+#| echo: true
+graficos_cuali(datos$State, "Estado / región", pastel = FALSE, n_top = 15)
+```
+
+## `Name` - Nombre
+### Nombre
+
+*Variable de alta cardinalidad. Se muestran los 20 nombres más frecuentes; el resto se agrupa en "Otras".*
+
+```{r}
+#| label: cuali-Name
+#| echo: true
+#| tbl-cap: "Nombres más frecuentes (top 20)"
+tabla_frecuencias(datos$Name, "Nombre", n_top = 20)
+```
+
+```{r}
+#| label: graf-cuali-Name
+#| echo: true
+graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 20)
+```
+
+## `Description` - Descripción
+### Descripción
+
+*Variable de texto libre: prácticamente cada descripción es única. Se reporta su cardinalidad; su longitud se analiza en las variables cuantitativas `desc_char_len` y `desc_word_count`.*
+
+```{r}
+#| label: card-Description
+#| echo: true
+tabla_cardinalidad(datos$Description)
+```
+
+## `PetID` - Identificador de la mascota
+### Identificador de la mascota
+
+*Variable identificadora: cada anuncio tiene un valor único. Se reporta su cardinalidad.*
+
+```{r}
+#| label: card-PetID
+#| echo: true
+tabla_cardinalidad(datos$PetID)
+```
+
+## `RescuerID` - Identificador del rescatista
+### Identificador del rescatista
+
+*Variable identificadora: cada rescatista tiene un ID único. Se reporta su cardinalidad.*
+
+```{r}
+#| label: card-RescuerID
+#| echo: true
+tabla_cardinalidad(datos$RescuerID)
+```
+
+:::
