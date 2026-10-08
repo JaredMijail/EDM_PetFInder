@@ -159,7 +159,7 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
 ```
 
 ::: {.panel-tabset}
-### `Age`
+## `Age`
 *Edad*
 ```{r}
 #| label: cuanti-Age
@@ -182,8 +182,8 @@ tabla_atipicos(datos$Age, caption = "Detección de valores atípicos — Edad (m
 graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
 ```
 
-### `Quantity`- Cantidad de animales en el anuncio
-
+## `Quantity`
+**Cantidad de animales en el anuncio**
 ```{r}
 #| label: cuanti-Quantity
 #| echo: true
@@ -205,8 +205,8 @@ tabla_atipicos(datos$Quantity, caption = "Detección de valores atípicos — Ca
 graficos_cuanti(datos$Quantity, "Animales en el anuncio", tipo = "conteo")
 ```
 
-### `Fee`- Tarifa de adopción
-
+## `Fee` 
+*Tarifa de adopción*
 ```{r}
 #| label: cuanti-Fee
 #| echo: true
@@ -228,8 +228,8 @@ tabla_atipicos(datos$Fee, caption = "Detección de valores atípicos — Tarifa 
 graficos_cuanti(datos$Fee, "Tarifa de adopción", tipo = "conteo")
 ```
 
-### `PhotoAmt`- Cantidad de fotos
-
+## `PhotoAmt`
+*Cantidad de fotos*
 
 ```{r}
 #| label: cuanti-PhotoAmt
@@ -252,7 +252,7 @@ tabla_atipicos(datos$PhotoAmt, caption = "Detección de valores atípicos — Ca
 graficos_cuanti(datos$PhotoAmt, "Cantidad de fotos", tipo = "conteo")
 ```
 
-### `VideoAmt` - Cantidad de videos
+## `VideoAmt` - Cantidad de videos
 
 ```{r}
 #| label: cuanti-VideoAmt
@@ -275,7 +275,7 @@ tabla_atipicos(datos$VideoAmt, caption = "Detección de valores atípicos — Ca
 graficos_cuanti(datos$VideoAmt, "Cantidad de videos", tipo = "conteo")
 ```
 
-### `sentiment_score`- Puntaje de sentimiento
+## `sentiment_score`- Puntaje de sentimiento
 
 ```{r}
 #| label: cuanti-sentiment-score
@@ -296,7 +296,7 @@ tabla_atipicos(datos$sentiment_score, caption = "Detección de valores atípicos
 graficos_cuanti(datos$sentiment_score, "Puntaje de sentimiento", tipo = "conteo")
 ```
 
-### `sentiment_magnitude`- Magnitud de sentimiento
+## `sentiment_magnitude`- Magnitud de sentimiento
 
 ```{r}
 #| label: cuanti-sentiment-magnitude
@@ -317,7 +317,7 @@ tabla_atipicos(datos$sentiment_magnitude, caption = "Detección de valores atíp
 graficos_cuanti(datos$sentiment_magnitude, "Magnitud de sentimiento", tipo = "conteo")
 ```
 
-### `total_labels`- Total de etiquetas
+## `total_labels`- Total de etiquetas
 
 ```{r}
 #| label: cuanti-total-labels
@@ -338,7 +338,7 @@ tabla_atipicos(datos$total_labels, caption = "Detección de valores atípicos �
 graficos_cuanti(datos$total_labels, "Total de etiquetas", tipo = "conteo")
 ```
 
-### `total_faces`- Total de rostros detectados
+## `total_faces`- Total de rostros detectados
 
 ```{r}
 #| label: cuanti-total-faces
@@ -359,7 +359,7 @@ tabla_atipicos(datos$total_faces, caption = "Detección de valores atípicos —
 graficos_cuanti(datos$total_faces, "Total de rostros detectados", tipo = "conteo")
 ```
 
-### `total_colors`- Total de colores detectados
+## `total_colors`- Total de colores detectados
 
 ```{r}
 #| label: cuanti-total-colors
@@ -380,7 +380,7 @@ tabla_atipicos(datos$total_colors, caption = "Detección de valores atípicos �
 graficos_cuanti(datos$total_colors, "Total de colores detectados", tipo = "conteo")
 ```
 
-### `desc_char_len`- Longitud de la descripción (caracteres)
+## `desc_char_len`- Longitud de la descripción (caracteres)
 
 ```{r}
 #| label: cuanti-desc-char-len
@@ -401,7 +401,7 @@ tabla_atipicos(datos$desc_char_len, caption = "Detección de valores atípicos �
 graficos_cuanti(datos$desc_char_len, "Longitud de la descripción (caracteres)", tipo = "conteo")
 ```
 
-### `desc_word_count`- Cantidad de palabras en la descripción
+## `desc_word_count`- Cantidad de palabras en la descripción
 
 ```{r}
 #| label: cuanti-desc-word-count
