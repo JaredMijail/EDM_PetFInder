@@ -698,13 +698,13 @@ graficos_cuali(datos$Color3, "Color terciario", pastel = TRUE, n_top = 10)
 #| label: cuali-Breed1
 #| echo: true
 #| tbl-cap: "Razas principales más frecuentes (top 15)"
-tabla_frecuencias(datos$Breed1, "Raza principal", n_top = 15)
+tabla_frecuencias(datos$Breed1, "Raza principal", n_top = 10)
 ```
 
 ```{r}
 #| label: graf-cuali-Breed1
 #| echo: true
-graficos_cuali(datos$Breed1, "Raza principal", pastel = FALSE, n_top = 15)
+graficos_cuali(datos$Breed1, "Raza principal", pastel = FALSE, n_top = 10)
 ```
 
 ## `Breed2` - Raza secundaria
@@ -714,13 +714,13 @@ graficos_cuali(datos$Breed1, "Raza principal", pastel = FALSE, n_top = 15)
 #| label: cuali-Breed2
 #| echo: true
 #| tbl-cap: "Razas secundarias más frecuentes (top 15)"
-tabla_frecuencias(datos$Breed2, "Raza secundaria", n_top = 15)
+tabla_frecuencias(datos$Breed2, "Raza secundaria", n_top = 10)
 ```
 
 ```{r}
 #| label: graf-cuali-Breed2
 #| echo: true
-graficos_cuali(datos$Breed2, "Raza secundaria", pastel = FALSE, n_top = 15)
+graficos_cuali(datos$Breed2, "Raza secundaria", pastel = FALSE, n_top = 10)
 ```
 
 ## `State` - Estado / región
@@ -730,13 +730,13 @@ graficos_cuali(datos$Breed2, "Raza secundaria", pastel = FALSE, n_top = 15)
 #| label: cuali-State
 #| echo: true
 #| tbl-cap: "Estados / regiones más frecuentes (top 15)"
-tabla_frecuencias(datos$State, "Estado / región", n_top = 15)
+tabla_frecuencias(datos$State, "Estado / región", n_top = 10)
 ```
 
 ```{r}
 #| label: graf-cuali-State
 #| echo: true
-graficos_cuali(datos$State, "Estado / región", pastel = FALSE, n_top = 15)
+graficos_cuali(datos$State, "Estado / región", pastel = FALSE, n_top = 10)
 ```
 
 ## `Name` - Nombre
