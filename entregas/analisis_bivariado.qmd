@@ -17,3 +17,69 @@ Jared Mijail Ramírez Escalante · María Paula Silva Capera
 
 En esta sección se presentan las posibles asociaciones entre pares de variables pertenecientes al conjunto de datos [PetFinder](dataset.qmd) enriquecido. Con fines de cumplir lo solicitado para esta primera entrega, se hacen dos conjuntos de contrastes principales. En primer lugar se toma como referencia la variable cualitativa `AdoptionSpeed` para contrastarla con el resto de variables cualitativas y cuantitativas del conjunto de datos [PetFinder](dataset.qmd) enriquecido. Posteriormente se realiza el mismo ejercicio tomando como referencia la variable cuantitativa `Age`.
 
+```{r}
+#| label: setup-comun
+#| echo: false
+#| include: false
+# Carga y traducción de las categorías del conjunto de datos
+source(here::here("_setup.R"))
+```
+
+## `AdoptionSpeed` versus variables cualitativas
+Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables se optó por agrupar las categorías con frecuencias relativas menores o iguales al 1%. En caso de que ninguna de las categorías alcance el umbral, se hará la descripción sobre las 10 categorías más frecuentes.
+
+```{r}
+# Agrupa en 'Otras' las categorías con menos de prop_min de los casos; si ninguna
+# alcanza ese umbral, conserva las max_niveles más frecuentes y agrupa el resto.
+agrupar_niveles <- function(f, prop_min = 0.01, max_niveles = 10,
+                            etiqueta = "Otras", nombre = "variable") {
+  f <- factor(f)
+  if (nlevels(f) <= 10) return(f)
+
+  mf    <- table(f)
+  n     <- sum(mf)
+  n_min <- prop_min * n
+
+  if (all(mf >= n_min)) return(f)
+
+  if (!any(mf >= n_min)) {
+    top   <- names(sort(mf, decreasing = TRUE))[seq_len(max_niveles)]
+    nuevo <- as.character(f)
+    nuevo[!is.na(nuevo) & !(nuevo %in% top)] <- etiqueta
+    return(factor(nuevo, levels = c(top, etiqueta)))
+  }
+
+  orden <- names(sort(mf))
+  k <- max(sum(mf < n_min), 2)
+  while (k < length(orden) - 1 && sum(mf[orden[seq_len(k)]]) < n_min) {
+    k <- k + 1
+  }
+  raras <- orden[seq_len(k)]
+
+  nuevo <- as.character(f)
+  nuevo[!is.na(nuevo) & nuevo %in% raras] <- etiqueta
+
+  mantener <- setdiff(names(sort(mf, decreasing = TRUE)), raras)
+  factor(nuevo, levels = c(mantener, etiqueta))
+}
+
+# Se agrupan solo las de alta cardinalidad; AdoptionSpeed queda fuera por ser la referencia
+VARS_ALTA <- c("Breed1", "Breed2", "State", "Name", "RescuerID")
+for (v in VARS_ALTA) {
+  datos_cc[[v]] <- agrupar_niveles(datos_cc[[v]], prop_min = 0.01, nombre = v)
+}
+
+# Paleta de la variable respuesta (la misma del resto del sitio)
+pal_clases <- c(
+  "Mismo día"    = "#0f766e",
+  "1–7 días"     = "#2e7d9a",
+  "8–30 días"    = "#1a3a5c",
+  "31–90 días"   = "#d97706",
+  "Sin adopción" = "#dc2626"
+)
+```
+
+::: {.panel-tabset}
+
+
+:::
