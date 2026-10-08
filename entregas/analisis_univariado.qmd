@@ -487,8 +487,8 @@ graficos_cuali <- function(x, etiqueta, pastel = FALSE, n_top = 10) {
 
 ::: {.panel-tabset}
 
-## `Type` - Especie
-### Especie
+## `Type`
+**Especie**
 
 ```{r}
 #| label: cuali-Type
@@ -504,8 +504,8 @@ tabla_frecuencias(datos$Type, "Especie")
 graficos_cuali(datos$Type, "Especie", pastel = TRUE, n_top = 10)
 ```
 
-## `Gender` - Género
-### Género
+## `Gender`
+**Género**
 
 ```{r}
 #| label: cuali-Gender
@@ -521,8 +521,8 @@ tabla_frecuencias(datos$Gender, "Género")
 graficos_cuali(datos$Gender, "Género", pastel = TRUE, n_top = 10)
 ```
 
-## `MaturitySize` - Tamaño de madurez
-### Tamaño de madurez
+## `MaturitySize` 
+**Tamaño de madurez**
 
 ```{r}
 #| label: cuali-MaturitySize
@@ -538,8 +538,8 @@ tabla_frecuencias(datos$MaturitySize, "Tamaño de madurez")
 graficos_cuali(datos$MaturitySize, "Tamaño de madurez", pastel = TRUE, n_top = 10)
 ```
 
-## `FurLength` - Longitud del pelaje
-### Longitud del pelaje
+## `FurLength`
+**Longitud del pelaje**
 
 ```{r}
 #| label: cuali-FurLength
@@ -555,8 +555,8 @@ tabla_frecuencias(datos$FurLength, "Longitud del pelaje")
 graficos_cuali(datos$FurLength, "Longitud del pelaje", pastel = TRUE, n_top = 10)
 ```
 
-## `Vaccinated` - Vacunado
-### Vacunado
+## `Vaccinated` 
+**Vacunado**
 
 ```{r}
 #| label: cuali-Vaccinated
@@ -572,8 +572,8 @@ tabla_frecuencias(datos$Vaccinated, "Vacunado")
 graficos_cuali(datos$Vaccinated, "Vacunado", pastel = TRUE, n_top = 10)
 ```
 
-## `Dewormed` - Desparasitado
-### Desparasitado
+## `Dewormed` 
+**Desparasitado**
 
 ```{r}
 #| label: cuali-Dewormed
@@ -589,8 +589,8 @@ tabla_frecuencias(datos$Dewormed, "Desparasitado")
 graficos_cuali(datos$Dewormed, "Desparasitado", pastel = TRUE, n_top = 10)
 ```
 
-## `Sterilized` - Esterilizado
-### Esterilizado
+## `Sterilized` 
+**Esterilizado**
 
 ```{r}
 #| label: cuali-Sterilized
@@ -606,8 +606,8 @@ tabla_frecuencias(datos$Sterilized, "Esterilizado")
 graficos_cuali(datos$Sterilized, "Esterilizado", pastel = TRUE, n_top = 10)
 ```
 
-## `Health` - Estado de salud
-### Estado de salud
+## `Health` 
+**Estado de salud**
 
 ```{r}
 #| label: cuali-Health
@@ -623,8 +623,8 @@ tabla_frecuencias(datos$Health, "Estado de salud")
 graficos_cuali(datos$Health, "Estado de salud", pastel = TRUE, n_top = 10)
 ```
 
-## `AdoptionSpeed` - Velocidad de adopción
-### Velocidad de adopción
+## `AdoptionSpeed` 
+**Velocidad de adopción**
 
 ```{r}
 #| label: cuali-AdoptionSpeed
@@ -640,8 +640,8 @@ tabla_frecuencias(datos$AdoptionSpeed, "Velocidad de adopción")
 graficos_cuali(datos$AdoptionSpeed, "Velocidad de adopción", pastel = TRUE, n_top = 10)
 ```
 
-## `Color1` - Color principal
-### Color principal
+## `Color1` 
+**Color principal**
 
 ```{r}
 #| label: cuali-Color1
@@ -657,8 +657,8 @@ tabla_frecuencias(datos$Color1, "Color principal")
 graficos_cuali(datos$Color1, "Color principal", pastel = TRUE, n_top = 10)
 ```
 
-## `Color2` - Color secundario
-### Color secundario
+## `Color2` 
+**Color secundario**
 
 ```{r}
 #| label: cuali-Color2
@@ -674,8 +674,8 @@ tabla_frecuencias(datos$Color2, "Color secundario")
 graficos_cuali(datos$Color2, "Color secundario", pastel = TRUE, n_top = 10)
 ```
 
-## `Color3` - Color terciario
-### Color terciario
+## `Color3`
+**Color terciario**
 
 ```{r}
 #| label: cuali-Color3
@@ -691,8 +691,8 @@ tabla_frecuencias(datos$Color3, "Color terciario")
 graficos_cuali(datos$Color3, "Color terciario", pastel = TRUE, n_top = 10)
 ```
 
-## `Breed1` - Raza principal
-### Raza principal
+## `Breed1`
+**Raza principal**
 
 ```{r}
 #| label: cuali-Breed1
@@ -707,8 +707,8 @@ tabla_frecuencias(datos$Breed1, "Raza principal", n_top = 10)
 graficos_cuali(datos$Breed1, "Raza principal", pastel = FALSE, n_top = 10)
 ```
 
-## `Breed2` - Raza secundaria
-### Raza secundaria
+## `Breed2` 
+**Raza secundaria**
 
 ```{r}
 #| label: cuali-Breed2
@@ -723,8 +723,8 @@ tabla_frecuencias(datos$Breed2, "Raza secundaria", n_top = 10)
 graficos_cuali(datos$Breed2, "Raza secundaria", pastel = FALSE, n_top = 10)
 ```
 
-## `State` - Estado / región
-### Estado / región
+## `State`
+**Estado**
 
 ```{r}
 #| label: cuali-State
@@ -739,8 +739,8 @@ tabla_frecuencias(datos$State, "Estado / región", n_top = 10)
 graficos_cuali(datos$State, "Estado / región", pastel = FALSE, n_top = 10)
 ```
 
-## `Name` - Nombre
-### Nombre
+## `Name`
+**Nombre**
 
 *Variable de alta cardinalidad. Se muestran los 20 nombres más frecuentes; el resto se agrupa en "Otras".*
 
@@ -757,8 +757,8 @@ tabla_frecuencias(datos$Name, "Nombre", n_top = 20)
 graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 20)
 ```
 
-## `Description` - Descripción
-### Descripción
+## `Description`
+**Descripción**
 
 *Variable de texto libre: prácticamente cada descripción es única. Se reporta su cardinalidad; su longitud se analiza en las variables cuantitativas `desc_char_len` y `desc_word_count`.*
 
@@ -768,8 +768,8 @@ graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 20)
 tabla_cardinalidad(datos$Description)
 ```
 
-## `PetID` - Identificador de la mascota
-### Identificador de la mascota
+## `PetID`
+**Identificador de la mascota**
 
 *Variable identificadora: cada anuncio tiene un valor único. Se reporta su cardinalidad.*
 
@@ -779,8 +779,8 @@ tabla_cardinalidad(datos$Description)
 tabla_cardinalidad(datos$PetID)
 ```
 
-## `RescuerID` - Identificador del rescatista
-### Identificador del rescatista
+## `RescuerID`
+**Identificador del rescatista**
 
 *Variable identificadora: cada rescatista tiene un ID único. Se reporta su cardinalidad.*
 
