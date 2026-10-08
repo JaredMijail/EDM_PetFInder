@@ -1423,7 +1423,47 @@ html[data-bs-theme="dark"] thead {
     print-color-adjust: exact;
   }
 
+  /* ================== NUEVO: panel-tabset en el PDF ================== */
+  /* Mostrar TODOS los paneles, no solo el activo */
+  .panel-tabset .tab-content > .tab-pane {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .panel-tabset .tab-content > .tab-pane:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  /* Ocultar la barra de pestañas (no tiene sentido sin interacción) */
+  .panel-tabset > .nav-tabs,
+  .panel-tabset > .nav,
+  .panel-tabset .nav-tabs {
+    display: none !important;
+  }
+
+  /* Mostrar el primer h3 dentro de cada panel como título de la variable.
+     En pantalla está oculto; al imprimir aparece. */
+  .panel-tabset .tab-pane > h3:first-child {
+    display: block !important;
+    font-family: var(--font-serif);
+    font-size: 15pt;
+    color: #14304d !important;
+    margin: 0 0 0.7em 0;
+    padding-bottom: 0.3em;
+    border-bottom: 2px solid var(--color-accent);
+    page-break-after: avoid;
+  }
+
   @page {
     margin: 1.8cm 1.6cm;
   }
+}
+
+/* El primer h3 de cada panel solo sirve para el PDF: en pantalla se oculta */
+.panel-tabset .tab-pane > h3:first-child {
+  display: none;
 }
