@@ -159,8 +159,8 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
 ```
 
 ::: {.panel-tabset}
-## `Age` - Edad
-Edad
+### `Age`
+*Edad*
 ```{r}
 #| label: cuanti-Age
 #| echo: true
