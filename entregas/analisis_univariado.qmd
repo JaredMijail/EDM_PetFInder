@@ -742,19 +742,19 @@ graficos_cuali(datos$State, "Estado / región", pastel = FALSE, n_top = 10)
 ## `Name`
 **Nombre**
 
-*Variable de alta cardinalidad. Se muestran los 20 nombres más frecuentes; el resto se agrupa en "Otras".*
+*Variable de alta cardinalidad. Se muestran los 10 nombres más frecuentes; el resto se agrupa en "Otras".*
 
 ```{r}
 #| label: cuali-Name
 #| echo: true
 #| tbl-cap: "Nombres más frecuentes (top 20)"
-tabla_frecuencias(datos$Name, "Nombre", n_top = 20)
+tabla_frecuencias(datos$Name, "Nombre", n_top = 10)
 ```
 
 ```{r}
 #| label: graf-cuali-Name
 #| echo: true
-graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 20)
+graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 10)
 ```
 
 ## `Description`
