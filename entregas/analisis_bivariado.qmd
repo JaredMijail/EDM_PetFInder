@@ -35,6 +35,11 @@ library(knitr)
 library(plotly)
 library(FactoClass)
 
+# ---------------------------------------------------------------------
+# 1. Constantes del proyecto
+# ---------------------------------------------------------------------
+ETIQUETA_OTRAS <- "Otras"
+
 # Traducciones de los nombres de las variables
 ETIQUETAS <- c(
   Type         = "Especie",
@@ -66,6 +71,17 @@ ETIQUETAS <- c(
   desc_char_len = 'Longitud de la descripción en caracteres',
   desc_word_count = 'Longitud de la descripción en palabras'
 )
+
+
+# Paleta de la variable respuesta (los nombres deben coincidir con los
+# niveles de AdoptionSpeed)
+pal_clases <- c(
+  "Mismo día"    = "#0f766e",
+  "1–7 días"     = "#2e7d9a",
+  "8–30 días"    = "#1a3a5c",
+  "31–90 días"   = "#d97706",
+  "Sin adopción" = "#dc2626"
+)
 ```
 
 ## `AdoptionSpeed` VS variables cualitativas
@@ -82,21 +98,6 @@ Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables 
 #
 # Requiere: ggplot2, dplyr, tibble, forcats, knitr (R >= 4.1 por el uso de |>).
 # Requiere en el entorno global: `datos` (con la columna AdoptionSpeed como factor).
-
-# ---------------------------------------------------------------------
-# 1. Constantes del proyecto
-# ---------------------------------------------------------------------
-ETIQUETA_OTRAS <- "Otras"
-
-# Paleta de la variable respuesta (los nombres deben coincidir con los
-# niveles de AdoptionSpeed)
-pal_clases <- c(
-  "Mismo día"    = "#0f766e",
-  "1–7 días"     = "#2e7d9a",
-  "8–30 días"    = "#1a3a5c",
-  "31–90 días"   = "#d97706",
-  "Sin adopción" = "#dc2626"
-)
 
 # ---------------------------------------------------------------------
 # 2. Utilidades de formato (coma decimal, punto de miles)
@@ -602,21 +603,18 @@ analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
 ## `AdoptionSpeed` VS variables cuantitativas
 
 ```{r}
-etiq <- function(v) {
-  if (v %in% names(ETIQUETAS)) unname(ETIQUETAS[v]) else v
-}
-
 analisis_bivar_cuali_vs_cuanti <- function(variable,
                                            datos,
-                                           cualitativa = "AdoptionSpeed") {
+                                           cualitativa = "AdoptionSpeed",
+                                           paleta = pal_clases) {
 
   if (!variable %in% names(datos))
     stop("La variable '", variable, "' no está en los datos.")
   if (!cualitativa %in% names(datos))
     stop("La variable cualitativa '", cualitativa, "' no está en los datos.")
 
-  lab_x <- etiq(variable)
-  lab_f <- etiq(cualitativa)
+  lab_x <- if (variable %in% names(ETIQUETAS)) ETIQUETAS[[variable]] else variable
+  lab_f <- if (cualitativa %in% names(ETIQUETAS)) ETIQUETAS[[cualitativa]] else cualitativa
 
   f0 <- as.factor(datos[[cualitativa]])
   ok <- complete.cases(datos[[variable]], f0)
@@ -624,9 +622,17 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
   f  <- droplevels(f0[ok])
   df <- data.frame(x = x, f = f)
 
+  niv <- levels(f)
+  if (!all(niv %in% names(paleta)))
+    stop("Los niveles de '", cualitativa, "' no coinciden con los nombres de la paleta: ",
+         paste(setdiff(niv, names(paleta)), collapse = ", "))
+
   # Diagrama de cajas
   f_med <- reorder(f, x, median)
-  fig1 <- plot_ly(df, x = ~x, color = f_med, type = "box",
+  df$f_med <- f_med
+  fig1 <- plot_ly(df, x = ~x, y = ~f_med, color = ~f_med,
+                  colors = paleta[levels(f_med)],
+                  type = "box", orientation = "h",
                   boxpoints = FALSE) %>%
     layout(title = list(text = paste0("Diagrama de cajas de ", lab_x,
                                       " según ", lab_f)),
@@ -636,13 +642,17 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 
   # Diagrama de violín
   f_mean <- reorder(f, x, mean)
-  fig2 <- plot_ly(df, x = ~x, split = f_mean, type = "violin",
+  df$f_mean <- f_mean
+  fig2 <- plot_ly(df, x = ~x, y = ~f_mean, color = ~f_mean,
+                  colors = paleta[levels(f_mean)],
+                  type = "violin", orientation = "h",
                   points = "all", pointpos = 0,
                   meanline = list(visible = TRUE, color = "black")) %>%
     layout(title = list(text = paste0("Diagrama de violín de ", lab_x,
                                       " según ", lab_f)),
            xaxis = list(title = lab_x),
-           yaxis = list(title = paste0(lab_f, " (ordenada por media)")))
+           yaxis = list(title = paste0(lab_f, " (ordenada por media)")),
+           showlegend = FALSE)
 
   # Razón de correlación
   X    <- data.frame(x = x) |> setNames(variable)
@@ -658,7 +668,6 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 
   htmltools::tagList(fig1, fig2, corr_html)
 }
-
 ```
 
 
