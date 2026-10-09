@@ -442,5 +442,7 @@ extraer_nombre <- function(expr) {
 
 ```{r}
 #| results: asis
+#| fig-width: 11
+#| fig-height: 5
  analisis_bivar_cuali_vs_cuali(datos$Gender)
 ```
