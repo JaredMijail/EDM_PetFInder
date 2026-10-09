@@ -272,7 +272,7 @@ grafico_perfil_cc <- function(x, y, nombre_x, paleta) {
     scale_fill_manual(values = paleta, name = NULL) +
     scale_x_continuous(expand = expansion(mult = c(0, 0.01))) +
     labs(title    = envolver(sprintf(
-           "Perfil fila: distribución de la velocidad de adopción dentro de cada categoría de %s",
+           "Distribución de la velocidad de adopción dentro de cada categoría de %s",
            nombre_x)),
          subtitle = "Cada barra suma 100 %; las etiquetas muestran los porcentajes ≥ 7 %",
          x = "Porcentaje de anuncios", y = NULL) +
