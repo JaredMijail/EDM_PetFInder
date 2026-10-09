@@ -591,10 +591,13 @@ analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
 
 ## `AdoptionSpeed` VS variables cuantitativas
 
+```{r}
+print(colnames(datos))
+```
 
 ```{r}
 analisis_bivar_cuali_vs_cuanti <- function(variable, 
-                      datos = datos,
+                      datos,
                       cualitativa = "AdoptionSpeed") {
 
   if (!variable %in% names(datos))
@@ -632,5 +635,5 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 
 
 ```{r}
-analisis_bivar_cuali_vs_cuanti('Quantity')
+analisis_bivar_cuali_vs_cuanti('Quantity', datos = datos)
 ```
