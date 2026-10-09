@@ -34,6 +34,38 @@ library(forcats)
 library(knitr)
 library(plotly)
 library(FactoClass)
+
+# Traducciones de los nombres de las variables
+ETIQUETAS <- c(
+  Type         = "Especie",
+  Gender       = "Género",
+  MaturitySize = "Tamaño",
+  FurLength    = "Longitud del pelo",
+  Vaccinated   = "Vacunado",
+  Dewormed     = "Desparasitado",
+  Sterilized   = "Esterilizado",
+  Health       = "Estado de salud",
+  Color1       = "Color principal",
+  Color2       = "Segundo color",
+  Color3       = "Tercer color",
+  Breed1       = "Raza principal",
+  Breed2       = "Segunda raza",
+  State        = "Estado o territorio",
+  Name         = "Nombre del animal",
+  RescuerID    = "Identificador del rescatista",
+  Age = 'Edad',
+  Quantity = 'Cantidad de animales en el anuncio',
+  Fee = 'Tarifa de adopción',
+  VideoAmt = 'Cantidad de videos',
+  PhotoAmt = 'Cantidad de fotos',
+  sentiment_score = 'Puntaje de sentimiento',
+  sentiment_magnitude = 'Magnitud de sentimiento',
+  total_labes = 'Total de etiquetas',
+  total_faces = 'Total de rostros detectados',
+  total_colors = 'Total de colores detectados',
+  desc_char_len = 'Longitud de la descripción en caracteres',
+  desc_word_count = 'Longitud de la descripción en palabras'
+)
 ```
 
 ## `AdoptionSpeed` VS variables cualitativas
@@ -51,8 +83,6 @@ Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables 
 # Requiere: ggplot2, dplyr, tibble, forcats, knitr (R >= 4.1 por el uso de |>).
 # Requiere en el entorno global: `datos` (con la columna AdoptionSpeed como factor).
 
-library(ggplot2)
-
 # ---------------------------------------------------------------------
 # 1. Constantes del proyecto
 # ---------------------------------------------------------------------
@@ -66,26 +96,6 @@ pal_clases <- c(
   "8–30 días"    = "#1a3a5c",
   "31–90 días"   = "#d97706",
   "Sin adopción" = "#dc2626"
-)
-
-# Traducciones de los nombres de las variables
-ETIQ_CC <- c(
-  Type         = "Especie",
-  Gender       = "Género",
-  MaturitySize = "Tamaño",
-  FurLength    = "Longitud del pelo",
-  Vaccinated   = "Vacunado",
-  Dewormed     = "Desparasitado",
-  Sterilized   = "Esterilizado",
-  Health       = "Estado de salud",
-  Color1       = "Color principal",
-  Color2       = "Segundo color",
-  Color3       = "Tercer color",
-  Breed1       = "Raza principal",
-  Breed2       = "Segunda raza",
-  State        = "Estado o territorio",
-  Name         = "Nombre del animal",
-  RescuerID    = "Identificador del rescatista"
 )
 
 # ---------------------------------------------------------------------
@@ -359,7 +369,7 @@ analisis_bivar_cuali_vs_cuali <- function(x,
                                           alta_cardinalidad = FALSE,
                                           y            = datos$AdoptionSpeed,
                                           nombre       = NULL,
-                                          traducciones = ETIQ_CC,
+                                          traducciones = ETIQUETAS,
                                           paleta       = pal_clases,
                                           encabezado   = TRUE) {
 
@@ -592,6 +602,10 @@ analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
 ## `AdoptionSpeed` VS variables cuantitativas
 
 ```{r}
+etiq <- function(v) {
+  if (v %in% names(ETIQUETAS)) unname(ETIQUETAS[v]) else v
+}
+
 analisis_bivar_cuali_vs_cuanti <- function(variable,
                                            datos,
                                            cualitativa = "AdoptionSpeed") {
@@ -601,38 +615,55 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
   if (!cualitativa %in% names(datos))
     stop("La variable cualitativa '", cualitativa, "' no está en los datos.")
 
+  lab_x <- etiq(variable)
+  lab_f <- etiq(cualitativa)
+
   f0 <- as.factor(datos[[cualitativa]])
   ok <- complete.cases(datos[[variable]], f0)
   x  <- datos[[variable]][ok]
   f  <- droplevels(f0[ok])
   df <- data.frame(x = x, f = f)
 
+  # Diagrama de cajas
   f_med <- reorder(f, x, median)
   fig1 <- plot_ly(df, x = ~x, color = f_med, type = "box",
                   boxpoints = FALSE) %>%
-    layout(xaxis = list(title = variable),
-           yaxis = list(title = paste("sorted", cualitativa)),
+    layout(title = list(text = paste0("Diagrama de cajas de ", lab_x,
+                                      " según ", lab_f)),
+           xaxis = list(title = lab_x),
+           yaxis = list(title = paste0(lab_f, " (ordenada por mediana)")),
            showlegend = FALSE)
 
+  # Diagrama de violín
   f_mean <- reorder(f, x, mean)
   fig2 <- plot_ly(df, x = ~x, split = f_mean, type = "violin",
                   points = "all", pointpos = 0,
                   meanline = list(visible = TRUE, color = "black")) %>%
-    layout(xaxis = list(title = variable),
-           yaxis = list(title = paste("sorted", cualitativa)))
+    layout(title = list(text = paste0("Diagrama de violín de ", lab_x,
+                                      " según ", lab_f)),
+           xaxis = list(title = lab_x),
+           yaxis = list(title = paste0(lab_f, " (ordenada por media)")))
 
-    X    <- data.frame(x = x) |> setNames(variable)
+  # Razón de correlación
+  X    <- data.frame(x = x) |> setNames(variable)
   corr <- centroids(X, f)$cr * 100
 
-  corr_html <- htmltools::tags$pre(
-    paste(capture.output(print(corr)), collapse = "\n")
+  corr_html <- htmltools::tagList(
+    htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
+                              " con ", lab_f)),
+    htmltools::tags$pre(
+      paste(capture.output(print(corr)), collapse = "\n")
+    )
   )
 
   htmltools::tagList(fig1, fig2, corr_html)
 }
+
 ```
 
 
 ```{r}
 analisis_bivar_cuali_vs_cuanti('Quantity', datos = datos)
 ```
+
+
