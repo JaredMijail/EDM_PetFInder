@@ -125,11 +125,11 @@ alto_figura <- function(k, base, por_categoria = 0.30, minimo = 3.5, maximo = 14
 }
 
 # Guarda el gráfico con la altura calculada y lo inserta en el documento
-mostrar_figura <- function(p, alto, ancho = 8, id, dir = "figuras_bivar") {
+mostrar_figura <- function(p, alto, ancho = 8, id, dir = "figuras_bivar", alt = "") {
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
   ruta <- file.path(dir, paste0(id, ".png"))
   ggplot2::ggsave(ruta, plot = p, width = ancho, height = alto, dpi = 150)
-  cat("\n\n", knitr::knit_print(knitr::include_graphics(ruta)), "\n\n", sep = "")
+  cat(sprintf("\n\n![%s](%s)\n\n", alt, ruta))
 }
 
 # ---------------------------------------------------------------------
@@ -423,8 +423,12 @@ analisis_bivar_cuali_vs_cuali <- function(x,
   print(tablas$contingencia)
   k  <- nlevels(x)
   id <- gsub("[^A-Za-z0-9_]", "_", nombre_var)
-  mostrar_figura(graficos$perfil,   alto_figura(k, base = 2.4), id = paste0(id, "_perfil"))
-  mostrar_figura(graficos$residuos, alto_figura(k, base = 2.2), id = paste0(id, "_residuos"))
+  mostrar_figura(graficos$perfil, alto_figura(k, base = 2.4),
+               id  = paste0(id, "_perfil"),
+               alt = sprintf("Perfil fila de la velocidad de adopción por %s", nombre_x))
+  mostrar_figura(graficos$residuos, alto_figura(k, base = 2.2),
+               id  = paste0(id, "_residuos"),
+               alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
   print(tablas$estadisticos)
   cat("\n\n**Interpretación.** ", texto, "\n\n", sep = "")
 
