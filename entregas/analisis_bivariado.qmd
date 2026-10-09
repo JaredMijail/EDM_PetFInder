@@ -98,6 +98,10 @@ fuerza_v <- function(v) {
 }
 
 # ---- Tabla de datos previa a la decisión del gráfico ----
+
+pval <- function(p) ifelse(is.na(p), "—",
+                           ifelse(p < 0.001, "p < 0,001", sprintf("p = %s", fmt(p, 3))))
+
 tabla_decision_cc <- function(x, y, nombre_x) {
   tab <- table(x, y)
   esperados <- outer(rowSums(tab), colSums(tab)) / sum(tab)
