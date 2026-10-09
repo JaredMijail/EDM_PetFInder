@@ -621,12 +621,14 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
     layout(xaxis = list(title = variable),
            yaxis = list(title = paste("sorted", cualitativa)))
 
-  X    <- data.frame(x = x) |> setNames(variable)
+    X    <- data.frame(x = x) |> setNames(variable)
   corr <- centroids(X, f)$cr * 100
 
-  print(fig1)
-  print(fig2)
-  print(corr)
+  corr_html <- htmltools::tags$pre(
+    paste(capture.output(print(corr)), collapse = "\n")
+  )
+
+  htmltools::tagList(fig1, fig2, corr_html)
 }
 ```
 
