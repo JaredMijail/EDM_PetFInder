@@ -1,0 +1,357 @@
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#| label: setup-comun
+#| echo: false
+#| include: false
+# Carga y traducción de las categorías del conjunto de datos
+source(here::here("_setup.R"))
+#
+#
+#
+#
+#
+#
+# Agrupa en 'Otras' las categorías con menos de prop_min de los casos; si ninguna
+# alcanza ese umbral, conserva las max_niveles más frecuentes y agrupa el resto.
+
+pval <- function(p) ifelse(is.na(p), "—",
+                           ifelse(p < 0.001, "p < 0,001", sprintf("p = %s", fmt(p, 3))))
+
+agrupar_niveles <- function(f, prop_min = 0.01, max_niveles = 10,
+                            etiqueta = "Otras", nombre = "variable") {
+  f <- factor(f)
+  if (nlevels(f) <= 10) return(f)
+
+  mf    <- table(f)
+  n     <- sum(mf)
+  n_min <- prop_min * n
+
+  if (all(mf >= n_min)) return(f)
+
+  if (!any(mf >= n_min)) {
+    top   <- names(sort(mf, decreasing = TRUE))[seq_len(max_niveles)]
+    nuevo <- as.character(f)
+    nuevo[!is.na(nuevo) & !(nuevo %in% top)] <- etiqueta
+    return(factor(nuevo, levels = c(top, etiqueta)))
+  }
+
+  orden <- names(sort(mf))
+  k <- max(sum(mf < n_min), 2)
+  while (k < length(orden) - 1 && sum(mf[orden[seq_len(k)]]) < n_min) {
+    k <- k + 1
+  }
+  raras <- orden[seq_len(k)]
+
+  nuevo <- as.character(f)
+  nuevo[!is.na(nuevo) & nuevo %in% raras] <- etiqueta
+
+  mantener <- setdiff(names(sort(mf, decreasing = TRUE)), raras)
+  factor(nuevo, levels = c(mantener, etiqueta))
+}
+
+# Se agrupan solo las de alta cardinalidad; AdoptionSpeed queda fuera por ser la referencia
+VARS_ALTA <- c("Breed1", "Breed2", "State", "Name", "RescuerID")
+for (v in VARS_ALTA) {
+  datos[[v]] <- agrupar_niveles(datos[[v]], prop_min = 0.01, nombre = v)
+}
+
+# Paleta de la variable respuesta (la misma del resto del sitio)
+pal_clases <- c(
+  "Mismo día"    = "#0f766e",
+  "1–7 días"     = "#2e7d9a",
+  "8–30 días"    = "#1a3a5c",
+  "31–90 días"   = "#d97706",
+  "Sin adopción" = "#dc2626"
+)
+
+# ---- V de Cramér con corrección de sesgo (Bergsma, 2013) ----
+cramers_v <- function(tab) {
+  chi <- suppressWarnings(stats::chisq.test(tab)$statistic)
+  n   <- sum(tab); r <- nrow(tab); c <- ncol(tab)
+  v   <- sqrt(max(0, chi / n - (r - 1) * (c - 1) / (n - 1)) /
+                (min(r - 1, c - 1) - (min(r - 1, c - 1)^2) / (n - 1)))
+  unname(v)
+}
+
+fuerza_v <- function(v) {
+  dplyr::case_when(
+    is.na(v)  ~ "no estimable",
+    v < 0.10  ~ "despreciable",
+    v < 0.20  ~ "débil",
+    v < 0.40  ~ "moderada",
+    TRUE      ~ "fuerte"
+  )
+}
+
+# ---- Tabla de datos previa a la decisión del gráfico ----
+
+
+
+tabla_decision_cc <- function(x, y, nombre_x) {
+  tab <- table(x, y)
+  esperados <- outer(rowSums(tab), colSums(tab)) / sum(tab)
+  pct_esp_bajo <- 100 * mean(esperados < 5)
+  chi <- suppressWarnings(stats::chisq.test(tab))
+  tibble::tibble(
+    `Elemento de decisión` = c("Casos completos del par (n)",
+                               "Categorías de la variable (tras agrupar)",
+                               "Categorías de AdoptionSpeed",
+                               "Categoría más pequeña (frecuencia mínima)",
+                               "Esperados < 5 en la tabla (%)",
+                               "p-valor de la prueba χ²",
+                               "Tratamiento elegido"),
+    Valor = c(ent(sum(tab)),
+              ent(nrow(tab)),
+              ent(ncol(tab)),
+              ent(min(rowSums(tab))),
+              pct(pct_esp_bajo),
+              pval(chi$p.value),
+              ifelse(nrow(tab) <= 12,
+                     "Barras apiladas al 100 % con todas las categorías",
+                     "Barras apiladas al 100 % (agrupadas en «Otras»)"))
+  ) |>
+    knitr::kable(align = c("l", "l"), format = "html") |>
+    knitr::knit_print() |>
+    cat()
+  invisible(NULL)
+}
+
+# ---- Gráfico: barras apiladas al 100 % (perfil fila) + etiquetas ----
+grafico_cc <- function(x, y, nombre_x) {
+  d <- tibble::tibble(cat = x, resp = y) |>
+    dplyr::count(cat, resp) |>
+    dplyr::group_by(cat) |>
+    dplyr::mutate(pct = 100 * n / sum(n), total = sum(n)) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(cat = forcats::fct_reorder(cat, total))
+
+  p1 <- ggplot(d, aes(x = pct, y = cat, fill = resp)) +
+    geom_col(width = 0.72) +
+    geom_text(aes(label = ifelse(pct >= 7, sprintf("%.0f %%", pct), "")),
+              position = position_stack(vjust = 0.5), size = 3, colour = "white") +
+    scale_fill_manual(values = pal_clases, name = NULL) +
+    scale_x_continuous(expand = expansion(mult = c(0, 0.01))) +
+    labs(title = sprintf("Perfil fila: distribución de la velocidad de adopción dentro de cada categoría de %s",
+                         nombre_x),
+         subtitle = "Cada barra suma 100 %; las etiquetas muestran los porcentajes ≥ 7 %",
+         x = "Porcentaje de anuncios", y = NULL) +
+    tema_u() +
+    theme(legend.position = "bottom")
+
+  # Mosaico con desviaciones del esperado (residuos de Pearson)
+  tab <- table(x, y)
+  esperados <- outer(rowSums(tab), colSums(tab)) / sum(tab)
+  res_pearson <- (tab - esperados) / sqrt(esperados)
+  d_res <- as.data.frame(as.table(res_pearson))
+  names(d_res) <- c("cat", "resp", "residuo")
+
+  p2 <- ggplot(d_res, aes(x = resp, y = cat, fill = residuo)) +
+    geom_tile(colour = "white", linewidth = 0.5) +
+    geom_text(aes(label = gsub("\\.", ",", sprintf("%.1f", residuo))), size = 3,
+              colour = ifelse(abs(d_res$residuo) > 4, "white", "#1f2937")) +
+    scale_fill_gradient2(low = "#1a3a5c", mid = "#f8fafc", high = "#dc2626",
+                         midpoint = 0, name = "Residuo de\nPearson") +
+    labs(title = sprintf("Mapa de residuos de Pearson: %s × velocidad de adopción", nombre_x),
+         subtitle = "Rojo: más casos que los esperados bajo independencia; azul: menos",
+         x = NULL, y = NULL) +
+    tema_u() +
+    theme(axis.text.x = element_text(angle = 25, hjust = 1),
+          legend.position = "right")
+
+  print(p1); print(p2)
+  invisible(NULL)
+}
+
+# ---- Párrafo interpretativo (cifras calculadas, no transcritas) ----
+texto_cc <- function(x, y, nombre_x) {
+  tab <- table(x, y)
+  chi  <- suppressWarnings(stats::chisq.test(tab))
+  v    <- cramers_v(tab)
+  res_p <- (tab - outer(rowSums(tab), colSums(tab)) / sum(tab)) /
+           sqrt(outer(rowSums(tab), colSums(tab)) / sum(tab))
+  idx  <- which(abs(res_p) == max(abs(res_p)), arr.ind = TRUE)[1, ]
+  celda_max <- sprintf("«%s × %s»", rownames(tab)[idx[1]], colnames(tab)[idx[2]])
+  res_max <- res_p[idx[1], idx[2]]
+  perfil <- prop.table(tab, 1) * 100
+  i_cat <- which.max(apply(perfil, 1, function(r) max(r) - min(r)))
+  sprintf(
+    paste0(
+      "La tabla cruza %s (%d categorías, tras agrupar las minoritarias) con la velocidad de adopción ",
+      "sobre %s anuncios. La prueba χ² de independencia arroja χ²(%d) = %s (%s), y la V de Cramér ",
+      "corregida es %s, una asociación %s. La celda que más se aparta de la independencia es %s ",
+      "(residuo de Pearson = %s), es decir, %s casos de los esperados si ambas variables fueran independientes. ",
+      "La categoría con el perfil más desigual es «%s»: en ella la proporción de adopción va de %s a %s según la clase. ",
+      "Lectura: %s."
+    ),
+    nombre_x, nrow(tab), ent(sum(tab)),
+    chi$parameter, fmt(chi$statistic, 1), pval(chi$p.value),
+    fmt(v, 3), fuerza_v(v),
+    celda_max, fmt(res_max, 1),
+    ifelse(res_max > 0, "hay más", "hay menos"),
+    rownames(tab)[i_cat],
+    pct(min(perfil[i_cat, ])), pct(max(perfil[i_cat, ])),
+    ifelse(v < 0.1,
+           "la variable apenas se asocia con la velocidad de adopción; no es prioritaria para el modelamiento",
+           ifelse(v < 0.2,
+                  "la asociación existe pero es débil; puede aportar en interacción con otras variables",
+                  "es de las variables que más discriminan la velocidad de adopción; prioritaria para el modelamiento"))
+  )
+}
+
+# Variables cualitativas a cruzar con AdoptionSpeed (respuesta)
+VARS_CC <- c("Type", "Gender", "MaturitySize", "FurLength", "Vaccinated", "Dewormed",
+             "Sterilized", "Health", "Color1", "Color2", "Color3",
+             "Breed1", "Breed2", "State", "Name", "RescuerID")
+
+ETIQ_CC <- c(
+  Type         = "Especie",
+  Gender       = "Sexo",
+  MaturitySize = "Tamaño",
+  FurLength    = "Longitud del pelo",
+  Vaccinated   = "Vacunado",
+  Dewormed     = "Desparasitado",
+  Sterilized   = "Esterilizado",
+  Health       = "Estado de salud",
+  Color1       = "Color principal",
+  Color2       = "Segundo color",
+  Color3       = "Tercer color",
+  Breed1       = "Raza principal",
+  Breed2       = "Segunda raza",
+  State        = "Estado o territorio",
+  Name         = "Nombre del animal",
+  RescuerID    = "Identificador del rescatista"
+)
+
+# ============================================================================
+# Análisis de asociación entre una variable cualitativa y AdoptionSpeed
+# ----------------------------------------------------------------------------
+# Uso:
+#   analizar_cc(datos, datos$Type)
+#   analizar_cc(datos, datos$Gender)
+#   analizar_cc(datos, datos$State, respuesta = datos$AdoptionSpeed)
+#
+# Parámetros:
+#   datos      data.frame que contiene la variable y la respuesta
+#   variable   el vector de la variable explicativa (ej. datos$Type)
+#   respuesta  el vector de la respuesta; por defecto datos$AdoptionSpeed
+#   etiq       vector con nombres -> etiquetas (por defecto ETIQ_CC)
+#   n_top      máximo de categorías a mostrar en tablas/gráficos (opcional)
+# ============================================================================
+
+analizar_cc <- function(datos,
+                        variable,
+                        respuesta = NULL,
+                        etiq      = ETIQ_CC,
+                        n_top     = 10) {
+
+  # -- 1. Detectar el nombre de la variable tal como se pasó -----------------
+  var_expr <- substitute(variable)
+  var_name <- if (is.symbol(var_expr)) {
+    as.character(var_expr)
+  } else if (is.call(var_expr) && identical(var_expr[[1]], as.name("$"))) {
+    as.character(var_expr[[3]])
+  } else {
+    NA_character_
+  }
+
+  # -- 2. Etiqueta legible ----------------------------------------------------
+  etiqueta <- if (!is.na(var_name) && var_name %in% names(etiq)) {
+    etiq[[var_name]]
+  } else {
+    if (!is.na(var_name)) var_name else "Variable"
+  }
+
+  # -- 3. Respuesta -----------------------------------------------------------
+  if (is.null(respuesta)) {
+    if (!"AdoptionSpeed" %in% names(datos)) {
+      stop("No se encontró 'AdoptionSpeed' en 'datos'. Pásala explícitamente con respuesta = ...")
+    }
+    y <- datos$AdoptionSpeed
+  } else {
+    y <- respuesta
+  }
+
+  # -- 4. Limpieza ------------------------------------------------------------
+  x  <- variable
+  ok <- complete.cases(x, y)
+  x  <- droplevels(factor(x[ok]))
+  y  <- droplevels(factor(y[ok]))
+
+  # -- 5. Cálculos ------------------------------------------------------------
+  tab <- table(x, y)
+  chi <- suppressWarnings(stats::chisq.test(tab))
+  v_c <- cramers_v(tab)
+
+  # -- 6. Encabezado ----------------------------------------------------------
+  cat(sprintf("\n\n#### %s {.unnumbered}\n\n", etiqueta))
+
+  # -- 7. Decisión + tabla de contingencia + gráfico --------------------------
+  tabla_decision_cc(x, y, etiqueta)
+
+  print(knitr::kable(
+    tab,
+    caption = sprintf("Tabla de contingencia: %s × velocidad de adopción", etiqueta),
+    format  = "html"
+  ))
+
+  grafico_cc(x, y, etiqueta)
+
+  # -- 8. Medidas de asociación ----------------------------------------------
+  print(knitr::kable(
+    tibble::tibble(
+      Medida = c("χ² de independencia", "gl", "p-valor",
+                 "V de Cramér (corregida)", "Intensidad"),
+      Valor  = c(fmt(chi$statistic, 2),
+                 ent(chi$parameter),
+                 pval(chi$p.value),
+                 fmt(v_c, 3),
+                 fuerza_v(v_c))
+    ),
+    align  = c("l", "r"),
+    format = "html"
+  ))
+
+  # -- 9. Interpretación ------------------------------------------------------
+  cat("\n\n**Interpretación.** ", texto_cc(x, y, etiqueta), "\n\n", sep = "")
+
+  # -- 10. Devolver fila-resumen (por si luego quieres unir todo) -------------
+  invisible(tibble::tibble(
+    Variable = etiqueta,
+    n        = sum(tab),
+    Chi2     = chi$statistic,
+    gl       = chi$parameter,
+    p        = chi$p.value,
+    V        = v_c
+  ))
+}
+#
+#
+#
+#
+#
+#
+#
+analizar_cc(datos, datos$Type)
+```
+#
+#
+#
+#
