@@ -1,47 +1,47 @@
----
-title: "Análisis Bivariado Diagnóstico"
-subtitle: "Análisis descriptivo bivariado de las variables del conjunto de datos PetFinder."
----
-
-::: autor-pdf-row
-::: autor-info
-**AUTORES**
-
-Jared Mijail Ramírez Escalante · María Paula Silva Capera
-:::
-
-<div class="action-bar">
-<button class="btn-print" onclick="window.print()">PDF</button>
-</div>
-:::
-
-En esta sección se presentan las posibles asociaciones entre pares de variables pertenecientes al conjunto de datos [PetFinder](dataset.qmd) enriquecido. Con fines de cumplir lo solicitado para esta primera entrega, se hacen dos conjuntos de contrastes principales. En primer lugar se toma como referencia la variable cualitativa `AdoptionSpeed` para contrastarla con el resto de variables cualitativas y cuantitativas del conjunto de datos [PetFinder](dataset.qmd) enriquecido. Posteriormente se realiza el mismo ejercicio tomando como referencia la variable cuantitativa `Age`.
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #| label: setup-comun
 #| echo: false
 #| include: false
 # Carga y traducción de las categorías del conjunto de datos
 source(here::here("_setup.R"))
-```
-
-```{r}
+#
+#
+#
 # Librerías utilizadas en esta sección
 library(ggplot2)
 library(dplyr)
 library(tibble)
 library(forcats)
 library(knitr)
-```
-
-## `AdoptionSpeed` versus variables cualitativas
-Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables se optó por agrupar las categorías con frecuencias relativas menores o iguales al 1%. En caso de que ninguna de las categorías alcance el umbral, se hará la descripción sobre las 10 categorías más frecuentes.
-
-
-## Type
-**Especie**
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 # =====================================================================
 # Análisis bivariado cualitativa vs. cualitativa frente a AdoptionSpeed
 # =====================================================================
@@ -452,12 +452,14 @@ extraer_nombre <- function(expr) {
 #   analisis_bivar_cuali_vs_cuali(datos[[v]], alta_cardinalidad = v %in% VARS_ALTA,
 #                                 nombre = v)$estadisticos
 # }) |> dplyr::bind_rows()
-```
-
-
-```{r}
+#
+#
+#
+#
 #| results: asis
 #| fig-width: 15
 #| fig-height: 7
  analisis_bivar_cuali_vs_cuali(datos$Gender)
-```
+#
+#
+#
