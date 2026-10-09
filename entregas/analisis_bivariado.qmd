@@ -592,13 +592,9 @@ analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
 ## `AdoptionSpeed` VS variables cuantitativas
 
 ```{r}
-print(colnames(datos))
-```
-
-```{r}
-analisis_bivar_cuali_vs_cuanti <- function(variable, 
-                      datos,
-                      cualitativa = "AdoptionSpeed") {
+analisis_bivar_cuali_vs_cuanti <- function(variable,
+                                           datos,
+                                           cualitativa = "AdoptionSpeed") {
 
   if (!variable %in% names(datos))
     stop("La variable '", variable, "' no está en los datos.")
@@ -612,7 +608,6 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
   df <- data.frame(x = x, f = f)
 
   f_med <- reorder(f, x, median)
-  pdf(NULL)
   fig1 <- plot_ly(df, x = ~x, color = f_med, type = "box",
                   boxpoints = FALSE) %>%
     layout(xaxis = list(title = variable),
@@ -629,7 +624,9 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
   X    <- data.frame(x = x) |> setNames(variable)
   corr <- centroids(X, f)$cr * 100
 
-  print(fig1, fig2, corr)
+  print(fig1)
+  print(fig2)
+  print(corr)
 }
 ```
 
