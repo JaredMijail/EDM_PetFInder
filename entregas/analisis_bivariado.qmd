@@ -32,6 +32,8 @@ library(dplyr)
 library(tibble)
 library(forcats)
 library(knitr)
+library(plotly)
+library(FactoClass)
 ```
 
 ## `AdoptionSpeed` VS variables cualitativas
@@ -588,3 +590,47 @@ analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
 :::
 
 ## `AdoptionSpeed` VS variables cuantitativas
+
+
+```{r}
+analisis_bivar_cuali_vs_cuanti <- function(variable, 
+                      datos = datos,
+                      cualitativa = "AdoptionSpeed") {
+
+  if (!variable %in% names(datos))
+    stop("La variable '", variable, "' no está en los datos.")
+  if (!cualitativa %in% names(datos))
+    stop("La variable cualitativa '", cualitativa, "' no está en los datos.")
+
+  f0 <- as.factor(datos[[cualitativa]])
+  ok <- complete.cases(datos[[variable]], f0)
+  x  <- datos[[variable]][ok]
+  f  <- droplevels(f0[ok])
+  df <- data.frame(x = x, f = f)
+
+  f_med <- reorder(f, x, median)
+  pdf(NULL)
+  fig1 <- plot_ly(df, x = ~x, color = f_med, type = "box",
+                  boxpoints = FALSE) %>%
+    layout(xaxis = list(title = variable),
+           yaxis = list(title = paste("sorted", cualitativa)),
+           showlegend = FALSE)
+
+  f_mean <- reorder(f, x, mean)
+  fig2 <- plot_ly(df, x = ~x, split = f_mean, type = "violin",
+                  points = "all", pointpos = 0,
+                  meanline = list(visible = TRUE, color = "black")) %>%
+    layout(xaxis = list(title = variable),
+           yaxis = list(title = paste("sorted", cualitativa)))
+
+  X    <- data.frame(x = x) |> setNames(variable)
+  corr <- centroids(X, f)$cr * 100
+
+  print(fig1, fig2, corr)
+}
+```
+
+
+```{r}
+analisis_bivar_cuali_vs_cuanti('Quantity')
+```
