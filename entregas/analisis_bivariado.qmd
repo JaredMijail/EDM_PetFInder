@@ -34,7 +34,7 @@ library(forcats)
 library(knitr)
 ```
 
-## `AdoptionSpeed` versus variables cualitativas
+## `AdoptionSpeed` VS variables cualitativas
 Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables se optó por agrupar las categorías con frecuencias relativas menores o iguales al 1%. En caso de que ninguna de las categorías alcance el umbral, se hará la descripción sobre las 10 categorías más frecuentes.
 
 
