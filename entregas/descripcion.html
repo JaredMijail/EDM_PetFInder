@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Jared Mijail Ramírez Escalante · María Paula Silva Capera">
 
-<title>Descripción – EDM_PetFinder</title>
+<title>Descripción del Conjunto de Datos – EDM_PetFinder</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,6 +70,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../entregas/analisis_univariado.html" rel="next">
+<link href="../proyecto/bibliografia.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -85,6 +86,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-74d19e79992467fccd1882236d97e988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/bootstrap/bootstrap-dark-070e54764458ee5734a9f7e2965ee2d2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="../site_libs/bootstrap/bootstrap-74d19e79992467fccd1882236d97e988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -118,12 +122,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Descripción – EDM_PetFinder">
-<meta property="og:description" content="Estructura global del conjunto de datos PetFinder">
+<meta property="og:title" content="Descripción del Conjunto de Datos – EDM_PetFinder">
+<meta property="og:description" content="Composición del conjunto de datos PetFinder.">
+<meta property="og:image" content="https://jaredmijail.github.io/EDM_PetFInder/entregas/descripcion_files/figure-html/general-tipos-1.png">
 <meta property="og:site_name" content="EDM_PetFinder">
-<meta name="twitter:title" content="Descripción – EDM_PetFinder">
-<meta name="twitter:description" content="Estructura global del conjunto de datos PetFinder">
-<meta name="twitter:card" content="summary">
+<meta property="og:image:alt" content="Número de variables cualitativas por escala">
+<meta property="og:image:height" content="792">
+<meta property="og:image:width" content="1104">
+<meta name="twitter:title" content="Descripción del Conjunto de Datos – EDM_PetFinder">
+<meta name="twitter:description" content="Composición del conjunto de datos PetFinder.">
+<meta name="twitter:image" content="https://jaredmijail.github.io/EDM_PetFInder/entregas/descripcion_files/figure-html/general-tipos-1.png">
+<meta name="twitter:image:alt" content="Número de variables cualitativas por escala">
+<meta name="twitter:image-height" content="792">
+<meta name="twitter:image-width" content="1104">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -354,6 +366,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Descripción</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../entregas/analisis_univariado.html">
+ <span class="dropdown-text">Análisis Univariado</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../entregas/analisis_bivariado.html">
+ <span class="dropdown-text">Análisis Bivariado</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../entregas/analisis-exploratorio.html">
  <span class="dropdown-text">Análisis exploratorio</span></a>
   </li>  
@@ -386,7 +406,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Descripción</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../entregas/descripcion.html">Entrega 01</a></li><li class="breadcrumb-item"><a href="../entregas/descripcion.html">Descripción del Conjunto de Datos</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -478,13 +498,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Entrega 1</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Entrega 01</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../entregas/descripcion.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Descripción del Conjunto de Datos</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../entregas/analisis_univariado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análisis Univariado Diagnóstico</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../entregas/analisis_bivariado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análisis Bivariado Diagnóstico</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../entregas/analisis-exploratorio.html" class="sidebar-item-text sidebar-link">
@@ -521,29 +559,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#tipos-de-variables" id="toc-tipos-de-variables" class="nav-link active" data-scroll-target="#tipos-de-variables">Tipos de Variables</a></li>
+  <li><a href="#valores-faltantes" id="toc-valores-faltantes" class="nav-link" data-scroll-target="#valores-faltantes">Valores faltantes</a></li>
+  <li><a href="#resumen" id="toc-resumen" class="nav-link" data-scroll-target="#resumen">Resumen</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/JaredMijail/EDM_PetFInder/edit/main/entregas/descripcion.qmd" class="toc-action"><i class="bi bi-github"></i>Editar esta página</a></li><li><a href="https://github.com/JaredMijail/EDM_PetFInder/issues/new" class="toc-action"><i class="bi empty"></i>Informar sobre problema</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../entregas/descripcion.html">Entrega 01</a></li><li class="breadcrumb-item"><a href="../entregas/descripcion.html">Descripción del Conjunto de Datos</a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Descripción</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Código</button></div></div>
-<p class="subtitle lead">Estructura global del conjunto de datos PetFinder</p>
+<div class="quarto-title-block"><div><h1 class="title">Descripción del Conjunto de Datos</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Código</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Mostrar todo el código</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Ocultar todo el código</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">Ver el código fuente</a></li></ul></div></div>
+<p class="subtitle lead">Composición del conjunto de datos PetFinder.</p>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autor/a</div>
-    <div class="quarto-title-meta-contents">
-             <p>Jared Mijail Ramírez Escalante · María Paula Silva Capera </p>
-          </div>
-  </div>
     
   
     
@@ -554,10 +594,479 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="autor-pdf-row">
+<div class="autor-info">
+<p><strong>AUTORES</strong></p>
+<p>Jared Mijail Ramírez Escalante · María Paula Silva Capera</p>
+</div>
+<div class="action-bar">
+<button class="btn-print" onclick="window.print()">
+PDF
+</button>
+</div>
+</div>
+<p>A continuación se describe el contenido del conjunto datos PetFinder según el número de unidades de observación (anuncios), el número de variables y su tipificación y los valores faltantes a nivel general y particular.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Unidades de observación"</span>   <span class="ot">=</span> <span class="fu">paste</span>(<span class="fu">ent</span>(<span class="fu">nrow</span>(datos)), <span class="st">"anuncios"</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Variables cualitativas"</span>    <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%d (%.1f %%)"</span>, <span class="fu">length</span>(VARS_CAT),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                                        <span class="dv">100</span> <span class="sc">*</span> <span class="fu">length</span>(VARS_CAT) <span class="sc">/</span> <span class="fu">ncol</span>(datos)),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Variables cuantitativas"</span>   <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%d (%.1f %%)"</span>, <span class="fu">length</span>(VARS_NUM),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="dv">100</span> <span class="sc">*</span> <span class="fu">length</span>(VARS_NUM) <span class="sc">/</span> <span class="fu">ncol</span>(datos)),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Valores faltantes"</span>         <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%s (%.2f %%)"</span>, <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(datos))),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                                        <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(<span class="fu">is.na</span>(datos))),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Filas duplicadas"</span>          <span class="ot">=</span> <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">duplicated</span>(datos))),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Identificadores duplicados"</span> <span class="ot">=</span> <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">duplicated</span>(datos<span class="sc">$</span>PetID)))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>celdas <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"**%s**: %s"</span>, <span class="fu">names</span>(est), est)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>grilla <span class="ot">&lt;-</span> <span class="fu">matrix</span>(celdas, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(grilla, <span class="at">col.names =</span> <span class="fu">rep</span>(<span class="st">""</span>, <span class="dv">3</span>), <span class="at">align =</span> <span class="st">"ccc"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 35%">
+<col style="width: 31%">
+<col style="width: 32%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>Unidades de observación</strong>: 14.993 anuncios</td>
+<td style="text-align: center;"><strong>Variables cualitativas</strong>: 19 (61.3 %)</td>
+<td style="text-align: center;"><strong>Variables cuantitativas</strong>: 12 (38.7 %)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>Valores faltantes</strong>: 3.382 (0.73 %)</td>
+<td style="text-align: center;"><strong>Filas duplicadas</strong>: 0</td>
+<td style="text-align: center;"><strong>Identificadores duplicados</strong>: 0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="tipos-de-variables" class="level3">
+<h3 class="anchored" data-anchor-id="tipos-de-variables">Tipos de Variables</h3>
+<p>Las 31 variables se clasifican por su naturaleza y su escala de medición. La columna <em>Fuente</em> distingue las variables originales de las que se construyeron en el <a href="../entregas/dataset.html">enriquecimiento</a> (texto e imagen).</p>
+<div class="cell" data-tbl-cap="Clasificación de las variables cualitativas por tipo, escala y origen">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>clasificacion_cuali <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Variable, <span class="sc">~</span><span class="st">`</span><span class="at">Tipo</span><span class="st">`</span>, <span class="sc">~</span>Escala, <span class="sc">~</span>Fuente,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PetID"</span>,              <span class="st">"Caracter"</span>,  <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Name"</span>,               <span class="st">"Caracter"</span>,  <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Type"</span>,               <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Breed1"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Breed2"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Gender"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Color1"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Color2"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Color3"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Vaccinated"</span>,         <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dewormed"</span>,           <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sterilized"</span>,         <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"State"</span>,              <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"RescuerID"</span>,          <span class="st">"Caracter"</span>,  <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Description"</span>,        <span class="st">"Texto"</span>,     <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MaturitySize"</span>,       <span class="st">"Factor"</span>,    <span class="st">"Ordinal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"FurLength"</span>,          <span class="st">"Factor"</span>,    <span class="st">"Ordinal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Health"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Ordinal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AdoptionSpeed"</span>,      <span class="st">"Factor"</span>,    <span class="st">"Ordinal"</span>,   <span class="st">"Original"</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(Escala)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>clasificacion_cuali <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Clasificación de las variables cualitativas por tipo, escala y origen</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Escala</th>
+<th style="text-align: left;">Fuente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PetID</td>
+<td style="text-align: left;">Caracter</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">Caracter</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Type</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Breed1</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Breed2</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Gender</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Color1</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Color2</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Color3</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Vaccinated</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dewormed</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sterilized</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">State</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RescuerID</td>
+<td style="text-align: left;">Caracter</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Description</td>
+<td style="text-align: left;">Texto</td>
+<td style="text-align: left;">Nominal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MaturitySize</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Ordinal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FurLength</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Ordinal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Health</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Ordinal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AdoptionSpeed</td>
+<td style="text-align: left;">Factor</td>
+<td style="text-align: left;">Ordinal</td>
+<td style="text-align: left;">Original</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>clasificacion_cuali <span class="sc">|&gt;</span> <span class="fu">count</span>(Escala) <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> <span class="fu">fct_reorder</span>(Escala, n))) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#2e7d9a"</span>, <span class="at">width =</span> <span class="fl">0.68</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">colour =</span> <span class="st">"#1f2937"</span>, <span class="at">size =</span> <span class="fl">3.4</span>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Variables cualitativas por escala"</span>, <span class="at">x =</span> <span class="st">"Número de variables"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span> <span class="fu">tema_u</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>clasificacion_cuali <span class="sc">|&gt;</span> <span class="fu">count</span>(Tipo) <span class="sc">|&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> n, <span class="at">fill =</span> Tipo)) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span> <span class="fu">coord_polar</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Composición por escala (cualitativas)"</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="fl">11.5</span>) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">colour =</span> <span class="cn">NA</span>),</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">colour =</span> <span class="st">"#1a3a5c"</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="fl">11.5</span>),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(), <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="descripcion_files/figure-html/general-tipos-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Número de variables cualitativas por escala"><img src="descripcion_files/figure-html/general-tipos-1.png" class="img-fluid figure-img" style="width:100.0%" alt="Número de variables cualitativas por escala"></a></p>
+<figcaption>Número de variables cualitativas por escala</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="descripcion_files/figure-html/general-tipos-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Composición porcentual de las variables cualitativas por escala"><img src="descripcion_files/figure-html/general-tipos-2.png" class="img-fluid figure-img" style="width:100.0%" alt="Composición porcentual de las variables cualitativas por escala"></a></p>
+<figcaption>Composición porcentual de las variables cualitativas por escala</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>De las 19 variables cualitativas se tiene que 15 de ellas son nominales frente a las 4 restantes que son ordinales. Se cuenta con variables de tipo caracter, factor y texto donde la categoría predominante es factor. Todas las variables hacen parte del conjunto de datos original.</p>
+<div class="cell" data-tbl-cap="Clasificación de las variables cuantitativas por tipo, escala y origen">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>clasificacion_cuanti <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Variable, <span class="sc">~</span><span class="st">`</span><span class="at">Tipo</span><span class="st">`</span>, <span class="sc">~</span>Escala, <span class="sc">~</span>Fuente,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Age"</span>,                <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Quantity"</span>,           <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Fee"</span>,                <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VideoAmt"</span>,           <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PhotoAmt"</span>,           <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sentiment_score"</span>,    <span class="st">"Numérico"</span>,  <span class="st">"Intervalo"</span>, <span class="st">"Enriquecimiento (texto)"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sentiment_magnitude"</span>,<span class="st">"Numérico"</span>,  <span class="st">"Razón"</span>,  <span class="st">"Enriquecimiento (texto)"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_labels"</span>,       <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Enriquecimiento (imagen)"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_faces"</span>,        <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Enriquecimiento (imagen)"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_colors"</span>,       <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Enriquecimiento (imagen)"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"desc_char_len"</span>,      <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Derivada del texto"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"desc_word_count"</span>,    <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Derivada del texto"</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(Escala)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>clasificacion_cuanti <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Clasificación de las variables cuantitativas por tipo, escala y origen</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Escala</th>
+<th style="text-align: left;">Fuente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">sentiment_score</td>
+<td style="text-align: left;">Numérico</td>
+<td style="text-align: left;">Intervalo</td>
+<td style="text-align: left;">Enriquecimiento (texto)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Quantity</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fee</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">VideoAmt</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PhotoAmt</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Original</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sentiment_magnitude</td>
+<td style="text-align: left;">Numérico</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Enriquecimiento (texto)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_labels</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Enriquecimiento (imagen)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">total_faces</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Enriquecimiento (imagen)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_colors</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Enriquecimiento (imagen)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">desc_char_len</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Derivada del texto</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">desc_word_count</td>
+<td style="text-align: left;">Entero</td>
+<td style="text-align: left;">Razón</td>
+<td style="text-align: left;">Derivada del texto</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>clasificacion_cuanti <span class="sc">|&gt;</span> <span class="fu">count</span>(Escala) <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> <span class="fu">fct_reorder</span>(Escala, n))) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#2e7d9a"</span>, <span class="at">width =</span> <span class="fl">0.68</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">colour =</span> <span class="st">"#1f2937"</span>, <span class="at">size =</span> <span class="fl">3.4</span>) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Variables cuantitativas por escala"</span>, <span class="at">x =</span> <span class="st">"Número de variables"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span> <span class="fu">tema_u</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>clasificacion_cuanti <span class="sc">|&gt;</span> <span class="fu">count</span>(Tipo) <span class="sc">|&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> n, <span class="at">fill =</span> Tipo)) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span> <span class="fu">coord_polar</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Composición por escala (cuantitativas)"</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="fl">11.5</span>) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">colour =</span> <span class="cn">NA</span>),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">colour =</span> <span class="st">"#1a3a5c"</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="fl">11.5</span>),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(), <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="descripcion_files/figure-html/general-tipos-cuanti-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Número de variables cuantitativas por escala"><img src="descripcion_files/figure-html/general-tipos-cuanti-1.png" class="img-fluid figure-img" style="width:100.0%" alt="Número de variables cuantitativas por escala"></a></p>
+<figcaption>Número de variables cuantitativas por escala</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="descripcion_files/figure-html/general-tipos-cuanti-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Composición porcentual de las variables cuantitativas por escala"><img src="descripcion_files/figure-html/general-tipos-cuanti-2.png" class="img-fluid figure-img" style="width:100.0%" alt="Composición porcentual de las variables cuantitativas por escala"></a></p>
+<figcaption>Composición porcentual de las variables cuantitativas por escala</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Entre las 12 variables cuantitativas se cuenta con 11 en escala de razón y 1 en escala de intervalo. Hay presencia de variables de tipo entero y numérico asociadas a conteos y puntajes respectivamente. Se tiene que 7 de estas variables hacen parte del conjunto de datos original mientras que otras 5 fueron agregadas con enriquecimiento (Ver <a href="../entregas/dataset.html">Conjunto de Datos y Enriquecimiento</a>).</p>
+</section>
+<section id="valores-faltantes" class="level3">
+<h3 class="anchored" data-anchor-id="valores-faltantes">Valores faltantes</h3>
+<div class="cell" data-tbl-cap="Valores perdidos por variable">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Variable =</span> <span class="fu">names</span>(datos), <span class="at">Perdidos =</span> <span class="fu">as.integer</span>(<span class="fu">colSums</span>(<span class="fu">is.na</span>(datos)))) <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(Perdidos <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="st">`</span><span class="at">% de las filas</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="dv">100</span> <span class="sc">*</span> Perdidos <span class="sc">/</span> <span class="fu">nrow</span>(datos))) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(Perdidos)) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">Perdidos =</span> <span class="fu">ent</span>(Perdidos)) <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variable"</span>, <span class="st">"Valores perdidos"</span>, <span class="st">"% de las filas"</span>),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Valores perdidos por variable</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: right;">Valores perdidos</th>
+<th style="text-align: right;">% de las filas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: right;">1.257</td>
+<td style="text-align: right;">8,4 %</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sentiment_score</td>
+<td style="text-align: right;">551</td>
+<td style="text-align: right;">3,7 %</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sentiment_magnitude</td>
+<td style="text-align: right;">551</td>
+<td style="text-align: right;">3,7 %</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_labels</td>
+<td style="text-align: right;">341</td>
+<td style="text-align: right;">2,3 %</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">total_faces</td>
+<td style="text-align: right;">341</td>
+<td style="text-align: right;">2,3 %</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_colors</td>
+<td style="text-align: right;">341</td>
+<td style="text-align: right;">2,3 %</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>La variable nombre y otras cinco variables derivadas del enriquecimiento presentan datos faltantes. El nombre del animal tiene 1.257 casos faltantes, las dos variables de sentimiento 551 cada una y las tres variables derivadas de la imagen 341 cada una (son anuncios sin fotografía).</p>
+</section>
+<section id="resumen" class="level3">
+<h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
+<p>El conjunto de datos tiene 14.993 unidades de observación (los anuncios), 31 variables y 464.783 celdas, de las cuales se pierde el 0,73 %; ese porcentaje es bajo y está concentrado en seis variables de las cuales cinco variables pertenecen al enriquecimiento. Los 0 duplicados de fila y de identificador confirman que no hay anuncios repetidos. En cuanto a la composición, hay 12 variables cuantitativas (39 % del total) y 19 cualitativas (61 %), de modo que el análisis descriptivo es parcialmente balanceado respecto al tipo de variables. Se considera importante tener presente que hay variables <strong>casi constantes</strong> (<code>Health</code>, <code>total_faces</code>, <code>VideoAmt</code>) y variables <strong>de alta cardinalidad</strong> (<code>Breed1</code>, <code>State</code>, <code>Name</code>, <code>Description</code>) que requieren un tratamiento distinto. Los detalles se retoman en las secciones siguientes.</p>
 
 
 <!-- -->
 
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1030,12 +1539,197 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       }
     }
   });
-  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Descripción"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Estructura global del conjunto de datos PetFinder"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Jared Mijail Ramírez Escalante · María Paula Silva Capera"</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../proyecto/bibliografia.html" class="pagination-link" aria-label="Bibliografía">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Bibliografía</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../entregas/analisis_univariado.html" class="pagination-link" aria-label="Análisis Univariado Diagnóstico">
+        <span class="nav-page-text">Análisis Univariado Diagnóstico</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Descripción del Conjunto de Datos"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Composición del conjunto de datos PetFinder."</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>::: autor-pdf-row</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>::: autor-info</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>**AUTORES**</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>Jared Mijail Ramírez Escalante · María Paula Silva Capera</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"action-bar"</span><span class="dt">&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn-print"</span><span class="ot"> onclick</span><span class="op">=</span><span class="st">"window.print()"</span><span class="dt">&gt;</span>PDF<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup-comun</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga y traducción de las categorías del conjunto de datos</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"_setup.R"</span>))</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>A continuación se describe el contenido del conjunto datos PetFinder según el número de unidades de observación (anuncios), el número de variables y su tipificación y los valores faltantes a nivel general y particular.</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Unidades de observación"</span>   <span class="ot">=</span> <span class="fu">paste</span>(<span class="fu">ent</span>(<span class="fu">nrow</span>(datos)), <span class="st">"anuncios"</span>),</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Variables cualitativas"</span>    <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%d (%.1f %%)"</span>, <span class="fu">length</span>(VARS_CAT),</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>                                        <span class="dv">100</span> <span class="sc">*</span> <span class="fu">length</span>(VARS_CAT) <span class="sc">/</span> <span class="fu">ncol</span>(datos)),</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Variables cuantitativas"</span>   <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%d (%.1f %%)"</span>, <span class="fu">length</span>(VARS_NUM),</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>                                        <span class="dv">100</span> <span class="sc">*</span> <span class="fu">length</span>(VARS_NUM) <span class="sc">/</span> <span class="fu">ncol</span>(datos)),</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Valores faltantes"</span>         <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%s (%.2f %%)"</span>, <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(datos))),</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>                                        <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(<span class="fu">is.na</span>(datos))),</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Filas duplicadas"</span>          <span class="ot">=</span> <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">duplicated</span>(datos))),</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Identificadores duplicados"</span> <span class="ot">=</span> <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">duplicated</span>(datos<span class="sc">$</span>PetID)))</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>celdas <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"**%s**: %s"</span>, <span class="fu">names</span>(est), est)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>grilla <span class="ot">&lt;-</span> <span class="fu">matrix</span>(celdas, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(grilla, <span class="at">col.names =</span> <span class="fu">rep</span>(<span class="st">""</span>, <span class="dv">3</span>), <span class="at">align =</span> <span class="st">"ccc"</span>)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tipos de Variables</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>Las 31 variables se clasifican por su naturaleza y su escala de medición. La columna *Fuente* distingue las variables originales de las que se construyeron en el <span class="co">[</span><span class="ot">enriquecimiento</span><span class="co">](dataset.qmd)</span> (texto e imagen).</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: general-clasificacion-cuali</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Clasificación de las variables cualitativas por tipo, escala y origen"</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>clasificacion_cuali <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Variable, <span class="sc">~</span><span class="st">`</span><span class="at">Tipo</span><span class="st">`</span>, <span class="sc">~</span>Escala, <span class="sc">~</span>Fuente,</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PetID"</span>,              <span class="st">"Caracter"</span>,  <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Name"</span>,               <span class="st">"Caracter"</span>,  <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Type"</span>,               <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Breed1"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Breed2"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Gender"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Color1"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Color2"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Color3"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Vaccinated"</span>,         <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dewormed"</span>,           <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sterilized"</span>,         <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>  <span class="st">"State"</span>,              <span class="st">"Factor"</span>,    <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>  <span class="st">"RescuerID"</span>,          <span class="st">"Caracter"</span>,  <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Description"</span>,        <span class="st">"Texto"</span>,     <span class="st">"Nominal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MaturitySize"</span>,       <span class="st">"Factor"</span>,    <span class="st">"Ordinal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  <span class="st">"FurLength"</span>,          <span class="st">"Factor"</span>,    <span class="st">"Ordinal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Health"</span>,             <span class="st">"Factor"</span>,    <span class="st">"Ordinal"</span>,   <span class="st">"Original"</span>,</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AdoptionSpeed"</span>,      <span class="st">"Factor"</span>,    <span class="st">"Ordinal"</span>,   <span class="st">"Original"</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(Escala)</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>clasificacion_cuali <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>))</span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: general-tipos</span></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="co">#| layout-ncol: 2</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: ["Número de variables cualitativas por escala", "Composición porcentual de las variables cualitativas por escala"]</span></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>clasificacion_cuali <span class="sc">|&gt;</span> <span class="fu">count</span>(Escala) <span class="sc">|&gt;</span></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> <span class="fu">fct_reorder</span>(Escala, n))) <span class="sc">+</span></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#2e7d9a"</span>, <span class="at">width =</span> <span class="fl">0.68</span>) <span class="sc">+</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">colour =</span> <span class="st">"#1f2937"</span>, <span class="at">size =</span> <span class="fl">3.4</span>) <span class="sc">+</span></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Variables cualitativas por escala"</span>, <span class="at">x =</span> <span class="st">"Número de variables"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span> <span class="fu">tema_u</span>()</span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>clasificacion_cuali <span class="sc">|&gt;</span> <span class="fu">count</span>(Tipo) <span class="sc">|&gt;</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> n, <span class="at">fill =</span> Tipo)) <span class="sc">+</span></span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span> <span class="fu">coord_polar</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Composición por escala (cualitativas)"</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="fl">11.5</span>) <span class="sc">+</span></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">colour =</span> <span class="cn">NA</span>),</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">colour =</span> <span class="st">"#1a3a5c"</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="fl">11.5</span>),</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(), <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>De las 19 variables cualitativas se tiene que 15 de ellas son nominales frente a las 4 restantes que son ordinales. Se cuenta con variables de tipo caracter, factor y texto donde la categoría predominante es factor. Todas las variables hacen parte del conjunto de datos original.</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: general-clasificacion-cuanti</span></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Clasificación de las variables cuantitativas por tipo, escala y origen"</span></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>clasificacion_cuanti <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Variable, <span class="sc">~</span><span class="st">`</span><span class="at">Tipo</span><span class="st">`</span>, <span class="sc">~</span>Escala, <span class="sc">~</span>Fuente,</span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Age"</span>,                <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Quantity"</span>,           <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Fee"</span>,                <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VideoAmt"</span>,           <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PhotoAmt"</span>,           <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Original"</span>,</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sentiment_score"</span>,    <span class="st">"Numérico"</span>,  <span class="st">"Intervalo"</span>, <span class="st">"Enriquecimiento (texto)"</span>,</span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sentiment_magnitude"</span>,<span class="st">"Numérico"</span>,  <span class="st">"Razón"</span>,  <span class="st">"Enriquecimiento (texto)"</span>,</span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_labels"</span>,       <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Enriquecimiento (imagen)"</span>,</span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_faces"</span>,        <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Enriquecimiento (imagen)"</span>,</span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_colors"</span>,       <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Enriquecimiento (imagen)"</span>,</span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>  <span class="st">"desc_char_len"</span>,      <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Derivada del texto"</span>,</span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>  <span class="st">"desc_word_count"</span>,    <span class="st">"Entero"</span>,    <span class="st">"Razón"</span>,  <span class="st">"Derivada del texto"</span></span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(Escala)</span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>clasificacion_cuanti <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>))</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: general-tipos-cuanti</span></span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a><span class="co">#| layout-ncol: 2</span></span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: ["Número de variables cuantitativas por escala", "Composición porcentual de las variables cuantitativas por escala"]</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>clasificacion_cuanti <span class="sc">|&gt;</span> <span class="fu">count</span>(Escala) <span class="sc">|&gt;</span></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> <span class="fu">fct_reorder</span>(Escala, n))) <span class="sc">+</span></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#2e7d9a"</span>, <span class="at">width =</span> <span class="fl">0.68</span>) <span class="sc">+</span></span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.4</span>, <span class="at">colour =</span> <span class="st">"#1f2937"</span>, <span class="at">size =</span> <span class="fl">3.4</span>) <span class="sc">+</span></span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Variables cuantitativas por escala"</span>, <span class="at">x =</span> <span class="st">"Número de variables"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span> <span class="fu">tema_u</span>()</span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>clasificacion_cuanti <span class="sc">|&gt;</span> <span class="fu">count</span>(Tipo) <span class="sc">|&gt;</span></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> n, <span class="at">fill =</span> Tipo)) <span class="sc">+</span></span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span> <span class="fu">coord_polar</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Composición por escala (cuantitativas)"</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="fl">11.5</span>) <span class="sc">+</span></span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">colour =</span> <span class="cn">NA</span>),</span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">colour =</span> <span class="st">"#1a3a5c"</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="fl">11.5</span>),</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(), <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>Entre las 12 variables cuantitativas se cuenta con 11 en escala de razón y 1 en escala de intervalo. Hay presencia de variables de tipo entero y numérico asociadas a conteos y puntajes respectivamente. Se tiene que 7 de estas variables hacen parte del conjunto de datos original mientras que otras 5 fueron agregadas con enriquecimiento (Ver <span class="co">[</span><span class="ot">Conjunto de Datos y Enriquecimiento</span><span class="co">](dataset.qmd)</span>).</span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a><span class="fu">### Valores faltantes</span></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: general-perdidos</span></span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Valores perdidos por variable"</span></span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Variable =</span> <span class="fu">names</span>(datos), <span class="at">Perdidos =</span> <span class="fu">as.integer</span>(<span class="fu">colSums</span>(<span class="fu">is.na</span>(datos)))) <span class="sc">|&gt;</span></span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(Perdidos <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="st">`</span><span class="at">% de las filas</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="dv">100</span> <span class="sc">*</span> Perdidos <span class="sc">/</span> <span class="fu">nrow</span>(datos))) <span class="sc">|&gt;</span></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(Perdidos)) <span class="sc">|&gt;</span></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">Perdidos =</span> <span class="fu">ent</span>(Perdidos)) <span class="sc">|&gt;</span></span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Variable"</span>, <span class="st">"Valores perdidos"</span>, <span class="st">"% de las filas"</span>),</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>La variable nombre y otras cinco variables derivadas del enriquecimiento presentan datos faltantes. El nombre del animal tiene 1.257 casos faltantes, las dos variables de sentimiento 551 cada una y las tres variables derivadas de la imagen 341 cada una (son anuncios sin fotografía).</span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a><span class="fu">### Resumen</span></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>El conjunto de datos tiene <span class="in">`r ent(nrow(datos))`</span> unidades de observación (los anuncios), <span class="in">`r ncol(datos)`</span> variables y <span class="in">`r ent(nrow(datos) * ncol(datos))`</span> celdas, de las cuales se pierde el <span class="in">`r pct(100*mean(is.na(datos)), 2)`</span>; ese porcentaje es bajo y está concentrado en seis variables de las cuales cinco variables pertenecen al enriquecimiento. Los <span class="in">`r ent(sum(duplicated(datos)))`</span> duplicados de fila y de identificador confirman que no hay anuncios repetidos. En cuanto a la composición, hay <span class="in">`r length(VARS_NUM)`</span> variables cuantitativas (<span class="in">`r pct(100*length(VARS_NUM)/ncol(datos), 0)`</span> del total) y <span class="in">`r length(VARS_CAT)`</span> cualitativas (<span class="in">`r pct(100*length(VARS_CAT)/ncol(datos), 0)`</span>), de modo que el análisis descriptivo es parcialmente balanceado respecto al tipo de variables. Se considera importante tener presente que hay variables **casi constantes** (`Health`, `total_faces`, `VideoAmt`) y variables **de alta cardinalidad** (<span class="in">`Breed1`</span>, <span class="in">`State`</span>, <span class="in">`Name`</span>, <span class="in">`Description`</span>) que requieren un tratamiento distinto. Los detalles se retoman en las secciones siguientes.</span>
+</code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -1045,7 +1739,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>   
     <div class="nav-footer-center">
 <p>EDM — Estadística Descriptiva Multivariada</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/JaredMijail/EDM_PetFInder/edit/main/entregas/descripcion.qmd" class="toc-action"><i class="bi bi-github"></i>Editar esta página</a></li><li><a href="https://github.com/JaredMijail/EDM_PetFInder/issues/new" class="toc-action"><i class="bi empty"></i>Informar sobre problema</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/JaredMijail/EDM_PetFInder/edit/main/entregas/descripcion.qmd" class="toc-action"><i class="bi bi-github"></i>Editar esta página</a></li><li><a href="https://github.com/JaredMijail/EDM_PetFInder/issues/new" class="toc-action"><i class="bi empty"></i>Informar sobre problema</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
@@ -1058,6 +1752,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

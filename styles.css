@@ -927,12 +927,46 @@ figcaption,
 }
 
 /* Botón de impresión / exportar a PDF */
-.action-bar {
+/* Fila autores + botón PDF */
+.autor-pdf-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
+  justify-content: space-between;
   align-items: center;
-  margin: 1.2rem 0 2rem 0;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 2rem 0;
+  padding: 0.9rem 1.1rem;
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius);
+}
+
+.autor-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.95rem;
+}
+
+.autor-info p {
+  margin: 0.15rem 0 0 0;
+}
+
+.autor-info strong {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-soft);
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+}
+
+.action-bar {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin: 0;
 }
 
 button.btn-print,
@@ -944,7 +978,7 @@ a.btn-print {
   border: none;
   border-bottom: none !important;
   border-radius: 8px;
-  padding: 0.6rem 1.2rem;
+  padding: 0.55rem 1.1rem;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
@@ -1389,7 +1423,47 @@ html[data-bs-theme="dark"] thead {
     print-color-adjust: exact;
   }
 
+  /* ================== NUEVO: panel-tabset en el PDF ================== */
+  /* Mostrar TODOS los paneles, no solo el activo */
+  .panel-tabset .tab-content > .tab-pane {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .panel-tabset .tab-content > .tab-pane:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  /* Ocultar la barra de pestañas (no tiene sentido sin interacción) */
+  .panel-tabset > .nav-tabs,
+  .panel-tabset > .nav,
+  .panel-tabset .nav-tabs {
+    display: none !important;
+  }
+
+  /* Mostrar el primer h3 dentro de cada panel como título de la variable.
+     En pantalla está oculto; al imprimir aparece. */
+  .panel-tabset .tab-pane > h3:first-child {
+    display: block !important;
+    font-family: var(--font-serif);
+    font-size: 15pt;
+    color: #14304d !important;
+    margin: 0 0 0.7em 0;
+    padding-bottom: 0.3em;
+    border-bottom: 2px solid var(--color-accent);
+    page-break-after: avoid;
+  }
+
   @page {
     margin: 1.8cm 1.6cm;
   }
+}
+
+/* El primer h3 de cada panel solo sirve para el PDF: en pantalla se oculta */
+.panel-tabset .tab-pane > h3:first-child {
+  display: none;
 }
