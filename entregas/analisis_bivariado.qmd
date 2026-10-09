@@ -38,8 +38,6 @@ library(knitr)
 Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables se optó por agrupar las categorías con frecuencias relativas menores o iguales al 1%. En caso de que ninguna de las categorías alcance el umbral, se hará la descripción sobre las 10 categorías más frecuentes.
 
 
-
-::: {.panel-tabset}
 ## Type
 **Especie**
 
@@ -439,4 +437,9 @@ extraer_nombre <- function(expr) {
 #   analisis_bivar_cuali_vs_cuali(datos[[v]], alta_cardinalidad = v %in% VARS_ALTA,
 #                                 nombre = v)$estadisticos
 # }) |> dplyr::bind_rows()
-:::
+```
+
+
+```{r}
+ analisis_bivar_cuali_vs_cuali(datos$Gender)
+```
