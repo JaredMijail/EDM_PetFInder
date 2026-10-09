@@ -209,6 +209,30 @@ texto_cc <- function(x, y, nombre_x) {
   )
 }
 
+# Variables cualitativas a cruzar con AdoptionSpeed (respuesta)
+VARS_CC <- c("Type", "Gender", "MaturitySize", "FurLength", "Vaccinated", "Dewormed",
+             "Sterilized", "Health", "Color1", "Color2", "Color3",
+             "Breed1", "Breed2", "State", "Name", "RescuerID")
+
+ETIQ_CC <- c(
+  Type         = "Especie",
+  Gender       = "Sexo",
+  MaturitySize = "Tamaño",
+  FurLength    = "Longitud del pelo",
+  Vaccinated   = "Vacunado",
+  Dewormed     = "Desparasitado",
+  Sterilized   = "Esterilizado",
+  Health       = "Estado de salud",
+  Color1       = "Color principal",
+  Color2       = "Segundo color",
+  Color3       = "Tercer color",
+  Breed1       = "Raza principal",
+  Breed2       = "Segunda raza",
+  State        = "Estado o territorio",
+  Name         = "Nombre del animal",
+  RescuerID    = "Identificador del rescatista"
+)
+
 # ============================================================================
 # Análisis de asociación entre una variable cualitativa y AdoptionSpeed
 # ----------------------------------------------------------------------------
@@ -318,6 +342,6 @@ analizar_cc <- function(datos,
 **Especie**
 
 ```{r}
-analizar_cc(datos = datos, variable = 'Type', etiq = 'Especie')
+analizar_cc(datos, datos$Type)
 ```
 :::
