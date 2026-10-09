@@ -457,14 +457,133 @@ extraer_nombre <- function(expr) {
 
 
 ::: {.panel-tabset}
-## Type
+
+## `Type`
+
 ```{r}
+#| label: bivar-type
 #| results: asis
- analisis_bivar_cuali_vs_cuali(datos$Gender)
+analisis_bivar_cuali_vs_cuali(datos$Type)
 ```
 
-## Gender
+## `Gender`
+
+```{r}
+#| label: bivar-gender
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Gender)
+```
+
+## `MaturitySize`
+
+```{r}
+#| label: bivar-maturitysize
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$MaturitySize)
+```
+
+## `FurLength`
+
+```{r}
+#| label: bivar-furlength
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$FurLength)
+```
+
+## `Vaccinated`
+
+```{r}
+#| label: bivar-vaccinated
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Vaccinated)
+```
+
+## `Dewormed`
+
+```{r}
+#| label: bivar-dewormed
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Dewormed)
+```
+
+## `Sterilized`
+
+```{r}
+#| label: bivar-sterilized
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Sterilized)
+```
+
+## `Health`
+
+```{r}
+#| label: bivar-health
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Health)
+```
+
+## `Color1`
+
+```{r}
+#| label: bivar-color1
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Color1)
+```
+
+## `Color2`
+
+```{r}
+#| label: bivar-color2
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Color2)
+```
+
+## `Color3`
+
+```{r}
+#| label: bivar-color3
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Color3)
+```
+
+## `Breed1`
+
+```{r}
+#| label: bivar-breed1
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
+```
+
+## `Breed2`
+
+```{r}
+#| label: bivar-breed2
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Breed2, alta_cardinalidad = TRUE)
+```
+
+## `State`
+
+```{r}
+#| label: bivar-state
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$State, alta_cardinalidad = TRUE)
+```
+
+## `Name`
+
+```{r}
+#| label: bivar-name
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Name, alta_cardinalidad = TRUE)
+```
+
+## `RescuerID`
+
+```{r}
+#| label: bivar-rescuerid
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
+```
 
 :::
-
-
