@@ -70,7 +70,7 @@ ETIQUETAS <- c(
   total_colors = 'Total de colores detectados',
   desc_char_len = 'Longitud de la descripción en caracteres',
   desc_word_count = 'Longitud de la descripción en palabras',
-  AdoptionSpeed = 'Velocidad de adopción
+  AdoptionSpeed = 'Velocidad de adopción'
 )
 
 
