@@ -1,0 +1,954 @@
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#| label: setup-comun
+#| echo: false
+#| include: false
+# Carga y traducción de las categorías del conjunto de datos
+source(here::here("_setup.R"))
+#
+#
+#
+# Librerías utilizadas en esta sección
+library(ggplot2)
+library(dplyr)
+library(tibble)
+library(forcats)
+library(knitr)
+library(plotly)
+library(FactoClass)
+
+# ---------------------------------------------------------------------
+# 1. Constantes del proyecto
+# ---------------------------------------------------------------------
+ETIQUETA_OTRAS <- "Otras"
+
+# Traducciones de los nombres de las variables
+ETIQUETAS <- c(
+  Type         = "Especie",
+  Gender       = "Género",
+  MaturitySize = "Tamaño",
+  FurLength    = "Longitud del pelo",
+  Vaccinated   = "Vacunado",
+  Dewormed     = "Desparasitado",
+  Sterilized   = "Esterilizado",
+  Health       = "Estado de salud",
+  Color1       = "Color principal",
+  Color2       = "Segundo color",
+  Color3       = "Tercer color",
+  Breed1       = "Raza principal",
+  Breed2       = "Segunda raza",
+  State        = "Estado o territorio",
+  Name         = "Nombre del animal",
+  RescuerID    = "Identificador del rescatista",
+  Age = 'Edad',
+  Quantity = 'Cantidad de animales en el anuncio',
+  Fee = 'Tarifa de adopción',
+  VideoAmt = 'Cantidad de videos',
+  PhotoAmt = 'Cantidad de fotos',
+  sentiment_score = 'Puntaje de sentimiento',
+  sentiment_magnitude = 'Magnitud de sentimiento',
+  total_labes = 'Total de etiquetas',
+  total_faces = 'Total de rostros detectados',
+  total_colors = 'Total de colores detectados',
+  desc_char_len = 'Longitud de la descripción en caracteres',
+  desc_word_count = 'Longitud de la descripción en palabras',
+  AdoptionSpeed = 'Velocidad de adopción'
+)
+
+
+# Paleta de la variable respuesta (los nombres deben coincidir con los
+# niveles de AdoptionSpeed)
+pal_clases <- c(
+  "Mismo día"    = "#0f766e",
+  "1–7 días"     = "#2e7d9a",
+  "8–30 días"    = "#1a3a5c",
+  "31–90 días"   = "#d97706",
+  "Sin adopción" = "#dc2626"
+)
+
+pal_clases2 <- unname(colorRampPalette(pal_clases, space = "Lab")(11))
+#
+#
+#
+#
+#
+#
+#
+# =====================================================================
+# Análisis bivariado cualitativa vs. cualitativa frente a AdoptionSpeed
+# =====================================================================
+# Uso:
+#   analisis_bivar_cuali_vs_cuali(datos$Gender)
+#   analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
+#
+# Requiere: ggplot2, dplyr, tibble, forcats, knitr (R >= 4.1 por el uso de |>).
+# Requiere en el entorno global: `datos` (con la columna AdoptionSpeed como factor).
+
+# ---------------------------------------------------------------------
+# 2. Utilidades de formato (coma decimal, punto de miles)
+# ---------------------------------------------------------------------
+fmt <- function(x, d = 2) {
+  unname(formatC(x, format = "f", digits = d, decimal.mark = ","))
+}
+
+ent <- function(x) {
+  unname(formatC(round(x), format = "d", big.mark = ".", decimal.mark = ","))
+}
+
+pct <- function(x, d = 1) paste0(fmt(x, d), " %")
+
+# p-valor legible: "p < 0,001" cuando es muy pequeño
+pval <- function(p) {
+  ifelse(is.na(p), "—",
+         ifelse(p < 0.001, "p < 0,001", sprintf("p = %s", fmt(p, 3))))
+}
+
+envolver <- function(s, ancho = 80) paste(strwrap(s, ancho), collapse = "\n")
+
+# Tema de los gráficos
+tema_u <- function(base_size = 11) {
+  theme_minimal(base_size = base_size) +
+    theme(plot.title          = element_text(face = "bold", size = base_size + 1),
+          plot.title.position = "plot",
+          panel.grid.minor    = element_blank(),
+          panel.grid.major.y  = element_blank())
+}
+
+# Altura de la figura (pulgadas) según el número de categorías
+alto_figura <- function(k, base, por_categoria = 0.30, minimo = 3.5, maximo = 14) {
+  min(max(base + por_categoria * k, minimo), maximo)
+}
+
+# Guarda el gráfico con la altura calculada y lo inserta en el documento
+mostrar_figura <- function(p, alto, ancho = 8, id, dir = "figuras_bivar", alt = "") {
+  dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+  ruta <- file.path(dir, paste0(id, ".png"))
+  ggplot2::ggsave(ruta, plot = p, width = ancho, height = alto, dpi = 150)
+  cat(sprintf("\n\n![%s](%s)\n\n", alt, ruta))
+}
+
+# ---------------------------------------------------------------------
+# 3. Agrupación de categorías minoritarias
+# ---------------------------------------------------------------------
+# Agrupa en 'Otras' las categorías con menos de prop_min de los casos; si
+# ninguna alcanza ese umbral, conserva las max_niveles más frecuentes y
+# agrupa el resto.
+agrupar_niveles <- function(f, prop_min = 0.01, max_niveles = 10,
+                            etiqueta = "Otras") {
+  f <- factor(f)
+  if (nlevels(f) <= max_niveles) return(f)
+
+  mf    <- table(f)
+  n     <- sum(mf)
+  n_min <- prop_min * n
+
+  if (all(mf >= n_min)) return(f)
+
+  if (!any(mf >= n_min)) {
+    top   <- names(sort(mf, decreasing = TRUE))[seq_len(max_niveles)]
+    nuevo <- as.character(f)
+    nuevo[!is.na(nuevo) & !(nuevo %in% top)] <- etiqueta
+    return(factor(nuevo, levels = c(top, etiqueta)))
+  }
+
+  orden <- names(sort(mf))
+  k <- max(sum(mf < n_min), 2)
+  while (k < length(orden) - 1 && sum(mf[orden[seq_len(k)]]) < n_min) {
+    k <- k + 1
+  }
+  raras <- orden[seq_len(k)]
+
+  nuevo <- as.character(f)
+  nuevo[!is.na(nuevo) & nuevo %in% raras] <- etiqueta
+
+  mantener <- setdiff(names(sort(mf, decreasing = TRUE)), raras)
+  factor(nuevo, levels = c(mantener, etiqueta))
+}
+
+# ---------------------------------------------------------------------
+# 4. Medidas de asociación
+# ---------------------------------------------------------------------
+# V de Cramér con corrección de sesgo (Bergsma, 2013)
+cramers_v <- function(tab) {
+  r <- nrow(tab); c <- ncol(tab); n <- sum(tab)
+  if (min(r, c) < 2 || n < 2) return(NA_real_)
+  chi <- suppressWarnings(stats::chisq.test(tab)$statistic)
+  m   <- min(r - 1, c - 1)
+  v   <- sqrt(max(0, chi / n - (r - 1) * (c - 1) / (n - 1)) /
+                (m - m^2 / (n - 1)))
+  unname(v)
+}
+
+fuerza_v <- function(v) {
+  dplyr::case_when(
+    is.na(v)  ~ "no estimable",
+    v < 0.10  ~ "despreciable",
+    v < 0.20  ~ "débil",
+    v < 0.40  ~ "moderada",
+    TRUE      ~ "fuerte"
+  )
+}
+
+# Calcula una sola vez todo lo que necesitan las tablas, los gráficos y el texto
+estadisticos_cc <- function(tab) {
+  chi <- suppressWarnings(stats::chisq.test(tab))
+  list(
+    chi       = chi,
+    esperados = chi$expected,
+    residuos  = chi$residuals,            # residuos de Pearson: (O - E) / sqrt(E)
+    perfil    = prop.table(tab, 1) * 100, # perfil fila, en %
+    v         = cramers_v(tab)
+  )
+}
+
+# ---------------------------------------------------------------------
+# 5. Tablas (devuelven objetos kable; no imprimen)
+# ---------------------------------------------------------------------
+tabla_decision_cc <- function(tab, st, agrupada) {
+  tratamiento <- paste0(
+    "Barras apiladas al 100 % (perfil fila) y mapa de residuos de Pearson",
+    if (agrupada) paste0("; minoritarias agrupadas en «", ETIQUETA_OTRAS, "»") else ""
+  )
+  tibble::tibble(
+    `Elemento de decisión` = c(
+      "Casos completos del par (n)",
+      if (agrupada) "Categorías de la variable (tras agrupar)" else "Categorías de la variable",
+      "Categorías de AdoptionSpeed",
+      "Categoría más pequeña (frecuencia mínima)",
+      "Esperados < 5 en la tabla (%)",
+      "p-valor de la prueba χ²",
+      "Tratamiento elegido"),
+    Valor = c(
+      ent(sum(tab)),
+      ent(nrow(tab)),
+      ent(ncol(tab)),
+      ent(min(rowSums(tab))),
+      pct(100 * mean(st$esperados < 5)),
+      pval(st$chi$p.value),
+      tratamiento)
+  ) |>
+    knitr::kable(align = c("l", "l"), format = "html")
+}
+
+tabla_contingencia_cc <- function(tab, nombre_x) {
+  knitr::kable(
+    tab,
+    caption = sprintf("Tabla de contingencia: %s × velocidad de adopción", nombre_x),
+    format  = "html"
+  )
+}
+
+tabla_estadisticos_cc <- function(st) {
+  tibble::tibble(
+    Medida = c("χ² de independencia", "gl", "p-valor",
+               "V de Cramér (corregida)", "Intensidad"),
+    Valor  = c(fmt(st$chi$statistic, 2), ent(st$chi$parameter),
+               pval(st$chi$p.value), fmt(st$v, 3), fuerza_v(st$v))
+  ) |>
+    knitr::kable(align = c("l", "r"), format = "html")
+}
+
+# ---------------------------------------------------------------------
+# 6. Gráficos (devuelven objetos ggplot; no imprimen)
+# ---------------------------------------------------------------------
+# Barras apiladas al 100 % (perfil fila)
+grafico_perfil_cc <- function(x, y, nombre_x, paleta) {
+  d <- tibble::tibble(cat = x, resp = y) |>
+    dplyr::count(cat, resp) |>
+    dplyr::group_by(cat) |>
+    dplyr::mutate(pct = 100 * n / sum(n), total = sum(n)) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(cat = forcats::fct_reorder(cat, total))
+
+  ggplot(d, aes(x = pct, y = cat, fill = resp)) +
+    geom_col(width = 0.72) +
+    geom_text(aes(label = ifelse(pct >= 7, sprintf("%.0f %%", pct), "")),
+              position = position_stack(vjust = 0.5), size = 3, colour = "white") +
+    scale_fill_manual(values = paleta, name = NULL) +
+    scale_x_continuous(expand = expansion(mult = c(0, 0.01))) +
+    labs(title    = envolver(sprintf(
+           "Distribución de la velocidad de adopción dentro de cada categoría de %s",
+           nombre_x)),
+         subtitle = "Cada barra suma 100 %; las etiquetas muestran los porcentajes ≥ 7 %",
+         x = "Porcentaje de anuncios", y = NULL) +
+    tema_u() +
+    theme(legend.position = "bottom")
+}
+
+# Mapa de calor de residuos de Pearson
+grafico_residuos_cc <- function(tab, st, nombre_x) {
+  d_res <- as.data.frame(as.table(st$residuos))
+  names(d_res) <- c("cat", "resp", "residuo")
+  d_res$cat     <- factor(d_res$cat, levels = names(sort(rowSums(tab))))
+  d_res$col_txt <- ifelse(abs(d_res$residuo) > 4, "white", "#1f2937")
+
+  ggplot(d_res, aes(x = resp, y = cat, fill = residuo)) +
+    geom_tile(colour = "white", linewidth = 0.5) +
+    geom_text(aes(label = gsub("\\.", ",", sprintf("%.1f", residuo)), colour = col_txt),
+              size = 3) +
+    scale_colour_identity() +
+    scale_fill_gradient2(low = "#1a3a5c", mid = "#f8fafc", high = "#dc2626",
+                         midpoint = 0, name = "Residuo de\nPearson") +
+    labs(title    = envolver(sprintf(
+           "Mapa de residuos de Pearson: %s × velocidad de adopción", nombre_x)),
+         subtitle = "Rojo: más casos que los esperados bajo independencia; azul: menos",
+         x = NULL, y = NULL) +
+    tema_u() +
+    theme(axis.text.x = element_text(angle = 25, hjust = 1),
+          legend.position = "right")
+}
+
+# ---------------------------------------------------------------------
+# 7. Párrafo interpretativo (cifras calculadas, no transcritas)
+# ---------------------------------------------------------------------
+texto_cc <- function(tab, st, nombre_x, agrupada) {
+  res <- st$residuos
+  idx <- which(abs(res) == max(abs(res)), arr.ind = TRUE)[1, ]
+  celda_max <- sprintf("«%s × %s»", rownames(tab)[idx[1]], colnames(tab)[idx[2]])
+  res_max   <- res[idx[1], idx[2]]
+
+  i_cat <- which.max(apply(st$perfil, 1, function(r) max(r) - min(r)))
+
+  lectura <- if (st$v < 0.1) {
+    "la variable apenas se asocia con la velocidad de adopción; no es prioritaria para el modelamiento"
+  } else if (st$v < 0.2) {
+    "la asociación existe pero es débil; puede aportar en interacción con otras variables"
+  } else {
+    "es de las variables que más discriminan la velocidad de adopción; prioritaria para el modelamiento"
+  }
+
+  paste0(
+    "La tabla cruza ", nombre_x, " (", ent(nrow(tab)), " categorías",
+    if (agrupada) ", tras agrupar las minoritarias" else "",
+    ") con la velocidad de adopción sobre ", ent(sum(tab)), " anuncios. ",
+    "La prueba χ² de independencia arroja χ²(", ent(st$chi$parameter), ") = ",
+    fmt(st$chi$statistic, 1), " (", pval(st$chi$p.value), "), y la V de Cramér ",
+    "corregida es ", fmt(st$v, 3), ", una asociación ", fuerza_v(st$v), ". ",
+    "La celda que más se aparta de la independencia es ", celda_max,
+    " (residuo de Pearson = ", fmt(res_max, 1), "), es decir, ",
+    if (res_max > 0) "hay más" else "hay menos",
+    " casos de los esperados si ambas variables fueran independientes. ",
+    "La categoría con el perfil más desigual es «", rownames(tab)[i_cat],
+    "»: en ella la proporción de adopción va de ", pct(min(st$perfil[i_cat, ])),
+    " a ", pct(max(st$perfil[i_cat, ])), " según la clase. ",
+    "Lectura: ", lectura, "."
+  )
+}
+
+# ---------------------------------------------------------------------
+# 8. Función principal
+# ---------------------------------------------------------------------
+# x                 : vector de la variable cualitativa (p. ej. datos$Gender)
+# alta_cardinalidad : TRUE aplica agrupar_niveles() antes del análisis
+# y                 : variable respuesta (por defecto datos$AdoptionSpeed, factor)
+# nombre            : nombre original de la variable; solo hace falta cuando x no
+#                     llega como datos$variable (p. ej. datos[[v]] dentro de un bucle)
+# traducciones      : vector con nombres = variable original, valores = traducción
+# paleta            : colores de los niveles de la variable respuesta
+# encabezado        : imprime un título "####" antes de los resultados (para Quarto/Rmd)
+#
+# Se calcula todo primero y se imprime al final, en este orden: tabla de
+# decisión, tabla de contingencia, gráfico de perfil, gráfico de residuos,
+# tabla de estadísticos e interpretación. Devuelve invisiblemente una lista
+# con las mismas piezas.
+analisis_bivar_cuali_vs_cuali <- function(x,
+                                          alta_cardinalidad = FALSE,
+                                          y            = datos$AdoptionSpeed,
+                                          nombre       = NULL,
+                                          traducciones = ETIQUETAS,
+                                          paleta       = pal_clases,
+                                          encabezado   = TRUE) {
+
+  # --- Nombre (original y traducido) de la variable ---
+  nombre_var <- if (is.null(nombre)) extraer_nombre(deparse(substitute(x))) else nombre
+  nombre_x   <- if (nombre_var %in% names(traducciones)) {
+    unname(traducciones[[nombre_var]])
+  } else {
+    nombre_var
+  }
+
+  # --- Validaciones ---
+  stopifnot(is.logical(alta_cardinalidad), length(alta_cardinalidad) == 1,
+            length(x) == length(y))
+
+  # --- Preparación de los datos ---
+  x <- if (alta_cardinalidad) {
+    agrupar_niveles(x, prop_min = 0.01, etiqueta = ETIQUETA_OTRAS)
+  } else {
+    factor(x)
+  }
+  agrupada <- alta_cardinalidad && ETIQUETA_OTRAS %in% levels(x)
+
+  ok <- stats::complete.cases(x, y)
+  x  <- droplevels(factor(x[ok]))
+  y  <- droplevels(factor(y[ok]))
+
+  if (nlevels(x) < 2 || nlevels(y) < 2) {
+    stop(sprintf("«%s» o AdoptionSpeed tienen menos de 2 categorías con casos completos.",
+                 nombre_x))
+  }
+  if (!all(levels(y) %in% names(paleta))) {
+    stop("Los niveles de AdoptionSpeed no coinciden con los nombres de `paleta`.")
+  }
+
+  tab <- table(x, y)
+  st  <- estadisticos_cc(tab)
+
+  # --- Construcción de todas las salidas (sin imprimir) ---
+  tablas <- list(
+    decision     = tabla_decision_cc(tab, st, agrupada),
+    contingencia = tabla_contingencia_cc(tab, nombre_x),
+    estadisticos = tabla_estadisticos_cc(st)
+  )
+  graficos <- list(
+    perfil   = grafico_perfil_cc(x, y, nombre_x, paleta),
+    residuos = grafico_residuos_cc(tab, st, nombre_x)
+  )
+  texto <- texto_cc(tab, st, nombre_x, agrupada)
+
+  resumen <- tibble::tibble(
+    Variable = nombre_x, n = sum(tab),
+    Chi2 = unname(st$chi$statistic), gl = unname(st$chi$parameter),
+    p = st$chi$p.value, V = st$v
+  )
+
+  # --- Impresión final ---
+  if (encabezado) cat(sprintf("\n\n**%s**\n\n", nombre_x))
+  print(tablas$decision)
+  print(tablas$contingencia)
+  k  <- nlevels(x)
+  id <- gsub("[^A-Za-z0-9_]", "_", nombre_var)
+  mostrar_figura(graficos$perfil, alto_figura(k, base = 2.4),
+               id  = paste0(id, "_perfil"),
+               alt = sprintf("Perfil fila de la velocidad de adopción por %s", nombre_x))
+  mostrar_figura(graficos$residuos, alto_figura(k, base = 2.2),
+               id  = paste0(id, "_residuos"),
+               alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
+  print(tablas$estadisticos)
+  cat("\n\n**Interpretación.** ", texto, "\n\n", sep = "")
+
+  invisible(list(estadisticos = resumen, tablas = tablas,
+                 graficos = graficos, texto = texto))
+}
+
+# Recupera el nombre de la columna a partir de la expresión pasada (datos$Var)
+extraer_nombre <- function(expr) {
+  expr <- paste(expr, collapse = "")
+  nm <- sub("^.*\\$", "", expr)
+  nm <- sub("^.*\\[\\[\"(.*)\"\\]\\]$", "\\1", nm)
+  gsub("`", "", nm)
+}
+
+# ---------------------------------------------------------------------
+# Ejemplo de uso en bucle (chunk con results = 'asis'), con tabla resumen
+# ---------------------------------------------------------------------
+# VARS_CC   <- c("Type", "Gender", "MaturitySize", "FurLength", "Vaccinated",
+#                "Dewormed", "Sterilized", "Health", "Color1", "Color2", "Color3",
+#                "Breed1", "Breed2", "State", "Name", "RescuerID")
+# VARS_ALTA <- c("Breed1", "Breed2", "State", "Name", "RescuerID")
+#
+# res_cc <- lapply(VARS_CC, function(v) {
+#   analisis_bivar_cuali_vs_cuali(datos[[v]], alta_cardinalidad = v %in% VARS_ALTA,
+#                                 nombre = v)$estadisticos
+# }) |> dplyr::bind_rows()
+#
+#
+#
+#
+#
+#
+#
+#
+#| label: bivar-type
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Type)
+#
+#
+#
+#
+#
+#| label: bivar-gender
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Gender)
+#
+#
+#
+#
+#
+#| label: bivar-maturitysize
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$MaturitySize)
+#
+#
+#
+#
+#
+#| label: bivar-furlength
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$FurLength)
+#
+#
+#
+#
+#
+#| label: bivar-vaccinated
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Vaccinated)
+#
+#
+#
+#
+#
+#| label: bivar-dewormed
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Dewormed)
+#
+#
+#
+#
+#
+#| label: bivar-sterilized
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Sterilized)
+#
+#
+#
+#
+#
+#| label: bivar-health
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Health)
+#
+#
+#
+#
+#
+#| label: bivar-color1
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Color1)
+#
+#
+#
+#
+#
+#| label: bivar-color2
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Color2)
+#
+#
+#
+#
+#
+#| label: bivar-color3
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Color3)
+#
+#
+#
+#
+#
+#| label: bivar-breed1
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
+#
+#
+#
+#
+#
+#| label: bivar-breed2
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Breed2, alta_cardinalidad = TRUE)
+#
+#
+#
+#
+#
+#| label: bivar-state
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$State, alta_cardinalidad = TRUE)
+#
+#
+#
+#
+#
+#| label: bivar-name
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$Name, alta_cardinalidad = TRUE)
+#
+#
+#
+#
+#
+#| label: bivar-rescuerid
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
+```
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti <- function(variable,
+                                           datos,
+                                           cualitativa = "AdoptionSpeed",
+                                           paleta = pal_clases) {
+
+  if (!variable %in% names(datos))
+    stop("La variable '", variable, "' no está en los datos.")
+  if (!cualitativa %in% names(datos))
+    stop("La variable cualitativa '", cualitativa, "' no está en los datos.")
+
+  lab_x <- if (variable %in% names(ETIQUETAS)) ETIQUETAS[[variable]] else variable
+  lab_f <- if (cualitativa %in% names(ETIQUETAS)) ETIQUETAS[[cualitativa]] else cualitativa
+
+  f0 <- as.factor(datos[[cualitativa]])
+  ok <- complete.cases(datos[[variable]], f0)
+  x  <- datos[[variable]][ok]
+  f  <- droplevels(f0[ok])
+  df <- data.frame(x = x, f = f)
+
+  niv <- levels(f)
+  if (!all(niv %in% names(paleta)))
+    stop("Los niveles de '", cualitativa, "' no coinciden con los nombres de la paleta: ",
+         paste(setdiff(niv, names(paleta)), collapse = ", "))
+
+  # Diagrama de cajas
+  f_med <- reorder(f, x, median)
+  df$f_med <- f_med
+  fig1 <- plot_ly(df, x = ~x, y = ~f_med, color = ~f_med,
+                  colors = paleta[levels(f_med)],
+                  type = "box", orientation = "h",
+                  boxpoints = TRUE) %>%
+    layout(title = list(text = paste0("Diagrama de cajas de ", lab_x,
+                                      " según ", lab_f)),
+           xaxis = list(title = lab_x),
+           yaxis = list(title = paste0(lab_f, " (ordenada por mediana)")),
+           showlegend = FALSE)
+
+  # Diagrama de violín
+  f_mean <- reorder(f, x, mean)
+  df$f_mean <- f_mean
+  fig2 <- plot_ly(df, x = ~x, y = ~f_mean, color = ~f_mean,
+                  colors = paleta[levels(f_mean)],
+                  type = "violin", orientation = "h",
+                  points = "all", pointpos = 0,
+                  meanline = list(visible = TRUE, color = "black")) %>%
+    layout(title = list(text = paste0("Diagrama de violín de ", lab_x,
+                                      " según ", lab_f)),
+           xaxis = list(title = lab_x),
+           yaxis = list(title = paste0(lab_f, " (ordenada por media)")),
+           showlegend = FALSE)
+
+  # Razón de correlación
+  X    <- data.frame(x = x) |> setNames(variable)
+  corr <- centroids(X, f)$cr * 100
+
+  corr_html <- htmltools::tagList(
+    htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
+                              " con ", lab_f)),
+    htmltools::tags$pre(
+      paste(capture.output(print(corr)), collapse = "\n")
+    )
+  )
+
+  htmltools::tagList(fig1, fig2, corr_html)
+}
+#
+#
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('Age', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('Quantity', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('Fee', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('VideoAmt', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('PhotoAmt', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('sentiment_score', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('sentiment_magnitude', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('total_labels', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('total_faces', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('total_colors', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('desc_char_len', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuali_vs_cuanti('desc_word_count', datos = datos)
+```
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali <- function(variable,
+                                           datos,
+                                           cuantitativa = "sentiment_score",
+                                           paleta = pal_clases2,
+                                           prop_min = 0.01,
+                                           max_niveles = 10,
+                                           etiqueta_otras = ETIQUETA_OTRAS) {
+
+  if (!cuantitativa %in% names(datos))
+    stop("La variable cuantitativa '", cuantitativa, "' no está en los datos.")
+  if (!variable %in% names(datos))
+    stop("La variable cualitativa '", variable, "' no está en los datos.")
+
+  lab_x <- if (cuantitativa %in% names(ETIQUETAS)) ETIQUETAS[[cuantitativa]] else cuantitativa
+  lab_f <- if (variable %in% names(ETIQUETAS)) ETIQUETAS[[variable]] else variable
+
+  f0 <- as.factor(datos[[variable]])
+  ok <- complete.cases(datos[[cuantitativa]], f0)
+  x  <- datos[[cuantitativa]][ok]
+  f  <- droplevels(f0[ok])
+  K  <- nlevels(f)
+
+  # Agrupación de niveles raros (no elimina filas, solo reetiqueta)
+  f_g <- agrupar_niveles(f, prop_min = prop_min, max_niveles = max_niveles,
+                         etiqueta = etiqueta_otras)
+  agrupado <- !setequal(levels(f_g), levels(f))
+  nota <- if (agrupado)
+    paste0(" [", K, " niveles agrupados en ", nlevels(f_g), "]") else ""
+
+  # Razón de correlación: con todos los niveles y, si aplica, con los agrupados
+  X      <- data.frame(x = x) |> setNames(cuantitativa)
+  corr   <- centroids(X, f)$cr * 100
+  corr_g <- if (agrupado) centroids(X, f_g)$cr * 100 else NULL
+
+  # Paleta: la dada si cubre todos los niveles; si no, una generada,
+  # con color propio para la categoría agrupada
+  df  <- data.frame(x = x, f = f_g)
+  niv <- levels(f_g)
+  
+  # Un color por nivel, tomado a intervalos regulares del degradé
+  pal <- setNames(
+  paleta[round(seq(1, length(paleta), length.out = length(niv)))],
+  niv
+
+  # Diagrama de cajas
+  f_med <- reorder(f_g, x, median)
+  df$f_med <- f_med
+  fig1 <- plot_ly(df, x = ~x, y = ~f_med, color = ~f_med,
+                  colors = pal[levels(f_med)],
+                  type = "box", orientation = "h",
+                  boxpoints = "outliers") %>%
+    layout(title = list(text = paste0("Diagrama de cajas de ", lab_x,
+                                      " según ", lab_f)),
+           xaxis = list(title = lab_x),
+           yaxis = list(title = paste0(lab_f, " (ordenada por mediana)", nota)),
+           showlegend = FALSE)
+
+  # Diagrama de violín
+  f_mean <- reorder(f_g, x, mean)
+  df$f_mean <- f_mean
+  fig2 <- plot_ly(df, x = ~x, y = ~f_mean, color = ~f_mean,
+                  colors = pal[levels(f_mean)],
+                  type = "violin", orientation = "h",
+                  points = "all", pointpos = 0,
+                  meanline = list(visible = TRUE, color = "black")) %>%
+    layout(title = list(text = paste0("Diagrama de violín de ", lab_x,
+                                      " según ", lab_f)),
+           xaxis = list(title = lab_x),
+           yaxis = list(title = paste0(lab_f, " (ordenada por media)", nota)),
+           showlegend = FALSE)
+
+  corr_html <- htmltools::tagList(
+    htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
+                              " con ", lab_f, " (", K, " niveles)")),
+    htmltools::tags$pre(
+      paste(capture.output(print(corr)), collapse = "\n")
+    ),
+    if (agrupado) htmltools::tagList(
+      htmltools::tags$h4(paste0("Razón de correlación (%) con niveles agrupados (",
+                                nlevels(f_g), " niveles)")),
+      htmltools::tags$pre(
+        paste(capture.output(print(corr_g)), collapse = "\n")
+      )
+    )
+  )
+
+  htmltools::tagList(fig1, fig2, corr_html)
+}
+#
+#
+#
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Type', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Name', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Breed1', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Breed2', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Gender', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Color1', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Color2', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Color3', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('MaturitySize', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('FurLength', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Vaccinated', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Dewormed', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Sterilized', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('Health', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('State', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('RescuerID', datos = datos)
+#
+#
+#
+#
+#
+analisis_bivar_cuanti_vs_cuali('AdoptionSpeed', datos = datos)
+#
+#
+#
+#
+#
+#
+#
+#
+#
