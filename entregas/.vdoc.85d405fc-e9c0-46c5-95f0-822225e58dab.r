@@ -1,31 +1,31 @@
----
-title: "Análisis Bivariado Diagnóstico"
-subtitle: "Análisis descriptivo bivariado de las variables del conjunto de datos PetFinder."
----
-
-::: autor-pdf-row
-::: autor-info
-**AUTORES**
-
-Jared Mijail Ramírez Escalante · María Paula Silva Capera
-:::
-
-<div class="action-bar">
-<button class="btn-print" onclick="window.print()">PDF</button>
-</div>
-:::
-
-En esta sección se presentan las posibles asociaciones entre pares de variables pertenecientes al conjunto de datos [PetFinder](dataset.qmd) enriquecido. Con fines de cumplir lo solicitado para esta primera entrega, se hacen dos conjuntos de contrastes principales. En primer lugar se toma como referencia la variable cualitativa `AdoptionSpeed` (velocidad de adopción) para contrastarla con el resto de variables cualitativas y cuantitativas del conjunto de datos [PetFinder](dataset.qmd) enriquecido. Posteriormente se realiza el mismo ejercicio tomando como referencia la variable cuantitativa `Age`.
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #| label: setup-comun
 #| echo: false
 #| include: false
 # Carga y traducción de las categorías del conjunto de datos
 source(here::here("_setup.R"))
-```
-
-```{r}
+#
+#
+#
 # Librerías utilizadas en esta sección
 library(ggplot2)
 library(dplyr)
@@ -86,13 +86,13 @@ pal_clases <- c(
 )
 
 pal_clases2 <- unname(colorRampPalette(pal_clases, space = "Lab")(11))
-```
-
-## `AdoptionSpeed` VS variables cualitativas
-Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables se optó por agrupar las categorías con frecuencias relativas menores o iguales al 1%. En caso de que ninguna de las categorías alcance el umbral, se hará la descripción sobre las 10 categorías más frecuentes.
-
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
 # =====================================================================
 # Análisis bivariado cualitativa vs. cualitativa frente a AdoptionSpeed
 # =====================================================================
@@ -470,143 +470,143 @@ extraer_nombre <- function(expr) {
 #   analisis_bivar_cuali_vs_cuali(datos[[v]], alta_cardinalidad = v %in% VARS_ALTA,
 #                                 nombre = v)$estadisticos
 # }) |> dplyr::bind_rows()
-```
-
-
-::: {.panel-tabset}
-
-## `Type`
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
 #| label: bivar-type
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Type)
-```
-
-## `Gender`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-gender
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Gender)
-```
-
-## `MaturitySize`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-maturitysize
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$MaturitySize)
-```
-
-## `FurLength`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-furlength
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$FurLength)
-```
-
-## `Vaccinated`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-vaccinated
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Vaccinated)
-```
-
-## `Dewormed`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-dewormed
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Dewormed)
-```
-
-## `Sterilized`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-sterilized
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Sterilized)
-```
-
-## `Health`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-health
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Health)
-```
-
-## `Color1`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-color1
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Color1)
-```
-
-## `Color2`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-color2
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Color2)
-```
-
-## `Color3`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-color3
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Color3)
-```
-
-## `Breed1`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-breed1
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
-```
-
-## `Breed2`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-breed2
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Breed2, alta_cardinalidad = TRUE)
-```
-
-## `State`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-state
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$State, alta_cardinalidad = TRUE)
-```
-
-## `Name`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-name
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Name, alta_cardinalidad = TRUE)
-```
-
-## `RescuerID`
-
-```{r}
+#
+#
+#
+#
+#
 #| label: bivar-rescuerid
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
 ```
-:::
-
-## `AdoptionSpeed` VS variables cuantitativas
-
-```{r}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti <- function(variable,
                                            datos,
                                            cualitativa = "AdoptionSpeed",
@@ -672,85 +672,85 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 
   htmltools::tagList(fig1, fig2, corr_html)
 }
-```
-
-
-::: {.panel-tabset}
-## Age
-**Edad**
-```{r bivar-age}
+#
+#
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('Age', datos = datos)
-```
-
-## Quantity
-**Cantidad de animales en el anuncio**
-```{r bivar-quantity}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('Quantity', datos = datos)
-```
-
-## Fee
-**Tarifa de adopción**
-```{r bivar-fee}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('Fee', datos = datos)
-```
-
-## VideoAmt
-**Cantidad de videos**
-```{r bivar-videoamt}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('VideoAmt', datos = datos)
-```
-
-## PhotoAmt
-**Cantidad de fotos**
-```{r bivar-photoamt}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('PhotoAmt', datos = datos)
-```
-
-## sentiment_score
-**Puntaje de sentimiento**
-```{r bivar-sentiment-score}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('sentiment_score', datos = datos)
-```
-
-## sentiment_magnitude
-**Magnitud de sentimiento**
-```{r bivar-sentiment-magnitude}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('sentiment_magnitude', datos = datos)
-```
-
-## total_labels
-**Total de etiquetas**
-```{r bivar-total-labels}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('total_labels', datos = datos)
-```
-
-## total_faces
-**Total de rostros detectados**
-```{r bivar-total-faces}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('total_faces', datos = datos)
-```
-
-## total_colors
-**Total de colores detectados**
-```{r bivar-total-colors}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('total_colors', datos = datos)
-```
-
-## desc_char_len
-**Longitud de la descripción en caracteres**
-```{r bivar-desc-char-len}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('desc_char_len', datos = datos)
-```
-
-## desc_word_count
-**Longitud de la descripción en palabras**
-```{r bivar-desc-word-count}
+#
+#
+#
+#
+#
 analisis_bivar_cuali_vs_cuanti('desc_word_count', datos = datos)
 ```
-:::
-
-## `sentiment_score` VS variables cualitativas
-```{r def-bivar-cuanti-vs-cuali}
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali <- function(variable,
                                            datos,
                                            cuantitativa = "sentiment_score",
@@ -841,117 +841,117 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
 
   htmltools::tagList(fig1, fig2, corr_html)
 }
-```
-
-
-::: {.panel-tabset}
-
-## Type
-**Especie**
-```{r sentiment-type}
+#
+#
+#
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Type', datos = datos)
-```
-
-## Name
-**Nombre del animal**
-```{r sentiment-name}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Name', datos = datos)
-```
-
-## Breed1
-**Raza principal**
-```{r sentiment-breed1}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Breed1', datos = datos)
-```
-
-## Breed2
-**Segunda raza**
-```{r sentiment-breed2}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Breed2', datos = datos)
-```
-
-## Gender
-**Género**
-```{r sentiment-gender}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Gender', datos = datos)
-```
-
-## Color1
-**Color principal**
-```{r sentiment-color1}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Color1', datos = datos)
-```
-
-## Color2
-**Segundo color**
-```{r sentiment-color2}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Color2', datos = datos)
-```
-
-## Color3
-**Tercer color**
-```{r sentiment-color3}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Color3', datos = datos)
-```
-
-## MaturitySize
-**Tamaño**
-```{r sentiment-maturitysize}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('MaturitySize', datos = datos)
-```
-
-## FurLength
-**Longitud del pelo**
-```{r sentiment-furlength}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('FurLength', datos = datos)
-```
-
-## Vaccinated
-**Vacunado**
-```{r sentiment-vaccinated}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Vaccinated', datos = datos)
-```
-
-## Dewormed
-**Desparasitado**
-```{r sentiment-dewormed}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Dewormed', datos = datos)
-```
-
-## Sterilized
-**Esterilizado**
-```{r sentiment-sterilized}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Sterilized', datos = datos)
-```
-
-## Health
-**Estado de salud**
-```{r sentiment-health}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('Health', datos = datos)
-```
-
-## State
-**Estado o territorio**
-```{r sentiment-state}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('State', datos = datos)
-```
-
-## RescuerID
-**Identificador del rescatista**
-```{r sentiment-rescuerid}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('RescuerID', datos = datos)
-```
-
-## AdoptionSpeed
-**Velocidad de adopción**
-```{r sentiment-adoptionspeed}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuali('AdoptionSpeed', datos = datos)
 ```
-:::
-
-## `sentiment_score` VS variables cuantitativas
-
-```{r}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti <- function(variable,
                                             datos,
                                             cuantitativa = "sentiment_score") {
@@ -1010,7 +1010,8 @@ analisis_bivar_cuanti_vs_cuanti <- function(variable,
            legend = list(orientation = "h", y = -0.2))
 
   # Coeficiente de correlación de Pearson
-  txt_pearson <- sprintf("Coeficiente de correlación de Pearson (r) = %.4f", r)
+  txt_pearson <- paste(
+    sprintf(r))
 
   # Coeficiente de determinación
   txt_r2 <- paste(
@@ -1023,14 +1024,15 @@ analisis_bivar_cuanti_vs_cuanti <- function(variable,
   rownames(coefs) <- c("(Intercepto)", lab_x)
   colnames(coefs) <- c("Estimación", "Error estándar", "Valor t", "Pr(>|t|)")
 
+  p_f <- pf(res$fstatistic[1], res$fstatistic[2], res$fstatistic[3],
+            lower.tail = FALSE)
+
   txt_reg <- paste(c(
     paste0("Modelo: ", lab_y, " = β0 + β1 · ", lab_x, " + ε"),
     paste0("Ajuste: ", ecuacion),
     "",
     capture.output(printCoefmat(coefs, digits = 4, signif.legend = TRUE)),
-    "",
-    sprintf("Error estándar residual: %.4f con %d grados de libertad",
-            res$sigma, as.integer(res$df[2]))
+    ""
   ), collapse = "\n")
 
   stats_html <- htmltools::tagList(
@@ -1047,73 +1049,75 @@ analisis_bivar_cuanti_vs_cuanti <- function(variable,
 
   htmltools::tagList(fig, stats_html)
 }
-```
-
-
-::: {.panel-tabset}
-## Age
-**Edad**
-```{r cuanti-cuanti-age}
+#
+#
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('Age', datos = datos)
-```
-
-## Quantity
-**Cantidad de animales en el anuncio**
-```{r cuanti-cuanti-quantity}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('Quantity', datos = datos)
-```
-
-## Fee
-**Tarifa de adopción**
-```{r cuanti-cuanti-fee}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('Fee', datos = datos)
-```
-
-## VideoAmt
-**Cantidad de videos**
-```{r cuanti-cuanti-videoamt}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('VideoAmt', datos = datos)
-```
-
-## PhotoAmt
-**Cantidad de fotos**
-```{r cuanti-cuanti-photoamt}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('PhotoAmt', datos = datos)
-```
-
-## sentiment_magnitude
-**Magnitud de sentimiento**
-```{r cuanti-cuanti-sentiment-magnitude}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('sentiment_magnitude', datos = datos)
-```
-
-## total_labels
-**Total de etiquetas**
-```{r cuanti-cuanti-total-labels}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('total_labels', datos = datos)
-```
-
-## total_faces
-**Total de rostros detectados**
-```{r cuanti-cuanti-total-faces}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('total_faces', datos = datos)
-```
-
-## total_colors
-**Total de colores detectados**
-```{r cuanti-cuanti-total-colors}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('total_colors', datos = datos)
-```
-
-## desc_char_len
-**Longitud de la descripción en caracteres**
-```{r cuanti-cuanti-desc-char-len}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('desc_char_len', datos = datos)
-```
-
-## desc_word_count
-**Longitud de la descripción en palabras**
-```{r cuanti-cuanti-desc-word-count}
+#
+#
+#
+#
+#
 analisis_bivar_cuanti_vs_cuanti('desc_word_count', datos = datos)
 ```
-:::
+#
+#
+#
