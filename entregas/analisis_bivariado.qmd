@@ -1064,9 +1064,74 @@ analisis_bivar_cuanti_vs_cuanti <- function(variable,
 }
 ```
 
-## Age
 
-```{r}
+::: {.panel-tabset}
+## Age
+**Edad**
+```{r cuanti-cuanti-age}
 analisis_bivar_cuanti_vs_cuanti('Age', datos = datos)
 ```
+
+## Quantity
+**Cantidad de animales en el anuncio**
+```{r cuanti-cuanti-quantity}
+analisis_bivar_cuanti_vs_cuanti('Quantity', datos = datos)
+```
+
+## Fee
+**Tarifa de adopción**
+```{r cuanti-cuanti-fee}
+analisis_bivar_cuanti_vs_cuanti('Fee', datos = datos)
+```
+
+## VideoAmt
+**Cantidad de videos**
+```{r cuanti-cuanti-videoamt}
+analisis_bivar_cuanti_vs_cuanti('VideoAmt', datos = datos)
+```
+
+## PhotoAmt
+**Cantidad de fotos**
+```{r cuanti-cuanti-photoamt}
+analisis_bivar_cuanti_vs_cuanti('PhotoAmt', datos = datos)
+```
+
+## sentiment_magnitude
+**Magnitud de sentimiento**
+```{r cuanti-cuanti-sentiment-magnitude}
+analisis_bivar_cuanti_vs_cuanti('sentiment_magnitude', datos = datos)
+```
+
+## total_labels
+**Total de etiquetas**
+```{r cuanti-cuanti-total-labels}
+analisis_bivar_cuanti_vs_cuanti('total_labels', datos = datos)
+```
+
+## total_faces
+**Total de rostros detectados**
+```{r cuanti-cuanti-total-faces}
+analisis_bivar_cuanti_vs_cuanti('total_faces', datos = datos)
+```
+
+## total_colors
+**Total de colores detectados**
+```{r cuanti-cuanti-total-colors}
+analisis_bivar_cuanti_vs_cuanti('total_colors', datos = datos)
+```
+
+## desc_char_len
+**Longitud de la descripción en caracteres**
+```{r cuanti-cuanti-desc-char-len}
+analisis_bivar_cuanti_vs_cuanti('desc_char_len', datos = datos)
+```
+
+## desc_word_count
+**Longitud de la descripción en palabras**
+```{r cuanti-cuanti-desc-word-count}
+analisis_bivar_cuanti_vs_cuanti('desc_word_count', datos = datos)
+```
+:::
+
+
 
