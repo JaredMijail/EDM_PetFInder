@@ -834,5 +834,5 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
 
 
 ```{r}
-analisis_bivar_cuanti_vs_cuali('Type')
+analisis_bivar_cuanti_vs_cuali('Type', datos = datos)
 ```
