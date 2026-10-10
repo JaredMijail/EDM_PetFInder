@@ -788,13 +788,11 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
   # con color propio para la categoría agrupada
   df  <- data.frame(x = x, f = f_g)
   niv <- levels(f_g)
-
-  if (all(niv %in% names(paleta))) {
-    # Un color por nivel, tomado a intervalos regulares del degradé
-    pal <- setNames(
-    paleta[round(seq(1, length(paleta), length.out = length(niv)))],
-    niv
-  )
+  
+  # Un color por nivel, tomado a intervalos regulares del degradé
+  pal <- setNames(
+  paleta[round(seq(1, length(paleta), length.out = length(niv)))],
+  niv
 
   # Diagrama de cajas
   f_med <- reorder(f_g, x, median)
