@@ -1400,7 +1400,7 @@ dimnames(mat) <- list(etiqueta(CUANTI), etiqueta(CUANTI))
 print(knitr::kable(round(mat, 2)))
 ```
 
-**Lectura del análisis cuanti-cuanti.** Tres hechos estructuran el resultado. Primero, las asociaciones de `Age` con las demás cuantitativas son todas **débiles o despreciables** (|ρ| ≤ `r fmt(max(abs(dplyr::bind_rows(res)$rho_Spearman)), 2)`): la edad no guarda relaciones lineales ni monótonas relevantes con el resto de señales del anuncio, así que su eventual efecto sobre la adopción no opera a través de ellas. Segundo, la matriz deja al descubierto **redundancias internas casi perfectas**: `PhotoAmt` con `total_colors` (ρ ≈ 1) y con `total_labels` (ρ ≈ 0,99), y `desc_char_len` con `desc_word_count` (ρ ≈ 0,99); en el modelamiento bastará una variable de cada par para no duplicar información. Tercero, `sentiment_magnitude` se asocia moderadamente con la longitud del relato (ρ ≈ 0,79–0,80), lo que confirma que la intensidad del sentimiento crece con la cantidad de texto y debe normalizarse si se usa.
+**Lectura del análisis cuanti-cuanti.** Tres hechos estructuran el resultado. Primero, las asociaciones de `Age` con las demás cuantitativas son todas **débiles o despreciables** (\|ρ\| ≤ `r fmt(max(abs(dplyr::bind_rows(res)$rho_Spearman)), 2)`): la edad no guarda relaciones lineales ni monótonas relevantes con el resto de señales del anuncio, así que su eventual efecto sobre la adopción no opera a través de ellas. Segundo, la matriz deja al descubierto **redundancias internas casi perfectas**: `PhotoAmt` con `total_colors` (ρ ≈ 1) y con `total_labels` (ρ ≈ 0,99), y `desc_char_len` con `desc_word_count` (ρ ≈ 0,99); en el modelamiento bastará una variable de cada par para no duplicar información. Tercero, `sentiment_magnitude` se asocia moderadamente con la longitud del relato (ρ ≈ 0,79–0,80), lo que confirma que la intensidad del sentimiento crece con la cantidad de texto y debe normalizarse si se usa.
 
 **Notas de lectura.**
 
@@ -1409,7 +1409,6 @@ print(knitr::kable(round(mat, 2)))
 3.  **Dirección de la regresión:** en todos los pares la respuesta es la *otra* variable (y) y el predictor es Age (x), según la variable de interés.
 4.  **Redundancia:** algunos pares entre las *otras* variables son casi colineales (`total_labels` ≈ `total_colors` ≈ `PhotoAmt`; `desc_char_len` ≈ `desc_word_count`), lo que la matriz final hace visible para el modelamiento.
 5.  **Causalidad:** son asociaciones descriptivas; el diseño es observacional.
-
 
 ### Bivariado 2 — cualitativa vs cuantitativas {.unnumbered}
 
@@ -1596,7 +1595,6 @@ bivariado <- function(cualitativa,
 }
 
 ```
-
 
 ### Bivariado 4 — cualitativa vs cualitativas {.unnumbered}
 
@@ -1941,5 +1939,5 @@ dplyr::bind_rows(res_cc) |>
 
 1.  **Agrupamiento:** las categorías con menos del 1 % de los anuncios se agrupan en «Otras» antes de cruzar; con celdas de esperado muy bajo la aproximación χ² deja de ser válida.
 2.  **V de Cramér corregida:** se usa la corrección de sesgo de Bergsma (2013), que es conservadora en tablas grandes; sin corrección, la V clásica infla ligeramente la asociación en variables de muchas categorías.
-3.  **Residuos de Pearson:** valores por encima de |2| marcan celdas que se apartan de la independencia; el mapa de calor los hace visibles de un vistazo.
+3.  **Residuos de Pearson:** valores por encima de \|2\| marcan celdas que se apartan de la independencia; el mapa de calor los hace visibles de un vistazo.
 4.  **Causalidad:** son asociaciones descriptivas sobre un diseño observacional; «sin adopción» significa no adoptado dentro de la ventana de 100 días de la competencia.
