@@ -754,6 +754,7 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
                                            datos,
                                            cuantitativa = "sentiment_score",
                                            prop_min = 0.01,
+                                           paleta = pal_clases2,
                                            max_niveles = 10,
                                            etiqueta_otras = ETIQUETA_OTRAS) {
 
