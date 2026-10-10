@@ -50,6 +50,8 @@ website:
             href: entregas/descripcion.qmd
           - text: "Análisis Univariado"
             href: entregas/analisis_univariado.qmd
+          - text: "Decisiones de recodificación"
+            href: entregas/decisiones_univariado.qmd
           - text: "Análisis Bivariado"
             href: entregas/analisis_bivariado.qmd
           - text: "Análisis exploratorio"
@@ -83,6 +85,7 @@ website:
         contents:
           - entregas/descripcion.qmd
           - entregas/analisis_univariado.qmd
+          - entregas/decisiones_univariado.qmd
           - entregas/analisis_bivariado.qmd
           - entregas/analisis-exploratorio.qmd
           - entregas/dataset.qmd
