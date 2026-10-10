@@ -748,20 +748,20 @@ analisis_bivar_cuali_vs_cuanti('desc_word_count', datos = datos)
 
 ## `sentiment_score` VS variables variables
 
-```{r}
+```{r def-bivar-cuanti-vs-cuali}
 analisis_bivar_cuanti_vs_cuali <- function(variable,
-                                              datos,
-                                              cuantitativa = "sentiment_score",
-                                              paleta = pal_clases,
-                                              max_niveles = 15) {
+                                           datos,
+                                           cuantitativa = "sentiment_score",
+                                           paleta = pal_clases,
+                                           max_niveles = 15) {
 
   if (!cuantitativa %in% names(datos))
     stop("La variable cuantitativa '", cuantitativa, "' no está en los datos.")
   if (!variable %in% names(datos))
-    stop("La variable variable '", variable, "' no está en los datos.")
+    stop("La variable cualitativa '", variable, "' no está en los datos.")
 
   lab_x <- if (cuantitativa %in% names(ETIQUETAS)) ETIQUETAS[[cuantitativa]] else cuantitativa
-  lab_f <- if (variable  %in% names(ETIQUETAS)) ETIQUETAS[[variable]]  else variable
+  lab_f <- if (variable %in% names(ETIQUETAS)) ETIQUETAS[[variable]] else variable
 
   f0 <- as.factor(datos[[variable]])
   ok <- complete.cases(datos[[cuantitativa]], f0)
@@ -786,12 +786,8 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
   df  <- data.frame(x = x, f = f)
   niv <- levels(f)
 
-  # La paleta solo se usa si cubre todos los niveles (p. ej. AdoptionSpeed)
-  if (all(niv %in% names(paleta))) {
-    pal <- paleta
-  } else {
-    pal <- setNames(hcl.colors(length(niv), "Dark 3"), niv)
-  }
+  pal <- if (all(niv %in% names(paleta))) paleta else
+    setNames(hcl.colors(length(niv), "Dark 3"), niv)
 
   # Diagrama de cajas
   f_med <- reorder(f, x, median)
@@ -831,7 +827,6 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
   htmltools::tagList(fig1, fig2, corr_html)
 }
 ```
-
 
 ```{r}
 analisis_bivar_cuanti_vs_cuali('Type', datos = datos)
