@@ -34,6 +34,7 @@ library(forcats)
 library(knitr)
 library(plotly)
 library(FactoClass)
+library(tidyverse)
 
 # ---------------------------------------------------------------------
 # 1. Constantes del proyecto
@@ -946,8 +947,126 @@ analisis_bivar_cuanti_vs_cuali('RescuerID', datos = datos)
 ```{r sentiment-adoptionspeed}
 analisis_bivar_cuanti_vs_cuali('AdoptionSpeed', datos = datos)
 ```
-
 :::
 
+## `sentiment_score` VS variables cuantitativas
 
+```{r}
+analisis_bivar_cuanti_vs_cuanti <- function(variable,
+                                            datos,
+                                            cuantitativa = "sentiment_score") {
+
+  if (!cuantitativa %in% names(datos))
+    stop("La variable cuantitativa '", cuantitativa, "' no está en los datos.")
+  if (!variable %in% names(datos))
+    stop("La variable '", variable, "' no está en los datos.")
+  if (variable == cuantitativa)
+    stop("'variable' debe ser distinta de '", cuantitativa, "'.")
+  if (!is.numeric(datos[[variable]]) || !is.numeric(datos[[cuantitativa]]))
+    stop("Ambas variables deben ser numéricas.")
+
+  lab_x <- if (variable %in% names(ETIQUETAS)) ETIQUETAS[[variable]] else variable
+  lab_y <- if (cuantitativa %in% names(ETIQUETAS)) ETIQUETAS[[cuantitativa]] else cuantitativa
+
+  ok <- complete.cases(datos[[variable]], datos[[cuantitativa]])
+  x  <- datos[[variable]][ok]
+  y  <- datos[[cuantitativa]][ok]
+  n  <- length(x)
+
+  if (n < 3 || sd(x) == 0 || sd(y) == 0)
+    stop("No hay variación suficiente en '", variable, "' o '", cuantitativa,
+         "' para ajustar el modelo.")
+
+  # Correlación de Pearson
+  ct <- cor.test(x, y, method = "pearson")
+  r  <- unname(ct$estimate)
+
+  # Regresión lineal simple y = b0 + b1 x
+  modelo <- lm(y ~ x)
+  res    <- summary(modelo)
+  b0     <- coef(modelo)[[1]]
+  b1     <- coef(modelo)[[2]]
+  r2     <- res$r.squared
+  r2_aj  <- res$adj.r.squared
+
+  ecuacion <- sprintf("%s (estimado) = %.4f %s %.4f · %s",
+                      lab_y, b0, if (b1 >= 0) "+" else "−", abs(b1), lab_x)
+
+  # Diagrama de dispersión con la recta de ajuste encima
+  linea <- data.frame(x = range(x))
+  linea$y <- b0 + b1 * linea$x
+
+  fig <- plot_ly(x = x, y = y, type = "scattergl", mode = "markers",
+                 marker = list(color = "#2e7d9a", size = 5, opacity = 0.35),
+                 name = paste0("Observaciones (n = ", n, ")")) %>%
+    add_trace(x = linea$x, y = linea$y, type = "scatter", mode = "lines",
+              line = list(color = "#dc2626", width = 3),
+              name = "Ajuste lineal", inherit = FALSE) %>%
+    layout(title = list(text = sprintf(
+             "Diagrama de dispersión de %s según %s<br><sup>r = %.3f · R² = %.3f</sup>",
+             lab_y, lab_x, r, r2)),
+           xaxis = list(title = lab_x),
+           yaxis = list(title = lab_y),
+           legend = list(orientation = "h", y = -0.2))
+
+  # Coeficiente de correlación de Pearson
+  txt_pearson <- paste(
+    sprintf("Coeficiente de correlación de Pearson (r): %.4f", r),
+    sprintf("IC 95%%: [%.4f, %.4f]", ct$conf.int[1], ct$conf.int[2]),
+    sprintf("Estadístico t = %.3f, gl = %d, valor p = %s",
+            unname(ct$statistic), as.integer(unname(ct$parameter)),
+            format.pval(ct$p.value, digits = 3, eps = 1e-16)),
+    sprintf("n = %d", n),
+    sep = "\n")
+
+  # Coeficiente de determinación
+  txt_r2 <- paste(
+    sprintf("R² = r² = %.4f", r2),
+    sprintf("(%.2f %% de la variabilidad de '%s' es explicada por '%s')",
+            100 * r2, lab_y, lab_x),
+    sprintf("R² ajustado = %.4f", r2_aj),
+    sep = "\n")
+
+  # Regresión lineal simple
+  coefs <- coef(res)
+  rownames(coefs) <- c("(Intercepto)", lab_x)
+  colnames(coefs) <- c("Estimación", "Error estándar", "Valor t", "Pr(>|t|)")
+
+  p_f <- pf(res$fstatistic[1], res$fstatistic[2], res$fstatistic[3],
+            lower.tail = FALSE)
+
+  txt_reg <- paste(c(
+    paste0("Modelo: ", lab_y, " = β0 + β1 · ", lab_x, " + ε"),
+    paste0("Ajuste: ", ecuacion),
+    "",
+    capture.output(printCoefmat(coefs, digits = 4, signif.legend = TRUE)),
+    "",
+    sprintf("Error estándar residual: %.4f con %d grados de libertad",
+            res$sigma, as.integer(res$df[2])),
+    sprintf("Estadístico F: %.2f en 1 y %d gl, valor p = %s",
+            unname(res$fstatistic[1]), as.integer(res$df[2]),
+            format.pval(p_f, digits = 3, eps = 1e-16))
+  ), collapse = "\n")
+
+  stats_html <- htmltools::tagList(
+    htmltools::tags$h4(paste0("Coeficiente de correlación de Pearson: ",
+                              lab_y, " y ", lab_x)),
+    htmltools::tags$pre(txt_pearson),
+    htmltools::tags$h4(paste0("Coeficiente de determinación R²: ",
+                              lab_y, " y ", lab_x)),
+    htmltools::tags$pre(txt_r2),
+    htmltools::tags$h4(paste0("Regresión lineal simple: ", lab_y,
+                              " sobre ", lab_x)),
+    htmltools::tags$pre(txt_reg)
+  )
+
+  htmltools::tagList(fig, stats_html)
+}
+```
+
+## Age
+
+```{r}
+analisis_bivar_cuanti_vs_cuanti('Age', datos = datos)
+```
 
