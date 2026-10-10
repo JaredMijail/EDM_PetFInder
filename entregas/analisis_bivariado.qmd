@@ -83,6 +83,8 @@ pal_clases <- c(
   "31–90 días"   = "#d97706",
   "Sin adopción" = "#dc2626"
 )
+
+pal_clases2 <- unname(colorRampPalette(pal_clases, space = "Lab")(11))
 ```
 
 ## `AdoptionSpeed` VS variables cualitativas
@@ -747,13 +749,14 @@ analisis_bivar_cuali_vs_cuanti('desc_word_count', datos = datos)
 :::
 
 ## `sentiment_score` VS variables cualitativas
-
 ```{r def-bivar-cuanti-vs-cuali}
 analisis_bivar_cuanti_vs_cuali <- function(variable,
                                            datos,
                                            cuantitativa = "sentiment_score",
-                                           paleta = pal_clases,
-                                           max_niveles = 15) {
+                                           paleta = pal_clases2,
+                                           prop_min = 0.01,
+                                           max_niveles = 10,
+                                           etiqueta_otras = ETIQUETA_OTRAS) {
 
   if (!cuantitativa %in% names(datos))
     stop("La variable cuantitativa '", cuantitativa, "' no está en los datos.")
@@ -767,30 +770,34 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
   ok <- complete.cases(datos[[cuantitativa]], f0)
   x  <- datos[[cuantitativa]][ok]
   f  <- droplevels(f0[ok])
+  K  <- nlevels(f)
 
-  # Razón de correlación: se calcula con TODOS los niveles
-  X    <- data.frame(x = x) |> setNames(cuantitativa)
-  corr <- centroids(X, f)$cr * 100
+  # Agrupación de niveles raros (no elimina filas, solo reetiqueta)
+  f_g <- agrupar_niveles(f, prop_min = prop_min, max_niveles = max_niveles,
+                         etiqueta = etiqueta_otras)
+  agrupado <- !setequal(levels(f_g), levels(f))
+  nota <- if (agrupado)
+    paste0(" [", K, " niveles agrupados en ", nlevels(f_g), "]") else ""
 
-  # Para los gráficos, se conservan los niveles más frecuentes
-  K <- nlevels(f)
-  truncado <- K > max_niveles
-  if (truncado) {
-    top  <- names(sort(table(f), decreasing = TRUE))[seq_len(max_niveles)]
-    keep <- f %in% top
-    x    <- x[keep]
-    f    <- droplevels(f[keep])
-  }
-  nota <- if (truncado) paste0(" [", max_niveles, " niveles más frecuentes de ", K, "]") else ""
+  # Razón de correlación: con todos los niveles y, si aplica, con los agrupados
+  X      <- data.frame(x = x) |> setNames(cuantitativa)
+  corr   <- centroids(X, f)$cr * 100
+  corr_g <- if (agrupado) centroids(X, f_g)$cr * 100 else NULL
 
-  df  <- data.frame(x = x, f = f)
-  niv <- levels(f)
+  # Paleta: la dada si cubre todos los niveles; si no, una generada,
+  # con color propio para la categoría agrupada
+  df  <- data.frame(x = x, f = f_g)
+  niv <- levels(f_g)
 
-  pal <- if (all(niv %in% names(paleta))) paleta else
-    setNames(hcl.colors(length(niv), "Dark 3"), niv)
+  if (all(niv %in% names(paleta))) {
+    # Un color por nivel, tomado a intervalos regulares del degradé
+    pal <- setNames(
+    paleta[round(seq(1, length(paleta), length.out = length(niv)))],
+    niv
+  )
 
   # Diagrama de cajas
-  f_med <- reorder(f, x, median)
+  f_med <- reorder(f_g, x, median)
   df$f_med <- f_med
   fig1 <- plot_ly(df, x = ~x, y = ~f_med, color = ~f_med,
                   colors = pal[levels(f_med)],
@@ -803,7 +810,7 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
            showlegend = FALSE)
 
   # Diagrama de violín
-  f_mean <- reorder(f, x, mean)
+  f_mean <- reorder(f_g, x, mean)
   df$f_mean <- f_mean
   fig2 <- plot_ly(df, x = ~x, y = ~f_mean, color = ~f_mean,
                   colors = pal[levels(f_mean)],
@@ -821,6 +828,13 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
                               " con ", lab_f, " (", K, " niveles)")),
     htmltools::tags$pre(
       paste(capture.output(print(corr)), collapse = "\n")
+    ),
+    if (agrupado) htmltools::tagList(
+      htmltools::tags$h4(paste0("Razón de correlación (%) con niveles agrupados (",
+                                nlevels(f_g), " niveles)")),
+      htmltools::tags$pre(
+        paste(capture.output(print(corr_g)), collapse = "\n")
+      )
     )
   )
 
