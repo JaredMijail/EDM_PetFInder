@@ -15,7 +15,7 @@ Jared Mijail Ramírez Escalante · María Paula Silva Capera
 </div>
 :::
 
-En esta sección se presentan las posibles asociaciones entre pares de variables pertenecientes al conjunto de datos [PetFinder](dataset.qmd) enriquecido. Con fines de cumplir lo solicitado para esta primera entrega, se hacen dos conjuntos de contrastes principales. En primer lugar se toma como referencia la variable variable `AdoptionSpeed` (velocidad de adopción) para contrastarla con el resto de variables variables y cuantitativas del conjunto de datos [PetFinder](dataset.qmd) enriquecido. Posteriormente se realiza el mismo ejercicio tomando como referencia la variable cuantitativa `Age`.
+En esta sección se presentan las posibles asociaciones entre pares de variables pertenecientes al conjunto de datos [PetFinder](dataset.qmd) enriquecido. Con fines de cumplir lo solicitado para esta primera entrega, se hacen dos conjuntos de contrastes principales. En primer lugar se toma como referencia la variable cualitativa `AdoptionSpeed` (velocidad de adopción) para contrastarla con el resto de variables cualitativas y cuantitativas del conjunto de datos [PetFinder](dataset.qmd) enriquecido. Posteriormente se realiza el mismo ejercicio tomando como referencia la variable cuantitativa `Age`.
 
 ```{r}
 #| label: setup-comun
@@ -85,13 +85,13 @@ pal_clases <- c(
 )
 ```
 
-## `AdoptionSpeed` VS variables variables
+## `AdoptionSpeed` VS variables cualitativas
 Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables se optó por agrupar las categorías con frecuencias relativas menores o iguales al 1%. En caso de que ninguna de las categorías alcance el umbral, se hará la descripción sobre las 10 categorías más frecuentes.
 
 
 ```{r}
 # =====================================================================
-# Análisis bivariado variable vs. variable frente a AdoptionSpeed
+# Análisis bivariado cualitativa vs. cualitativa frente a AdoptionSpeed
 # =====================================================================
 # Uso:
 #   analisis_bivar_cuali_vs_cuali(datos$Gender)
@@ -354,7 +354,7 @@ texto_cc <- function(tab, st, nombre_x, agrupada) {
 # ---------------------------------------------------------------------
 # 8. Función principal
 # ---------------------------------------------------------------------
-# x                 : vector de la variable variable (p. ej. datos$Gender)
+# x                 : vector de la variable cualitativa (p. ej. datos$Gender)
 # alta_cardinalidad : TRUE aplica agrupar_niveles() antes del análisis
 # y                 : variable respuesta (por defecto datos$AdoptionSpeed, factor)
 # nombre            : nombre original de la variable; solo hace falta cuando x no
@@ -606,18 +606,18 @@ analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
 ```{r}
 analisis_bivar_cuali_vs_cuanti <- function(variable,
                                            datos,
-                                           variable = "AdoptionSpeed",
+                                           cualitativa = "AdoptionSpeed",
                                            paleta = pal_clases) {
 
   if (!variable %in% names(datos))
     stop("La variable '", variable, "' no está en los datos.")
-  if (!variable %in% names(datos))
-    stop("La variable variable '", variable, "' no está en los datos.")
+  if (!cualitativa %in% names(datos))
+    stop("La variable cualitativa '", cualitativa, "' no está en los datos.")
 
   lab_x <- if (variable %in% names(ETIQUETAS)) ETIQUETAS[[variable]] else variable
-  lab_f <- if (variable %in% names(ETIQUETAS)) ETIQUETAS[[variable]] else variable
+  lab_f <- if (cualitativa %in% names(ETIQUETAS)) ETIQUETAS[[cualitativa]] else cualitativa
 
-  f0 <- as.factor(datos[[variable]])
+  f0 <- as.factor(datos[[cualitativa]])
   ok <- complete.cases(datos[[variable]], f0)
   x  <- datos[[variable]][ok]
   f  <- droplevels(f0[ok])
@@ -625,7 +625,7 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 
   niv <- levels(f)
   if (!all(niv %in% names(paleta)))
-    stop("Los niveles de '", variable, "' no coinciden con los nombres de la paleta: ",
+    stop("Los niveles de '", cualitativa, "' no coinciden con los nombres de la paleta: ",
          paste(setdiff(niv, names(paleta)), collapse = ", "))
 
   # Diagrama de cajas
@@ -746,7 +746,7 @@ analisis_bivar_cuali_vs_cuanti('desc_word_count', datos = datos)
 ```
 :::
 
-## `sentiment_score` VS variables variables
+## `sentiment_score` VS variables cualitativas
 
 ```{r def-bivar-cuanti-vs-cuali}
 analisis_bivar_cuanti_vs_cuali <- function(variable,
