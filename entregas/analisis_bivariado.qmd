@@ -634,7 +634,7 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
   fig1 <- plot_ly(df, x = ~x, y = ~f_med, color = ~f_med,
                   colors = paleta[levels(f_med)],
                   type = "box", orientation = "h",
-                  boxpoints = FALSE) %>%
+                  boxpoints = TRUE) %>%
     layout(title = list(text = paste0("Diagrama de cajas de ", lab_x,
                                       " según ", lab_f)),
            xaxis = list(title = lab_x),
