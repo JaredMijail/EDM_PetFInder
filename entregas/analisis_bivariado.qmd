@@ -1041,7 +1041,7 @@ analisis_bivar_cuanti_vs_cuanti <- function(variable,
 
   # Coeficiente de determinación
   txt_r2 <- paste(
-    sprintf("R² =", r2),
+    sprintf("R² = %.4f", r2),
     sprintf("R² ajustado = %.4f", r2_aj),
     sep = "\n")
 
