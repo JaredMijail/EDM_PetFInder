@@ -1011,19 +1011,11 @@ analisis_bivar_cuanti_vs_cuanti <- function(variable,
 
   # Coeficiente de correlación de Pearson
   txt_pearson <- paste(
-    sprintf("Coeficiente de correlación de Pearson (r): %.4f", r),
-    sprintf("IC 95%%: [%.4f, %.4f]", ct$conf.int[1], ct$conf.int[2]),
-    sprintf("Estadístico t = %.3f, gl = %d, valor p = %s",
-            unname(ct$statistic), as.integer(unname(ct$parameter)),
-            format.pval(ct$p.value, digits = 3, eps = 1e-16)),
-    sprintf("n = %d", n),
-    sep = "\n")
+    sprintf(r))
 
   # Coeficiente de determinación
   txt_r2 <- paste(
-    sprintf("R² = r² = %.4f", r2),
-    sprintf("(%.2f %% de la variabilidad de '%s' es explicada por '%s')",
-            100 * r2, lab_y, lab_x),
+    sprintf("R² =", r2),
     sprintf("R² ajustado = %.4f", r2_aj),
     sep = "\n")
 
@@ -1040,12 +1032,7 @@ analisis_bivar_cuanti_vs_cuanti <- function(variable,
     paste0("Ajuste: ", ecuacion),
     "",
     capture.output(printCoefmat(coefs, digits = 4, signif.legend = TRUE)),
-    "",
-    sprintf("Error estándar residual: %.4f con %d grados de libertad",
-            res$sigma, as.integer(res$df[2])),
-    sprintf("Estadístico F: %.2f en 1 y %d gl, valor p = %s",
-            unname(res$fstatistic[1]), as.integer(res$df[2]),
-            format.pval(p_f, digits = 3, eps = 1e-16))
+    ""
   ), collapse = "\n")
 
   stats_html <- htmltools::tagList(
@@ -1132,6 +1119,3 @@ analisis_bivar_cuanti_vs_cuanti('desc_char_len', datos = datos)
 analisis_bivar_cuanti_vs_cuanti('desc_word_count', datos = datos)
 ```
 :::
-
-
-
