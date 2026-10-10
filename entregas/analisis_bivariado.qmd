@@ -828,6 +828,112 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
 }
 ```
 
-```{r}
+
+::: {.panel-tabset}
+
+## Type
+**Especie**
+```{r sentiment-type}
 analisis_bivar_cuanti_vs_cuali('Type', datos = datos)
 ```
+
+## Name
+**Nombre del animal**
+```{r sentiment-name}
+analisis_bivar_cuanti_vs_cuali('Name', datos = datos)
+```
+
+## Breed1
+**Raza principal**
+```{r sentiment-breed1}
+analisis_bivar_cuanti_vs_cuali('Breed1', datos = datos)
+```
+
+## Breed2
+**Segunda raza**
+```{r sentiment-breed2}
+analisis_bivar_cuanti_vs_cuali('Breed2', datos = datos)
+```
+
+## Gender
+**Género**
+```{r sentiment-gender}
+analisis_bivar_cuanti_vs_cuali('Gender', datos = datos)
+```
+
+## Color1
+**Color principal**
+```{r sentiment-color1}
+analisis_bivar_cuanti_vs_cuali('Color1', datos = datos)
+```
+
+## Color2
+**Segundo color**
+```{r sentiment-color2}
+analisis_bivar_cuanti_vs_cuali('Color2', datos = datos)
+```
+
+## Color3
+**Tercer color**
+```{r sentiment-color3}
+analisis_bivar_cuanti_vs_cuali('Color3', datos = datos)
+```
+
+## MaturitySize
+**Tamaño**
+```{r sentiment-maturitysize}
+analisis_bivar_cuanti_vs_cuali('MaturitySize', datos = datos)
+```
+
+## FurLength
+**Longitud del pelo**
+```{r sentiment-furlength}
+analisis_bivar_cuanti_vs_cuali('FurLength', datos = datos)
+```
+
+## Vaccinated
+**Vacunado**
+```{r sentiment-vaccinated}
+analisis_bivar_cuanti_vs_cuali('Vaccinated', datos = datos)
+```
+
+## Dewormed
+**Desparasitado**
+```{r sentiment-dewormed}
+analisis_bivar_cuanti_vs_cuali('Dewormed', datos = datos)
+```
+
+## Sterilized
+**Esterilizado**
+```{r sentiment-sterilized}
+analisis_bivar_cuanti_vs_cuali('Sterilized', datos = datos)
+```
+
+## Health
+**Estado de salud**
+```{r sentiment-health}
+analisis_bivar_cuanti_vs_cuali('Health', datos = datos)
+```
+
+## State
+**Estado o territorio**
+```{r sentiment-state}
+analisis_bivar_cuanti_vs_cuali('State', datos = datos)
+```
+
+## RescuerID
+**Identificador del rescatista**
+```{r sentiment-rescuerid}
+analisis_bivar_cuanti_vs_cuali('RescuerID', datos = datos)
+```
+
+## AdoptionSpeed
+**Velocidad de adopción**
+```{r sentiment-adoptionspeed}
+analisis_bivar_cuanti_vs_cuali('AdoptionSpeed', datos = datos)
+```
+
+:::
+
+
+
