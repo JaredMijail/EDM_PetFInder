@@ -1,22 +1,25 @@
 ---
 title: "Análisis Univariado Diagnóstico"
 subtitle: "Análisis descriptivo univariado de las variables del conjunto de datos PetFinder."
---- 
+---
 
-::: autor-pdf-row
+::::: autor-pdf-row
 ::: autor-info
 **AUTORES**
 
 Jared Mijail Ramírez Escalante · María Paula Silva Capera
 :::
 
-<div class="action-bar">
-<button class="btn-print" onclick="window.print()">PDF</button>
-</div>
-:::
+::: action-bar
+<button class="btn-print" onclick="window.print()">
 
-A continuación se describen cada una de las variables del conjunto de datos [PetFinder](dataset.qmd) enriquecido por separado
-con el apoyo de estadísticas de tendencia central y dispersión, gráficos de distribución, tablas de frecuencia e identificación de valores atípicos/extremos.
+PDF
+
+</button>
+:::
+:::::
+
+A continuación se describen cada una de las variables del conjunto de datos [PetFinder](dataset.qmd) enriquecido por separado con el apoyo de estadísticas de tendencia central y dispersión, gráficos de distribución, tablas de frecuencia e identificación de valores atípicos/extremos.
 
 ```{r}
 #| label: setup-comun
@@ -158,22 +161,24 @@ graficos_cuanti <- function(x, etiqueta, tipo = c("continuo", "conteo")) {
 }
 ```
 
-::: {.panel-tabset}
+::: panel-tabset
 ## `Age`
+
 **Edad**
+
+Variable entera de razón, que nos dice la edad de los animales en adopción medida en meses.
+
 ```{r}
 #| label: cuanti-Age
 #| echo: true
 tabla_estadisticos(datos$Age, caption = "Estadísticos descriptivos — Edad (meses)")
 ```
 
-
 ```{r}
 #| label: atip-Age
 #| echo: true
 tabla_atipicos(datos$Age, caption = "Detección de valores atípicos — Edad (meses)")
 ```
-
 
 ```{r}
 #| label: graf-Age
@@ -182,21 +187,25 @@ tabla_atipicos(datos$Age, caption = "Detección de valores atípicos — Edad (m
 graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
 ```
 
+La elevada curtosis, el marcado sesgo a la derecha, el alto coeficiente de variación y la notable discrepancia entre la media y la mediana (apoyados por la visualización gráfica) confirman una alta concentración de la población en edades tempranas y una presencia significativa de valores atípicos.
+
+Por tanto, para análisis o modelos estadísticos sensibles a valores extremos, podria resultar conveniente transformar la edad en una variable cualitativa ordina.
+
 ## `Quantity`
+
 **Cantidad de animales en el anuncio**
+
 ```{r}
 #| label: cuanti-Quantity
 #| echo: true
 tabla_estadisticos(datos$Quantity, caption = "Estadísticos descriptivos — Cantidad de animales en el anuncio")
 ```
 
-
 ```{r}
 #| label: atip-Quantity
 #| echo: true
 tabla_atipicos(datos$Quantity, caption = "Detección de valores atípicos — Cantidad de animales en el anuncio")
 ```
-
 
 ```{r}
 #| label: graf-Quantity
@@ -205,21 +214,27 @@ tabla_atipicos(datos$Quantity, caption = "Detección de valores atípicos — Ca
 graficos_cuanti(datos$Quantity, "Animales en el anuncio", tipo = "conteo")
 ```
 
-## `Fee` 
+Al concentrarse más del 77% de la muestra en el valor unitario ($Q1 = 1$, $Q3 = 1$), el rango intercuartílico resulta nulo ($RIQ = 0$). Esto provoca que los límites del criterio estándar de atípicos colapsen en [1, 1], clasificando de forma artificial el 22,9% de los datos (valores> 1) como atípicos y extremos. 
+
+Por ello es altamente recomendable transformar en una variable cualitativa ordinal.
+
+## `Fee`
+
 **Tarifa de adopción**
+
+Es la tarifa de adopción solicitada en ringgit malayo (MYR).
+
 ```{r}
 #| label: cuanti-Fee
 #| echo: true
 tabla_estadisticos(datos$Fee, caption = "Estadísticos descriptivos — Tarifa de adopción")
 ```
 
-
 ```{r}
 #| label: atip-Fee
 #| echo: true
 tabla_atipicos(datos$Fee, caption = "Detección de valores atípicos — Tarifa de adopción")
 ```
-
 
 ```{r}
 #| label: graf-Fee
@@ -228,8 +243,15 @@ tabla_atipicos(datos$Fee, caption = "Detección de valores atípicos — Tarifa 
 graficos_cuanti(datos$Fee, "Tarifa de adopción", tipo = "conteo")
 ```
 
+Así como en  la variable Age tenemos un rango intercuartílico colapsado en un solo valor, que es 0 (adopciones gratuitas), pero a diferencia de Age solo el 15,5% de los individuos se encuentran en los extremos, osea que tenemos aún más individuos concentrados en un solo valor.
+
+Esta variable requiere ser convertida a una cualitativa ordinal.
+
 ## `PhotoAmt`
+
 **Cantidad de fotos**
+
+Indica la cantidad de fotografías del anuncio. 
 
 ```{r}
 #| label: cuanti-PhotoAmt
@@ -237,13 +259,11 @@ graficos_cuanti(datos$Fee, "Tarifa de adopción", tipo = "conteo")
 tabla_estadisticos(datos$PhotoAmt, caption = "Estadísticos descriptivos — Cantidad de fotos")
 ```
 
-
 ```{r}
 #| label: atip-PhotoAmt
 #| echo: true
 tabla_atipicos(datos$PhotoAmt, caption = "Detección de valores atípicos — Cantidad de fotos")
 ```
-
 
 ```{r}
 #| label: graf-PhotoAmt
@@ -252,21 +272,25 @@ tabla_atipicos(datos$PhotoAmt, caption = "Detección de valores atípicos — Ca
 graficos_cuanti(datos$PhotoAmt, "Cantidad de fotos", tipo = "conteo")
 ```
 
+La variable refleja que la mayoría de las publicaciones recurren a un número reducido de imágenes, concentrándose típicamente entre 2 y 5 fotos, solo tenemos 6,1% de atipicos y 1.9% de extremos. Por ello esta variable no presenta características particulares que puedan hacer difícil su manejo.
+
 ## `VideoAmt`
+
 **Cantidad de videos**
+
+Indica la cantidad de videos por anuncio.
+
 ```{r}
 #| label: cuanti-VideoAmt
 #| echo: true
 tabla_estadisticos(datos$VideoAmt, caption = "Estadísticos descriptivos — Cantidad de videos")
 ```
 
-
 ```{r}
 #| label: atip-VideoAmt
 #| echo: true
 tabla_atipicos(datos$VideoAmt, caption = "Detección de valores atípicos — Cantidad de videos")
 ```
-
 
 ```{r}
 #| label: graf-VideoAmt
@@ -275,8 +299,17 @@ tabla_atipicos(datos$VideoAmt, caption = "Detección de valores atípicos — Ca
 graficos_cuanti(datos$VideoAmt, "Cantidad de videos", tipo = "conteo")
 ```
 
+El colapso del rango intercuartílico en cero ($RIQ = 0$), con límites inferior y superior fijados en 0, refleja la ausencia casi total de material audiovisual en la muestra. 
+
+Dada esta extrema concentración en el valor nulo (96,2%), se recomienda transformar la cantidad de videos en una variable binaria o dicotómica (0 = Sin video, 1 = Con video).
+
+
 ## `sentiment_score`
+
 **Puntaje de sentimiento**
+
+Indica la polaridad del tono de la descripción entre [-1, 1] (Negativo, Positivo), generadas en el Data Set por Google Natural Language API.
+
 ```{r}
 #| label: cuanti-sentiment-score
 #| echo: true
@@ -296,8 +329,14 @@ tabla_atipicos(datos$sentiment_score, caption = "Detección de valores atípicos
 graficos_cuanti(datos$sentiment_score, "Puntaje de sentimiento", tipo = "conteo")
 ```
 
+La variable refleja una tendencia predominantemente positiva en los anuncios, con una mediana de 0,30 y una media de 0,28, donde el 50% central de la muestra se sitúa entre 0,10 y 0,40 puntos ($RIQ = 0,30$). Los valores abarcan un rango completo desde textos con tono negativo (-0,90) hasta altamente positivos (0,90). Al tener un sesgo leve (asimetría = 0,232) y una curtosis baja (0,484), la variable conserva una distribución continua adecuada que describe con claridad la diversidad de sentimientos en las publicaciones. 
+
 ## `sentiment_magnitude`
+
 **Magnitud de sentimiento**
+
+Indica la intensidad emocional de la descripcion.
+
 ```{r}
 #| label: cuanti-sentiment-magnitude
 #| echo: true
@@ -317,8 +356,14 @@ tabla_atipicos(datos$sentiment_magnitude, caption = "Detección de valores atíp
 graficos_cuanti(datos$sentiment_magnitude, "Magnitud de sentimiento", tipo = "conteo")
 ```
 
+La variable refleja que la mayoría de las publicaciones presentan una intensidad emocional baja o moderada, concentrándose el 50% central de los datos entre 0,80 y 2,80 puntos ($RIQ = 2$). Aunque la escala arranca en 0 (textos neutros), existe una cola larga hacia la derecha que alcanza un máximo de 32 puntos, correspondiente a descripciones de gran extensión o carga emocional.
+
 ## `total_labels`
+
 **Total de etiquetas**
+
+Variable entera de razón, indica la cantidad de etiquetas de contenido detectadas en las fotos del anuncio, dadas por Google Vision API.
+
 ```{r}
 #| label: cuanti-total-labels
 #| echo: true
@@ -338,8 +383,14 @@ tabla_atipicos(datos$total_labels, caption = "Detección de valores atípicos �
 graficos_cuanti(datos$total_labels, "Total de etiquetas", tipo = "conteo")
 ```
 
+La variable muestra que la mayoría de los anuncios utiliza un volumen moderado de etiquetas, concentrando el 50% central de los datos entre 18 y 48 unidades ($RIQ = 30$), con una mediana de 30 y una moda de 10 etiquetas. Aunque el conteo arranca desde 1 solo tag, la distribución presenta una cola larga hacia la derecha con casos excepcionales que alcanzan un máximo de 299 etiquetas. 
+
 ## `total_faces`
+
 **Total de rostros detectados**
+
+Cantidad de rostros humanos detectados en el anuncio, dadas por Google Vision API.
+
 ```{r}
 #| label: cuanti-total-faces
 #| echo: true
@@ -359,8 +410,14 @@ tabla_atipicos(datos$total_faces, caption = "Detección de valores atípicos —
 graficos_cuanti(datos$total_faces, "Total de rostros detectados", tipo = "conteo")
 ```
 
+La variable refleja una ausencia casi total de rostros en las imágenes de las publicaciones, donde la inmensa mayoría de las observaciones toma el valor nulo (mediana, moda, Q1 y Q3 son igual a 0). Asi mismo el rango intercuartilico colapsa en 0. Por ello la mejor opción es transformarla en una variable binaria (0 = Sin rostros, 1 = Con rostros). 
+
 ## `total_colors`
+
 **Total de colores detectados**
+
+Cantidad de colores dominantes detectados en el anuncio, dadas por Google Vision API.
+
 ```{r}
 #| label: cuanti-total-colors
 #| echo: true
@@ -380,8 +437,12 @@ tabla_atipicos(datos$total_colors, caption = "Detección de valores atípicos �
 graficos_cuanti(datos$total_colors, "Total de colores detectados", tipo = "conteo")
 ```
 
+La variable muestra una paleta cromática moderada en la mayoría de las publicaciones, concentrando el 50% central de los datos entre 20 y 50 colores ($RIQ = 30$).
+
 ## `desc_char_len`
+
 **Longitud de la descripción (caracteres)**
+
 ```{r}
 #| label: cuanti-desc-char-len
 #| echo: true
@@ -401,8 +462,12 @@ tabla_atipicos(datos$desc_char_len, caption = "Detección de valores atípicos �
 graficos_cuanti(datos$desc_char_len, "Longitud de la descripción (caracteres)", tipo = "conteo")
 ```
 
+La variable refleja que la mayoría de los anuncios utiliza descripciones breves a moderadas, concentrando el 50% central de los datos entre 117 y 431 caracteres ($RIQ = 314$)
+
 ## `desc_word_count`
+
 **Cantidad de palabras en la descripción**
+
 ```{r}
 #| label: cuanti-desc-word-count
 #| echo: true
@@ -421,6 +486,9 @@ tabla_atipicos(datos$desc_word_count, caption = "Detección de valores atípicos
 #| layout-ncol: 2
 graficos_cuanti(datos$desc_word_count, "Cantidad de palabras en la descripción", tipo = "conteo")
 ```
+
+La variable refleja que la mayoría de los anuncios utiliza un número breve a moderado de palabras en sus descripciones, concentrando el 50% central de los datos entre 21 y 81 palabras ($RIQ = 60$), con una mediana de 44 y una moda de 3 palabras. Aunque el conteo mínimo arranca en 1 sola palabra, existe una cola derecha muy pronunciada que alcanza un máximo de 1.257 palabras en textos excepcionalmente detallados.
+
 :::
 
 ## Análisis de variables cualitativas
@@ -485,9 +553,9 @@ graficos_cuali <- function(x, etiqueta, pastel = FALSE, n_top = 10) {
 }
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## `Type`
+
 **Especie**
 
 ```{r}
@@ -505,6 +573,7 @@ graficos_cuali(datos$Type, "Especie", pastel = TRUE, n_top = 10)
 ```
 
 ## `Gender`
+
 **Género**
 
 ```{r}
@@ -521,7 +590,8 @@ tabla_frecuencias(datos$Gender, "Género")
 graficos_cuali(datos$Gender, "Género", pastel = TRUE, n_top = 10)
 ```
 
-## `MaturitySize` 
+## `MaturitySize`
+
 **Tamaño de madurez**
 
 ```{r}
@@ -539,6 +609,7 @@ graficos_cuali(datos$MaturitySize, "Tamaño de madurez", pastel = TRUE, n_top = 
 ```
 
 ## `FurLength`
+
 **Longitud del pelaje**
 
 ```{r}
@@ -555,7 +626,8 @@ tabla_frecuencias(datos$FurLength, "Longitud del pelaje")
 graficos_cuali(datos$FurLength, "Longitud del pelaje", pastel = TRUE, n_top = 10)
 ```
 
-## `Vaccinated` 
+## `Vaccinated`
+
 **Vacunado**
 
 ```{r}
@@ -572,7 +644,8 @@ tabla_frecuencias(datos$Vaccinated, "Vacunado")
 graficos_cuali(datos$Vaccinated, "Vacunado", pastel = TRUE, n_top = 10)
 ```
 
-## `Dewormed` 
+## `Dewormed`
+
 **Desparasitado**
 
 ```{r}
@@ -589,7 +662,8 @@ tabla_frecuencias(datos$Dewormed, "Desparasitado")
 graficos_cuali(datos$Dewormed, "Desparasitado", pastel = TRUE, n_top = 10)
 ```
 
-## `Sterilized` 
+## `Sterilized`
+
 **Esterilizado**
 
 ```{r}
@@ -606,7 +680,8 @@ tabla_frecuencias(datos$Sterilized, "Esterilizado")
 graficos_cuali(datos$Sterilized, "Esterilizado", pastel = TRUE, n_top = 10)
 ```
 
-## `Health` 
+## `Health`
+
 **Estado de salud**
 
 ```{r}
@@ -623,7 +698,8 @@ tabla_frecuencias(datos$Health, "Estado de salud")
 graficos_cuali(datos$Health, "Estado de salud", pastel = TRUE, n_top = 10)
 ```
 
-## `AdoptionSpeed` 
+## `AdoptionSpeed`
+
 **Velocidad de adopción**
 
 ```{r}
@@ -640,7 +716,8 @@ tabla_frecuencias(datos$AdoptionSpeed, "Velocidad de adopción")
 graficos_cuali(datos$AdoptionSpeed, "Velocidad de adopción", pastel = TRUE, n_top = 10)
 ```
 
-## `Color1` 
+## `Color1`
+
 **Color principal**
 
 ```{r}
@@ -657,7 +734,8 @@ tabla_frecuencias(datos$Color1, "Color principal")
 graficos_cuali(datos$Color1, "Color principal", pastel = TRUE, n_top = 10)
 ```
 
-## `Color2` 
+## `Color2`
+
 **Color secundario**
 
 ```{r}
@@ -675,6 +753,7 @@ graficos_cuali(datos$Color2, "Color secundario", pastel = TRUE, n_top = 10)
 ```
 
 ## `Color3`
+
 **Color terciario**
 
 ```{r}
@@ -692,6 +771,7 @@ graficos_cuali(datos$Color3, "Color terciario", pastel = TRUE, n_top = 10)
 ```
 
 ## `Breed1`
+
 **Raza principal**
 
 ```{r}
@@ -707,7 +787,8 @@ tabla_frecuencias(datos$Breed1, "Raza principal", n_top = 10)
 graficos_cuali(datos$Breed1, "Raza principal", pastel = FALSE, n_top = 10)
 ```
 
-## `Breed2` 
+## `Breed2`
+
 **Raza secundaria**
 
 ```{r}
@@ -724,6 +805,7 @@ graficos_cuali(datos$Breed2, "Raza secundaria", pastel = FALSE, n_top = 10)
 ```
 
 ## `State`
+
 **Estado**
 
 ```{r}
@@ -740,6 +822,7 @@ graficos_cuali(datos$State, "Estado / región", pastel = FALSE, n_top = 10)
 ```
 
 ## `Name`
+
 **Nombre**
 
 *Variable de alta cardinalidad. Se muestran los 10 nombres más frecuentes; el resto se agrupa en "Otras".*
@@ -758,6 +841,7 @@ graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 10)
 ```
 
 ## `Description`
+
 **Descripción**
 
 *Variable de texto libre: prácticamente cada descripción es única. Se reporta su cardinalidad; su longitud se analiza en las variables cuantitativas `desc_char_len` y `desc_word_count`.*
@@ -769,6 +853,7 @@ tabla_cardinalidad(datos$Description)
 ```
 
 ## `PetID`
+
 **Identificador de la mascota**
 
 *Variable identificadora: cada anuncio tiene un valor único. Se reporta su cardinalidad.*
@@ -780,6 +865,7 @@ tabla_cardinalidad(datos$PetID)
 ```
 
 ## `RescuerID`
+
 **Identificador del rescatista**
 
 *Variable identificadora: cada rescatista tiene un ID único. Se reporta su cardinalidad.*
@@ -789,5 +875,4 @@ tabla_cardinalidad(datos$PetID)
 #| echo: true
 tabla_cardinalidad(datos$RescuerID)
 ```
-
 :::
