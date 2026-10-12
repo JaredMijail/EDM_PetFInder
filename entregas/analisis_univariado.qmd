@@ -808,7 +808,7 @@ Por lo que se puede apreciar en el diagrama de distribución de frecuencias, la 
 ```{r}
 #| label: card-name
 #| echo: true
-tabla_cardinalidad(datos$Description)
+tabla_cardinalidad(datos$Name)
 ```
 
 ## `Description`
