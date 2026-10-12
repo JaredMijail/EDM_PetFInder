@@ -446,9 +446,9 @@ analisis_bivar_cuali_vs_cuali <- function(x,
   mostrar_figura(graficos$perfil, alto_figura(k, base = 2.4),
                id  = paste0(id, "_perfil"),
                alt = sprintf("Perfil fila de la velocidad de adopción por %s", nombre_x))
-  mostrar_figura(graficos$residuos, alto_figura(k, base = 2.2),
-               id  = paste0(id, "_residuos"),
-               alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
+  #mostrar_figura(graficos$residuos, alto_figura(k, base = 2.2),
+  #             id  = paste0(id, "_residuos"),
+  #             alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
   print(tablas$estadisticos)
   cat("\n\n**Interpretación.** ", texto, "\n\n", sep = "")
 
