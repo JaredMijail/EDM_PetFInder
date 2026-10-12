@@ -812,7 +812,11 @@ Por lo que se puede apreciar en el diagrama de distribución de frecuencias, la 
 tabla_frecuencias(datos$Name, "Nombre", n_top = 10)
 ```
 
-
+```{r}
+#| label: card-name
+#| echo: true
+tabla_cardinalidad(datos$Description)
+```
 
 ```{r}
 #| label: graf-cuali-Name
