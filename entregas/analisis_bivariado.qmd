@@ -267,7 +267,7 @@ tabla_decision_cc <- function(tab, st, agrupada) {
             ent(min(rowSums(tab))),
       pval(st$chi$p.value)
       ),
-      caption = sprintf("Tabla resumen: %s × velocidad de adopción", nombre_x)
+      caption = sprintf("Tabla resumen del cruce con la variable velocidad de adopción")
   ) |>
     knitr::kable(align = c("l", "l"), format = "html")
 }
