@@ -820,7 +820,7 @@ La variable nombre hace referencia al nombre que recibe el animal que se ofrece 
 tabla_cardinalidad(datos$Description)
 ```
 
-La variable descripción hace referencia al texto que pretendía describir y dar información considerada de interés sobre el animal aosciado con el anuncio. Esta es una variable de texto libre por tanto prácticamente cada descripción es única, por este motivo se considera de alta cardinalidad. La longitud de la descripción se analiza en las variables cuantitativas `desc_char_len` y `desc_word_count`.
+La variable descripción hace referencia al texto que pretendía describir y dar información considerada de interés sobre el animal aosciado con el anuncio. Esta es una variable de texto libre por tanto prácticamente cada descripción es única, por este motivo se considera de alta cardinalidad. La descripción más común es *For Adoption* con una frecuencia relativa de 1.1%. La longitud de la descripción se analiza en las variables cuantitativas `desc_char_len` y `desc_word_count`.
 
 ## `PetID`
 **Identificador de la mascota**
@@ -830,12 +830,14 @@ La variable descripción hace referencia al texto que pretendía describir y dar
 ## `RescuerID`
 **Identificador del rescatista**
 
-*Variable identificadora: cada rescatista tiene un ID único. Se reporta su cardinalidad.*
+*Es una variable identificadora: cada rescatista tiene un ID único.*
 
 ```{r}
 #| label: card-RescuerID
 #| echo: true
-graficos_cuali(datos$RescuerID, "Estado / región", pastel = FALSE, n_top = 10)
+tabla_cardinalidad(datos$RescuerID)
 ```
+
+La variable RescuerID asocia cada anuncio a un único rescatista. Esta se considera una variable de alta cardinalidad dado que contiene 5.595 categorías diferentes, es decir el 37,3% de sus valores son distintos. El identificador más frecuente es *fa90fa5b1ee11c86938398b60abc32cb* con una frecuencia relativa de 3,1%.
 
 :::
