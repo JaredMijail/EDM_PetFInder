@@ -803,25 +803,12 @@ Por lo que se puede apreciar en el diagrama de distribución de frecuencias, la 
 ## `Name`
 **Nombre**
 
-*Variable de alta cardinalidad. Se muestran los 10 nombres más frecuentes; el resto se agrupa en "Otras".*
-
-```{r}
-#| label: cuali-Name
-#| echo: true
-#| tbl-cap: "Nombres más frecuentes"
-tabla_frecuencias(datos$Name, "Nombre", n_top = 10)
-```
+*Variable de alta cardinalidad. Se reporta su cardinalidad*
 
 ```{r}
 #| label: card-name
 #| echo: true
 tabla_cardinalidad(datos$Description)
-```
-
-```{r}
-#| label: graf-cuali-Name
-#| echo: true
-graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 10)
 ```
 
 ## `Description`
