@@ -174,6 +174,8 @@ tabla_estadisticos(datos$Age, caption = "Estadísticos descriptivos — Edad (me
 tabla_atipicos(datos$Age, caption = "Detección de valores atípicos — Edad (meses)")
 ```
 
+Variable de razón (meses). Media 10,45 ≫ mediana 3 y Q3 = 12: sesgo fuerte a la derecha (asimetría 3,76; curtosis 20,77), con 10,0 % de atípicos (1,5·RIQ) y 6,0 % de extremos (3·RIQ) hasta 255 meses.
+
 
 ```{r}
 #| label: graf-Age
@@ -181,6 +183,8 @@ tabla_atipicos(datos$Age, caption = "Detección de valores atípicos — Edad (m
 #| layout-ncol: 2
 graficos_cuanti(datos$Age, "Edad (meses)", tipo = "conteo")
 ```
+
+El histograma y la densidad concentran la masa en edades tempranas (moda 2) y el diagrama de caja muestra una cola larga por encima del bigote superior.
 
 ## `Quantity`
 **Cantidad de animales en el anuncio**
@@ -197,6 +201,8 @@ tabla_estadisticos(datos$Quantity, caption = "Estadísticos descriptivos — Can
 tabla_atipicos(datos$Quantity, caption = "Detección de valores atípicos — Cantidad de animales en el anuncio")
 ```
 
+Conteo de razón con Q1 = Q3 = 1 (77,1 % vale 1): el RIQ = 0 colapsa las cercas de Tukey en [1, 1] y clasifica artificialmente el 22,9 % de los casos (> 1) como atípico.
+
 
 ```{r}
 #| label: graf-Quantity
@@ -204,6 +210,8 @@ tabla_atipicos(datos$Quantity, caption = "Detección de valores atípicos — Ca
 #| layout-ncol: 2
 graficos_cuanti(datos$Quantity, "Animales en el anuncio", tipo = "conteo")
 ```
+
+El perfil de barras decrece escalonadamente desde 1; no hay cola atípica real, solo conteos cada vez menos frecuentes (máximo 20).
 
 ## `Fee` 
 **Tarifa de adopción**
@@ -220,6 +228,8 @@ tabla_estadisticos(datos$Fee, caption = "Estadísticos descriptivos — Tarifa d
 tabla_atipicos(datos$Fee, caption = "Detección de valores atípicos — Tarifa de adopción")
 ```
 
+RIQ = 0 con el 84,5 % en 0 (adopciones gratuitas); media 21,26 ≫ mediana 0 y asimetría 8,92 (curtosis 191,7): el 15,5 % marcado como atípico es el grupo con tarifa (hasta 3.000 MYR).
+
 
 ```{r}
 #| label: graf-Fee
@@ -227,6 +237,8 @@ tabla_atipicos(datos$Fee, caption = "Detección de valores atípicos — Tarifa 
 #| layout-ncol: 2
 graficos_cuanti(datos$Fee, "Tarifa de adopción", tipo = "conteo")
 ```
+
+La distribución colapsa en 0 con una cola larguísima hacia tarifas altas; la señal útil es gratuita vs. con tarifa.
 
 ## `PhotoAmt`
 **Cantidad de fotos**
@@ -244,6 +256,8 @@ tabla_estadisticos(datos$PhotoAmt, caption = "Estadísticos descriptivos — Can
 tabla_atipicos(datos$PhotoAmt, caption = "Detección de valores atípicos — Cantidad de fotos")
 ```
 
+RIQ = 3 (Q1 = 2, Q3 = 5), con 6,1 % de atípicos y 1,9 % de extremos: dispersión moderada, sin complicaciones de manejo.
+
 
 ```{r}
 #| label: graf-PhotoAmt
@@ -251,6 +265,8 @@ tabla_atipicos(datos$PhotoAmt, caption = "Detección de valores atípicos — Ca
 #| layout-ncol: 2
 graficos_cuanti(datos$PhotoAmt, "Cantidad de fotos", tipo = "conteo")
 ```
+
+Distribución concentrada entre 2 y 5 fotos (mediana 3) con cola corta; comportamiento estable.
 
 ## `VideoAmt`
 **Cantidad de videos**
@@ -267,6 +283,8 @@ tabla_estadisticos(datos$VideoAmt, caption = "Estadísticos descriptivos — Can
 tabla_atipicos(datos$VideoAmt, caption = "Detección de valores atípicos — Cantidad de videos")
 ```
 
+RIQ = 0 con el 96,2 % en 0: las cercas colapsan en 0 y el 3,8 % restante (1–8 videos) cae como atípico. Media 0,06.
+
 
 ```{r}
 #| label: graf-VideoAmt
@@ -274,6 +292,8 @@ tabla_atipicos(datos$VideoAmt, caption = "Detección de valores atípicos — Ca
 #| layout-ncol: 2
 graficos_cuanti(datos$VideoAmt, "Cantidad de videos", tipo = "conteo")
 ```
+
+La ausencia de video domina por completo; los conteos positivos son marginales.
 
 ## `sentiment_score`
 **Puntaje de sentimiento**
@@ -289,12 +309,16 @@ tabla_estadisticos(datos$sentiment_score, caption = "Estadísticos descriptivos 
 tabla_atipicos(datos$sentiment_score, caption = "Detección de valores atípicos — Puntaje de sentimiento")
 ```
 
+Escala continua en [-1, 1] casi simétrica (asimetría 0,23; curtosis 0,48): mediana 0,30, media 0,28 y 50 % central entre 0,10 y 0,40 (RIQ = 0,30); solo 5,4 % de atípicos.
+
 ```{r}
 #| label: graf-sentiment-score
 #| echo: true
 #| layout-ncol: 2
 graficos_cuanti(datos$sentiment_score, "Puntaje de sentimiento", tipo = "conteo")
 ```
+
+Distribución acampanada de tono levemente positivo en torno a 0,30; sin colas marcadas.
 
 ## `sentiment_magnitude`
 **Magnitud de sentimiento**
@@ -310,12 +334,16 @@ tabla_estadisticos(datos$sentiment_magnitude, caption = "Estadísticos descripti
 tabla_atipicos(datos$sentiment_magnitude, caption = "Detección de valores atípicos — Magnitud de sentimiento")
 ```
 
+50 % central entre 0,80 y 2,80 (RIQ = 2); media 2,13 > mediana 1,60 y asimetría 2,91: cola derecha con 5,0 % de atípicos hasta 32.
+
 ```{r}
 #| label: graf-sentiment-magnitude
 #| echo: true
 #| layout-ncol: 2
 graficos_cuanti(datos$sentiment_magnitude, "Magnitud de sentimiento", tipo = "conteo")
 ```
+
+Densidad concentrada en intensidades bajas (moda 0,90) con cola larga; pocas descripciones de gran magnitud.
 
 ## `total_labels`
 **Total de etiquetas**
@@ -331,12 +359,16 @@ tabla_estadisticos(datos$total_labels, caption = "Estadísticos descriptivos —
 tabla_atipicos(datos$total_labels, caption = "Detección de valores atípicos — Total de etiquetas")
 ```
 
+50 % central entre 18 y 48 etiquetas (RIQ = 30); mediana 30 y moda 10, con 5,5 % de atípicos que alcanzan 299.
+
 ```{r}
 #| label: graf-total-labels
 #| echo: true
 #| layout-ncol: 2
 graficos_cuanti(datos$total_labels, "Total de etiquetas", tipo = "conteo")
 ```
+
+Unimodal con cola larga a la derecha; la mayoría de anuncios usa pocas etiquetas.
 
 ## `total_faces`
 **Total de rostros detectados**
@@ -352,12 +384,16 @@ tabla_estadisticos(datos$total_faces, caption = "Estadísticos descriptivos — 
 tabla_atipicos(datos$total_faces, caption = "Detección de valores atípicos — Total de rostros detectados")
 ```
 
+Conteo con mediana, Q1, Q3 y moda iguales a 0 (96,4 % sin rostros): el RIQ = 0 colapsa las cercas y marca el 3,6 % restante como atípico.
+
 ```{r}
 #| label: graf-total-faces
 #| echo: true
 #| layout-ncol: 2
 graficos_cuanti(datos$total_faces, "Total de rostros detectados", tipo = "conteo")
 ```
+
+El valor nulo es absolutamente dominante; la presencia de rostros (1–6) es marginal.
 
 ## `total_colors`
 **Total de colores detectados**
@@ -373,12 +409,16 @@ tabla_estadisticos(datos$total_colors, caption = "Estadísticos descriptivos —
 tabla_atipicos(datos$total_colors, caption = "Detección de valores atípicos — Total de colores detectados")
 ```
 
+50 % central entre 20 y 50 colores (RIQ = 30); media 39,72 y mediana 30, con 6,3 % de atípicos hasta 300.
+
 ```{r}
 #| label: graf-total-colors
 #| echo: true
 #| layout-ncol: 2
 graficos_cuanti(datos$total_colors, "Total de colores detectados", tipo = "conteo")
 ```
+
+Unimodal con cola derecha moderada; paleta cromática estable en la mayoría de anuncios.
 
 ## `desc_char_len`
 **Longitud de la descripción (caracteres)**
@@ -394,12 +434,16 @@ tabla_estadisticos(datos$desc_char_len, caption = "Estadísticos descriptivos �
 tabla_atipicos(datos$desc_char_len, caption = "Detección de valores atípicos — Longitud de la descripción (caracteres)")
 ```
 
+50 % central entre 117 y 431 caracteres (RIQ = 314); media 339 > mediana 238, asimetría 4,00 y 5,9 % de atípicos hasta 6.664 caracteres.
+
 ```{r}
 #| label: graf-desc-char-len
 #| echo: true
 #| layout-ncol: 2
 graficos_cuanti(datos$desc_char_len, "Longitud de la descripción (caracteres)", tipo = "conteo")
 ```
+
+Cola derecha marcada: descripciones breves o moderadas son la regla, con casos muy largos aislados.
 
 ## `desc_word_count`
 **Cantidad de palabras en la descripción**
@@ -415,12 +459,16 @@ tabla_estadisticos(datos$desc_word_count, caption = "Estadísticos descriptivos 
 tabla_atipicos(datos$desc_word_count, caption = "Detección de valores atípicos — Cantidad de palabras en la descripción")
 ```
 
+50 % central entre 21 y 81 palabras (RIQ = 60); mediana 44 y moda 3, con 5,7 % de atípicos que llegan a 1.257 palabras.
+
 ```{r}
 #| label: graf-desc-word-count
 #| echo: true
 #| layout-ncol: 2
 graficos_cuanti(datos$desc_word_count, "Cantidad de palabras en la descripción", tipo = "conteo")
 ```
+
+Sesgo a la derecha pronunciado; la mayoría de textos son cortos y unos pocos muy extensos.
 :::
 
 ## Análisis de variables cualitativas
