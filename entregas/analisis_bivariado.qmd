@@ -269,7 +269,7 @@ tabla_decision_cc <- function(tab, st, agrupada) {
       ),
       
   ) |>
-    knitr::kable(align = c("l", "l"), format = "html", caption = sprintf("Tabla resumen del cruce con la variable velocidad de adopción"))
+    knitr::kable(align = c("l", "l"), format = "html")
 }
 
 tabla_contingencia_cc <- function(tab, nombre_x) {
@@ -360,19 +360,12 @@ texto_cc <- function(tab, st, nombre_x, agrupada) {
   }
 
   paste0(
-    "La tabla cruza ", nombre_x, " (", ent(nrow(tab)), " categorías",
+    "Se cruza ", nombre_x, " (", ent(nrow(tab)), " categorías",
     if (agrupada) ", tras agrupar las minoritarias" else "",
     ") con la velocidad de adopción sobre ", ent(sum(tab)), " anuncios. ",
     "La prueba χ² de independencia arroja χ²(", ent(st$chi$parameter), ") = ",
     fmt(st$chi$statistic, 1), " (", pval(st$chi$p.value), "), y la V de Cramér ",
     "corregida es ", fmt(st$v, 3), ", una asociación ", fuerza_v(st$v), ". ",
-    "La celda que más se aparta de la independencia es ", celda_max,
-    " (residuo de Pearson = ", fmt(res_max, 1), "), es decir, ",
-    if (res_max > 0) "hay más" else "hay menos",
-    " casos de los esperados si ambas variables fueran independientes. ",
-    "La categoría con el perfil más desigual es «", rownames(tab)[i_cat],
-    "»: en ella la proporción de adopción va de ", pct(min(st$perfil[i_cat, ])),
-    " a ", pct(max(st$perfil[i_cat, ])), " según la clase. ",
     "Lectura: ", lectura, "."
   )
 }
