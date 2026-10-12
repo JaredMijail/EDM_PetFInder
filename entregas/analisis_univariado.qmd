@@ -565,12 +565,16 @@ graficos_cuali <- function(x, etiqueta, pastel = FALSE, n_top = 10) {
 tabla_frecuencias(datos$Type, "Especie")
 ```
 
+Según la tabla de frecuencias para la variable especie, se observa que las especies domésticas que se ofrecen en adopción en la plataforma de PetFinder son perro y gato. Para el momento de la recolección de los datos había 8.132 anuncios con perros y 6.861 anuncios con gatos en la plataforma para un total de 14.993 anuncios de adopción publicados.
+
 ```{r}
 #| label: graf-cuali-Type
 #| echo: true
 #| layout-ncol: 2
 graficos_cuali(datos$Type, "Especie", pastel = TRUE, n_top = 10)
 ```
+
+En el gráfico de distribución de frecuencias y el de composición porcentual se evidencia que la especie perro predomina con una frecuencia relativa de 54.2% frente a la especie gato cuya frecuencia relativa es de 45.8%. Esto sugiere que en el momento de la recolección de los datos, la mayoría del total de los animales presentes en los refugios de animales, organizaciones de rescate y hogares de paso asociados con PetFinder eran perros.
 
 ## `Gender`
 
@@ -583,6 +587,8 @@ graficos_cuali(datos$Type, "Especie", pastel = TRUE, n_top = 10)
 tabla_frecuencias(datos$Gender, "Género")
 ```
 
+Con la tabla de frecuencias de la variable género se entiende que para el momento de la recolección de los datos, en 7.277 anuncios de la plataforma PetFinder había presencia de uno o más animales hembras, en 5.536 anuncios había uno o más animales machos y en los 2.180 anuncios restantes se hallaban dos o más animales machos y hembras.
+
 ```{r}
 #| label: graf-cuali-Gender
 #| echo: true
@@ -590,8 +596,14 @@ tabla_frecuencias(datos$Gender, "Género")
 graficos_cuali(datos$Gender, "Género", pastel = TRUE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `MaturitySize`
 
+=======
+Por lo que se observa en el diagrama de distribución de frecuencias y de la composición porcentual, para el momento de la recolección de los datos, en casi la mitad de los anuncios publicados de la plataforma PetFinder se hallaban uno o más animales hembras con una frecuencia relativa de 48.5%. Aproximadamente la tercera parte de los anuncios se componían de uno o más animales machos con una frecuencia relativa de 36.9% y por último, el 14.5% de los anuncios restantes presentaban animales hembras y machos. Esto parece indicar que en el total de animales pertenecientes a los refugios de animales, organizaciones de rescate y hogares de paso asociados con PetFinder el género predominante es hembra dado que la frecuencia relativa acumulada de los anuncios donde aparece al menos un animal hembra es de 85.4%.
+
+## `MaturitySize` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Tamaño de madurez**
 
 ```{r}
@@ -601,12 +613,16 @@ graficos_cuali(datos$Gender, "Género", pastel = TRUE, n_top = 10)
 tabla_frecuencias(datos$MaturitySize, "Tamaño de madurez")
 ```
 
+Respecto al tamaño de madurez (estatura y peso definitivo) de los animales, según la tabla de frecuencia se sabe que se emplearon cuatro clasificaciones para los anuncios donde mediano tiene presencia en 10.305 anuncios, las categorías pequeño y grande están asociadas a 3.395 y 1.269 anuncios respectivamente y el tamaño de madurez más escaso es extra grande con tan solo 33 anuncios asociados para el momento en que se recolectaron los datos.
+
 ```{r}
 #| label: graf-cuali-MaturitySize
 #| echo: true
 #| layout-ncol: 2
 graficos_cuali(datos$MaturitySize, "Tamaño de madurez", pastel = TRUE, n_top = 10)
 ```
+
+Por lo que se observa en el gráfico de distribución de frecuencias y el de composición porcentual parece que el tamaño de madurez prevalente es mediano con una frecuencia relativa de 68.7%, le siguen las categorías pequeño, grande y extra grande con frecuencias relativas de 22.6%, 8.4% y 0.2% respectivamente. Esto sugiere que en el total de animales presentes en los refugios de animales, organizaciones de rescate y hogares de paso asociados con PetFinder las razas grandes y extra grandes son poco comunes mientras que las pequeñas y medianas están más disponibles para adopción.
 
 ## `FurLength`
 
@@ -619,6 +635,8 @@ graficos_cuali(datos$MaturitySize, "Tamaño de madurez", pastel = TRUE, n_top = 
 tabla_frecuencias(datos$FurLength, "Longitud del pelaje")
 ```
 
+En cuanto a la longitud del pelaje de los animales anunciados en la plataforma Petfinder, por lo que se observa en la tabla de frecuencias se sabe que en el momento de la recolección de los datos, 8.808 de los anuncios contenían animales con pelaje corto, 5.361 anuncios tenían animales con pelaje de logitud mediana y los 824 anuncios restantes presentaban animales con pelaje largo.
+
 ```{r}
 #| label: graf-cuali-FurLength
 #| echo: true
@@ -626,8 +644,14 @@ tabla_frecuencias(datos$FurLength, "Longitud del pelaje")
 graficos_cuali(datos$FurLength, "Longitud del pelaje", pastel = TRUE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `Vaccinated`
 
+=======
+Según el diagrama de distribución de frecuencias y de composición porcentual para la variable longitud del pelaje, la mayoría de los animales ofrecidos en adopción para el momento de la recolección de los datos tienen pelaje corto con una frecuencia relativa de 58.7% mientras que aproximadamente una tercera parte de los animales tienen una longitud de pelaje mediano con una frecuencia relativa de 35.8% y el 5.5% del total de anuncios contenía animales con pelaje largo. Esto sugiere que el pelaje largo en los animales pertenecientes a los refugios de animales, organizaciones de rescate y hogares de paso asociados con PetFinder de ese momento es poco común, mientras que aquellos con pelaje con longitudes mediana y corta estaban más disponibles para adopción.
+
+## `Vaccinated` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Vacunado**
 
 ```{r}
@@ -637,6 +661,8 @@ graficos_cuali(datos$FurLength, "Longitud del pelaje", pastel = TRUE, n_top = 10
 tabla_frecuencias(datos$Vaccinated, "Vacunado")
 ```
 
+Según la tabla de frecuencias de la variable vacunado se sabe que para anunciar a los animales en adopción en la plataforma PetFinder, la información que se proporcionó en el momento de la recolección de los datos sobre el esquema de vacunación del animal fue si había recibido al menos una vacuna (Sí), si no había recibido ninguna (No) o si el proveedor no estaba seguro (No está seguro). En este caso, en 7.227 de los anuncios se declaró que el animal no estaba vacunado, en 5.898 de los anuncios se afirmó que el animal estaba vacunado y en los 1.868 anuncios restantes se manifestó que no se tenía certeza sobre si el animal había recibido vacunas o no.
+
 ```{r}
 #| label: graf-cuali-Vaccinated
 #| echo: true
@@ -644,8 +670,14 @@ tabla_frecuencias(datos$Vaccinated, "Vacunado")
 graficos_cuali(datos$Vaccinated, "Vacunado", pastel = TRUE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `Dewormed`
 
+=======
+En el diagrama de distribución de frecuencias y de composición porcentual se observa que casi en la mitad de los anuncios en la plataforma PetFinder en el momento de la recolección de los datos, los animales no estaban vacunados con una frecuencia relativa de 48.2%. Por otro lado el 39.3% de los anuncios contenían animales que sí estaban vacunados y el 12.5% restante contenía animales cuyo estado de vacuación era incierto.
+
+## `Dewormed` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Desparasitado**
 
 ```{r}
@@ -655,6 +687,8 @@ graficos_cuali(datos$Vaccinated, "Vacunado", pastel = TRUE, n_top = 10)
 tabla_frecuencias(datos$Dewormed, "Desparasitado")
 ```
 
+Respecto a la desparacitación de los animales de los anuncios de la plataforma PetFinder para el momento de la recolección de los datos, por la tabla de frecuencias se sabe que en 8.397 anuncios los animales presentes sí estaban desparacitados (Sí), en 4.815 de los anuncios los animales ofrecidos en adopción no estaban desparacitados (No) y por otro lado, en los 1.781 anuncios restantes los animales presentados tenían un estado de desparacitación incierto (No está seguro).
+
 ```{r}
 #| label: graf-cuali-Dewormed
 #| echo: true
@@ -662,8 +696,14 @@ tabla_frecuencias(datos$Dewormed, "Desparasitado")
 graficos_cuali(datos$Dewormed, "Desparasitado", pastel = TRUE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `Sterilized`
 
+=======
+De acuerdo con lo que se observa en el diagrama de la distribución de frecuencias y de composición porcentual, en la mayoría de anuncios de la plataforma PetFinder en el momento de la recolección de los datos, se afirma que los animales presentes estaban desparacitados con una frecuencia relativa de 56%. Por otro lado en el 32.1% del total de anuncios se declara que los animales presentados no estaban desparacitados y en el 11.9% de los anuncios restantes no había certeza sobre el estado de desparacitación de los animales presentes. Dado el análisis diagnóstico respecto a la variable vacunado, puede resultar de interés indagar entre la relación inversamente proporcional que existe entre la categoría Sí de vacunado y la categoría Sí de desparacitado, y entre la categoría No de vacunado y la categoría No de desparacitado. Lo anterior debido a que ambos son tratamientos farmacológicos básicos dentro cuidado de un animal doméstico de cualquier especie.
+
+## `Sterilized` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Esterilizado**
 
 ```{r}
@@ -673,6 +713,8 @@ graficos_cuali(datos$Dewormed, "Desparasitado", pastel = TRUE, n_top = 10)
 tabla_frecuencias(datos$Sterilized, "Esterilizado")
 ```
 
+Por lo que se puede observar en la tabla de frecuencias de la variable esterilizado, se tiene que en 10.077 anuncios los animales asociados no estaban esterlizados (No), en 3.101 anuncios lo animales presentes sí lo estaban (Sí) y los animales relacionados con los 1.815 anuncios restantes tenían un estado de esterilización incierto (No está seguro). 
+
 ```{r}
 #| label: graf-cuali-Sterilized
 #| echo: true
@@ -680,8 +722,14 @@ tabla_frecuencias(datos$Sterilized, "Esterilizado")
 graficos_cuali(datos$Sterilized, "Esterilizado", pastel = TRUE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `Health`
 
+=======
+Con lo que se observa en el diagrama de distribución de frecuencias y el de composición porcentual parece que la gran parte de los anuncios publicados relacionan animales que no están esterilizados con una frecuencia relativa de 67.2% mientras que el 20.7% y 12.1% de loa anuncios están relacionados con animales esterilizados y cuyo estado de esterilización es incierto, respectivamente. Es de notar que de acuerdo con los análisis anteriores relacionados con las variables vacunado y desparacitado, la proporción de anuncios que relacionan animales cuyo estado de vacunación, desparacitación y esterilización es similar teniendo 12.5%, 11.9% y 12.1% como frecuencia relativa, respectivamente. Puede ser de interés indagar sobre este aspecto.
+
+## `Health` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Estado de salud**
 
 ```{r}
@@ -691,6 +739,8 @@ graficos_cuali(datos$Sterilized, "Esterilizado", pastel = TRUE, n_top = 10)
 tabla_frecuencias(datos$Health, "Estado de salud")
 ```
 
+En cuanto a la variable salud, según su tabla de frecuencias se tiene que los anuncios de animales en adopción de la plataforma PetFinder en el momento de la recolección de los datos, 14.478 anuncios corresponden a animales sanos mientras que otros 481 anuncios están asociados a animales con lesiones leves y los 34 anuncios restantes están asociados a animales con lesiones graves.
+
 ```{r}
 #| label: graf-cuali-Health
 #| echo: true
@@ -698,8 +748,14 @@ tabla_frecuencias(datos$Health, "Estado de salud")
 graficos_cuali(datos$Health, "Estado de salud", pastel = TRUE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `AdoptionSpeed`
 
+=======
+De acuerdo con lo que se observa en el diagrama de distribución de frecuencias y el de composición porcentual se tiene que casi todos los anuncios publicados en la plataforma PetFinder en el momento de la recolección de los datos están asociados a animales sanos mientras que en el 3.4% de anuncios restantes se manifiesta que los animales relacionados presentan algún tipo de lesión.
+
+## `AdoptionSpeed` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Velocidad de adopción**
 
 ```{r}
@@ -709,6 +765,8 @@ graficos_cuali(datos$Health, "Estado de salud", pastel = TRUE, n_top = 10)
 tabla_frecuencias(datos$AdoptionSpeed, "Velocidad de adopción")
 ```
 
+Según la tabla de frecuencias de la variable tiempo de adopción elaborada con los anuncios que fueron recolectados de la plataforma PetFinder, tan solo el 410 de los anuncios están asociados a animales que fueron adoptados el mismo día que fueron anunciados desde los refugios de animales, organizaciones de rescate u hogares de paso. Por otra parte, 3.090, 4.037 y 3.259 de los anuncios corresponden a animales cuyo tiempo de adopción fue 1-7 días, 8-30 días y 31-90 días, respectivamente. Por último, 4.197 de los anuncios están asociados a animales que no fueron adoptados.
+
 ```{r}
 #| label: graf-cuali-AdoptionSpeed
 #| echo: true
@@ -716,8 +774,14 @@ tabla_frecuencias(datos$AdoptionSpeed, "Velocidad de adopción")
 graficos_cuali(datos$AdoptionSpeed, "Velocidad de adopción", pastel = TRUE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `Color1`
 
+=======
+Por lo que se observa en el diagrama de distribución de frecuencias y el composición porcentual, las frecuencias acumladas de los tiempos de adopción 1-7 días, 8-30 días y 31-90 días es de 69,2%, equivalentemente, el 69.2% de los anuncios corresponden a animales cuyo tiempo de adopción es de por lo menos 1 día. Por otro lado aproximadamente la cuarta parte de los anuncios están asociados a animales que no fueron adoptados mientras que tan solo el 2.7% de los anuncios relacionan animales que fueron adoptados el mismo día que fue publicado su anuncio de adopción.
+
+## `Color1` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Color principal**
 
 ```{r}
@@ -727,6 +791,8 @@ graficos_cuali(datos$AdoptionSpeed, "Velocidad de adopción", pastel = TRUE, n_t
 tabla_frecuencias(datos$Color1, "Color principal")
 ```
 
+Por lo que se puede observar de la tabla de frecuencias de la variable color principal, para los anuncios publicados en la plataforma PetFinder en el momento que fueron recolectados los datos, se consideraron siete clasificaciones de color del pelaje para los animales (colores numerados del 1 al 7). Se tiene que 7.427 de los anuncios corresponden a animales cuyo pelaje de color 1, 3.750 anuncios contienen animales cuyo pelaje es de color 2 y 947, 884, 684, 667 y 634 de los anuncios corresponden a animales cuyo pelaje es de color 3, color 5, color 6, color 7 y color 4, respectivamente.
+
 ```{r}
 #| label: graf-cuali-Color1
 #| echo: true
@@ -734,8 +800,14 @@ tabla_frecuencias(datos$Color1, "Color principal")
 graficos_cuali(datos$Color1, "Color principal", pastel = TRUE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `Color2`
 
+=======
+Por lo que se observa en los diagramas de distribución de frecuencias y de composición porcentual, aproximadamente la mitad de los anuncios contenían animales cuyo pelaje es de color 1 con unafrecuencia realtiva de 49.5% mientras que la cuarta parte de los anuncios contenían animales cuyo pelaje es de color 2. Por otro lado, los colores 3, 4, 5, 6 y 7 están aproximadamente uniformemente distribuidos para el resto de los anuncios con frecuencias relativas de 6.3%, 4.2%, 5.9%, 4.6% y 4.4%, respectivamente.
+
+## `Color2` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Color secundario**
 
 ```{r}
@@ -745,12 +817,16 @@ graficos_cuali(datos$Color1, "Color principal", pastel = TRUE, n_top = 10)
 tabla_frecuencias(datos$Color2, "Color secundario")
 ```
 
+Respecto a la variable color secundario, según su tabla de frecuencias asociada a los anuncios de la plataforma PetFinder cuyos datos fueron recolectados, se observa que se consideraron siete clasificaciones para el color del pelaje (colores numerados del 0 al 7, excepto el 1). Se tiene que 4.471 anuncios corresponden a animales cuyo pelaje contiene el color secundario 0. Por otra parte 3.438 anuncios corresponden a animales cuyo pelaje contiene el color secundario 7. Para los colores 2, 5, 6, 4 y 3 tenemos 3.313, 1.128, 1.063, 870 y 710 anunciones que corresponden a animales cuyo pelaje contiene ese color secundario, respectivamente.
+
 ```{r}
 #| label: graf-cuali-Color2
 #| echo: true
 #| layout-ncol: 2
 graficos_cuali(datos$Color2, "Color secundario", pastel = TRUE, n_top = 10)
 ```
+
+Por lo observado en el diagrama de distribución de frecuencias y de composición porcentual, se tiene que aproximadamente la tercera parte de los anuncios de adopción de la plataforma PetFinder para el momento de la recolección de los datos están relacionados con animales cuyo pelaje contiene el color secundario 0. Por otro lado los siguientes colores secundarios más comunes son el 7 y el 2 con una frecuencia relativa de 22.9% y 22.1% respectivamente. Por último, los colores secundarios 5, 6, 4 y 3 son menos comunes con una frecuencia relativa de 7.5%, 7.1%, 5.8% y 4.7% respectivamente.
 
 ## `Color3`
 
@@ -763,12 +839,16 @@ graficos_cuali(datos$Color2, "Color secundario", pastel = TRUE, n_top = 10)
 tabla_frecuencias(datos$Color3, "Color terciario")
 ```
 
+Según la tabla de frecuencias de la variable color terciario elaborada con los anuncios cuyos datos fueron recolectados de la plataforma PetFinder, se tiene que se consideraron 6 clasificaciones para los colores terciarios (colores 0, 3, 4, 5, 6, 7). En este caso, 10.604 anuncios corresponden a animales cuyo pelaje contiene el color terciario 0, 3.221 anuncios contienen animales cuyo pelaje tiene el color terciario 7. En otra instancia, se tiene que 417, 378, 198 y 174 anuncios corresponden a animales cuyo pelaje tiene los colores terciarios 5, 6, 4 y 3, respectivamente.
+
 ```{r}
 #| label: graf-cuali-Color3
 #| echo: true
 #| layout-ncol: 2
 graficos_cuali(datos$Color3, "Color terciario", pastel = TRUE, n_top = 10)
 ```
+
+Por lo apreciado en el diagrama de distribución de frecuencias y de composición porcentual, se tiene que la mayoría de los anuncios publicados refieren a animales cuyo pelaje contiene el color terciario 0 con una frecuencia relativa de 70.7%. Además, el segundo color terciario más común es el color 7 con una frecuencia relativa de 21.5%. Por otro lado, el 7,8% de los anuncios restantes están asociados a animales cuyo pelaje contiene uno y solo uno de los colores terciarios 5, 6, 4 y 3.
 
 ## `Breed1`
 
@@ -777,9 +857,11 @@ graficos_cuali(datos$Color3, "Color terciario", pastel = TRUE, n_top = 10)
 ```{r}
 #| label: cuali-Breed1
 #| echo: true
-#| tbl-cap: "Razas principales más frecuentes (top 15)"
+#| tbl-cap: "Razas principales"
 tabla_frecuencias(datos$Breed1, "Raza principal", n_top = 10)
 ```
+
+Dada la gran diversidad de razas principales consideradas, para elaborar una tabla de frecuencias más informativa de la variable raza principal de los anuncios publicados en la plataforma PetFinder para el momento que los datos fueron recolectados, se optó por agrupar las clasificaciones de raza principal que tuvieran una proporción menor o igual al 1%. Según esta tabla de frecuencias, 5.927 de los anuncios corresponden a animales cuya raza principal es 307, 3.634 anuncios están relacionados con animales cuya raza principal es 266 y 1.258 anuncios tienen asociados animales cuya raza principal es 265. Además, 342, 296, 264, 221, 205 y 190 anuncios asocian a animales cuya raza principal es 299, 264, 292, 285, 141 y 205 respectivamente. El resto de los 2.656 anuncios corresponden a animales cuya raza principal es una de las otras 167 categorías consideradas (Otras).
 
 ```{r}
 #| label: graf-cuali-Breed1
@@ -787,22 +869,33 @@ tabla_frecuencias(datos$Breed1, "Raza principal", n_top = 10)
 graficos_cuali(datos$Breed1, "Raza principal", pastel = FALSE, n_top = 10)
 ```
 
+<<<<<<< HEAD
 ## `Breed2`
 
+=======
+Según lo que se aprecia en el diagrama de distribución de frecuencias se tiene que la raza más común es 307 con una frecuencia relativa de 39.5%. La segunda raza principal más común es 266 con una frecuencia relativa de 24.2% y la tercera raza principal común es 265 con una frecuencia relativa de 8.4%. Por otra parte, el 10,3% de los anuncios contiene animales cuya raza principal es una y solo una de 299, 264, 292, 285, 141 o 205. Por último, el 17.7% restante de los anuncios están asociados a animales cuya raza principal es una y solo una de las otras 167 categorías agrupadas (Otras).
+
+## `Breed2` 
+>>>>>>> 7c3fa63 (analisis univariados cualis)
 **Raza secundaria**
 
 ```{r}
 #| label: cuali-Breed2
 #| echo: true
-#| tbl-cap: "Razas secundarias más frecuentes (top 15)"
+#| tbl-cap: "Razas secundarias"
 tabla_frecuencias(datos$Breed2, "Raza secundaria", n_top = 10)
 ```
+
+Al igual que con las razas principales, para las razas secundarias se agruparon aquellas cuya proporción fuera menor o igual al 1% en la categoría Otras. Dado lo anterior, en la tabla de frecuencias construida con los datos recolectados de los anuncios de la plataforma PetFinder se observa que 10.762 de los anuncios refieren animales cuya raza secundaria es 0. Además, 1.727 anuncios están asociados a animales cuya raza secundaria es 307. Por otra parte, 599, 321, 138, 125, 105, 91 y 86 anuncios corresponden a animales cuya raza secundaria es una y solo una de 266, 265, 299, 264, 292, 218 y 141. Por último, 1.039 anuncios refieren animales cuya raza secundaria es muy poco común y se clasifica como Otras.
+
 
 ```{r}
 #| label: graf-cuali-Breed2
 #| echo: true
 graficos_cuali(datos$Breed2, "Raza secundaria", pastel = FALSE, n_top = 10)
 ```
+
+Por lo que se oberva en el diagrama de distribución de frecuencias, se tiene que para el momento de la recolección de los datos la mayoría de los anuncios publicados en PetFinder están relacionados a animales cuya raza secundaria es la raza 0 con una frecuencia relativa del 71.8%. La segunda raza secundaria más común es 307 con una frecuencia relativa de 11.5% y la tercera raza secundaria común es 266 con una frecuencia relativa de 4%. Por otra parte, el 5.7% de los anuncios corresponden a animales cuya raza secundaria es una y solo una de 265, 299, 264, 292, 218 o 141. Por último, el 6.9% restante de los anuncios refiere animales cuya raza secundaria es muy poco común y clasifica como Otras.
 
 ## `State`
 
@@ -811,15 +904,19 @@ graficos_cuali(datos$Breed2, "Raza secundaria", pastel = FALSE, n_top = 10)
 ```{r}
 #| label: cuali-State
 #| echo: true
-#| tbl-cap: "Estados / regiones más frecuentes (top 15)"
+#| tbl-cap: "Estados / regiones"
 tabla_frecuencias(datos$State, "Estado / región", n_top = 10)
 ```
+
+Dado que se contaban con estados o regiones con una proporción de anuncios publicados menor al 1%, se decidió agrupar dichos lugares en la categoría Otras. Según la tabla de frecuencias de la variable estado al momento en que se recolectaron los datos de la plataforma PetFinder, se tiene que se consideraron 14 regiones o estados de Estados Unidos. Desde el estado o región 41326 se publicaron 8.714 anuncios de adopción, desde el estado o región 41401 se publicaron 3.845 anuncios y desde el estado o región 41327 se publicaron 843 anuncios. Además, desde los estados o regiones 41336, 41330, 41332, 41324, 41325 y 41335 se publicaron 843, 507, 420, 253, 137, 110 y 85 anuncios, respectivamente.
 
 ```{r}
 #| label: graf-cuali-State
 #| echo: true
 graficos_cuali(datos$State, "Estado / región", pastel = FALSE, n_top = 10)
 ```
+
+Por lo que se puede apreciar en el diagrama de distribución de frecuencias, la mayor parte de los anuncios publicados en PetFinder son del estado o región 41326 con una frecuencia relativa de 58.1%. También se observa que la cuarta parte de los anuncios provienen del estado o región 41401. Por otra parte, el 15.7% de los anuncios provienen de uno y solo uno de los estados o regiones 41327, 41336, 41330, 41332, 41324, 41325 y 41335. Por úlitmo, el 0.5% restante de los anuncios provienen de otros 5 estados o regiones categorizados como Otras.
 
 ## `Name`
 
@@ -830,14 +927,16 @@ graficos_cuali(datos$State, "Estado / región", pastel = FALSE, n_top = 10)
 ```{r}
 #| label: cuali-Name
 #| echo: true
-#| tbl-cap: "Nombres más frecuentes (top 20)"
+#| tbl-cap: "Nombres más frecuentes"
 tabla_frecuencias(datos$Name, "Nombre", n_top = 10)
 ```
+
+
 
 ```{r}
 #| label: graf-cuali-Name
 #| echo: true
-graficos_cuali(datos$Name, "Nombre", pastel = FALSE, n_top = 10)
+tabla_cardinalidad(datos$Name)
 ```
 
 ## `Description`
