@@ -116,7 +116,7 @@ pal_clases2 <- unname(colorRampPalette(pal_clases, space = "Lab")(11))
 ````
 
 ## `AdoptionSpeed` VS variables cualitativas
-Dado que se cuenta con variables de alta cardinalidad, para hacerlas manejables se optó por agrupar las categorías con frecuencias relativas menores o iguales al 1%. En caso de que ninguna de las categorías alcance el umbral, se hará la descripción sobre las 10 categorías más frecuentes.
+En esta primera subsección se presenta el contraste de la variable velocidad de adopción frente a 16 variables cualitativas del conjunto de datos PetFinder.
 
 
 ````{r}
@@ -256,22 +256,17 @@ tabla_decision_cc <- function(tab, st, agrupada) {
     if (agrupada) paste0("; minoritarias agrupadas en «", ETIQUETA_OTRAS, "»") else ""
   )
   tibble::tibble(
-    `Elemento de decisión` = c(
-      "Casos completos del par (n)",
+    `Descripción` = c(
+      "Pares completos",
       if (agrupada) "Categorías de la variable (tras agrupar)" else "Categorías de la variable",
-      "Categorías de AdoptionSpeed",
-      "Categoría más pequeña (frecuencia mínima)",
-      "Esperados < 5 en la tabla (%)",
-      "p-valor de la prueba χ²",
-      "Tratamiento elegido"),
+      "Ffrecuencia mínima",
+      "p-valor de la prueba χ²"),
     Valor = c(
       ent(sum(tab)),
       ent(nrow(tab)),
-      ent(ncol(tab)),
-      ent(min(rowSums(tab))),
-      pct(100 * mean(st$esperados < 5)),
-      pval(st$chi$p.value),
-      tratamiento)
+            ent(min(rowSums(tab))),
+      pval(st$chi$p.value)
+      )
   ) |>
     knitr::kable(align = c("l", "l"), format = "html")
 }
@@ -381,22 +376,6 @@ texto_cc <- function(tab, st, nombre_x, agrupada) {
   )
 }
 
-# ---------------------------------------------------------------------
-# 8. Función principal
-# ---------------------------------------------------------------------
-# x                 : vector de la variable cualitativa (p. ej. datos$Gender)
-# alta_cardinalidad : TRUE aplica agrupar_niveles() antes del análisis
-# y                 : variable respuesta (por defecto datos$AdoptionSpeed, factor)
-# nombre            : nombre original de la variable; solo hace falta cuando x no
-#                     llega como datos$variable (p. ej. datos[[v]] dentro de un bucle)
-# traducciones      : vector con nombres = variable original, valores = traducción
-# paleta            : colores de los niveles de la variable respuesta
-# encabezado        : imprime un título "####" antes de los resultados (para Quarto/Rmd)
-#
-# Se calcula todo primero y se imprime al final, en este orden: tabla de
-# decisión, tabla de contingencia, gráfico de perfil, gráfico de residuos,
-# tabla de estadísticos e interpretación. Devuelve invisiblemente una lista
-# con las mismas piezas.
 analisis_bivar_cuali_vs_cuali <- function(x,
                                           alta_cardinalidad = FALSE,
                                           y            = datos$AdoptionSpeed,
@@ -484,19 +463,6 @@ extraer_nombre <- function(expr) {
   nm <- sub("^.*\\[\\[\"(.*)\"\\]\\]$", "\\1", nm)
   gsub("`", "", nm)
 }
-
-# ---------------------------------------------------------------------
-# Ejemplo de uso en bucle (chunk con results = 'asis'), con tabla resumen
-# ---------------------------------------------------------------------
-# VARS_CC   <- c("Type", "Gender", "MaturitySize", "FurLength", "Vaccinated",
-#                "Dewormed", "Sterilized", "Health", "Color1", "Color2", "Color3",
-#                "Breed1", "Breed2", "State", "Name", "RescuerID")
-# VARS_ALTA <- c("Breed1", "Breed2", "State", "Name", "RescuerID")
-#
-# res_cc <- lapply(VARS_CC, function(v) {
-#   analisis_bivar_cuali_vs_cuali(datos[[v]], alta_cardinalidad = v %in% VARS_ALTA,
-#                                 nombre = v)$estadisticos
-# }) |> dplyr::bind_rows()
 ````
 
 
@@ -509,6 +475,8 @@ extraer_nombre <- function(expr) {
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Type)
 ````
+
+
 
 ## `Gender`
 
