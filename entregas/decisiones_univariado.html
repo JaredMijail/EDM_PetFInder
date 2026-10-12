@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -78,14 +78,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-6453f418aeef366c23116eb9cb0b6816.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-5a1953863e1f72ef3b996ef827f01ca7.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-74d19e79992467fccd1882236d97e988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-070e54764458ee5734a9f7e2965ee2d2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-74d19e79992467fccd1882236d97e988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8398234f745cab2ff1d3e5c5891a9e61.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-d3563fbecff4384cabf838e9ab5114ab.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8398234f745cab2ff1d3e5c5891a9e61.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -149,10 +149,10 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Decisiones de recodificación – EDM_PetFinder">
-<meta property="og:description" content="Transformación de Quantity y Fee (ordinales) y de VideoAmt y total_faces (binarias) a partir de los diagnósticos del análisis univariado.">
+<meta property="og:description" content="Transformación de VideoAmt y total_faces en variables binarias a partir de los diagnósticos del análisis univariado.">
 <meta property="og:site_name" content="EDM_PetFinder">
 <meta name="twitter:title" content="Decisiones de recodificación – EDM_PetFinder">
-<meta name="twitter:description" content="Transformación de Quantity y Fee (ordinales) y de VideoAmt y total_faces (binarias) a partir de los diagnósticos del análisis univariado.">
+<meta name="twitter:description" content="Transformación de VideoAmt y total_faces en variables binarias a partir de los diagnósticos del análisis univariado.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -594,8 +594,6 @@ window.Quarto = {
   <ul>
   <li><a href="#resumen-de-decisiones" id="toc-resumen-de-decisiones" class="nav-link active" data-scroll-target="#resumen-de-decisiones">Resumen de decisiones</a></li>
   <li><a href="#recodificación" id="toc-recodificación" class="nav-link" data-scroll-target="#recodificación">Recodificación</a></li>
-  <li><a href="#quantity-cualitativa-ordinal" id="toc-quantity-cualitativa-ordinal" class="nav-link" data-scroll-target="#quantity-cualitativa-ordinal"><code>Quantity</code> → cualitativa ordinal</a></li>
-  <li><a href="#fee-cualitativa-ordinal-3-niveles" id="toc-fee-cualitativa-ordinal-3-niveles" class="nav-link" data-scroll-target="#fee-cualitativa-ordinal-3-niveles"><code>Fee</code> → cualitativa ordinal (3 niveles)</a></li>
   <li><a href="#videoamt-binaria" id="toc-videoamt-binaria" class="nav-link" data-scroll-target="#videoamt-binaria"><code>VideoAmt</code> → binaria</a></li>
   <li><a href="#total_faces-binaria" id="toc-total_faces-binaria" class="nav-link" data-scroll-target="#total_faces-binaria"><code>total_faces</code> → binaria</a></li>
   <li><a href="#verificación" id="toc-verificación" class="nav-link" data-scroll-target="#verificación">Verificación</a></li>
@@ -609,7 +607,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../entregas/descripcion.html">Entrega 01</a></li><li class="breadcrumb-item"><a href="../entregas/decisiones_univariado.html">Decisiones de recodificación</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Decisiones de recodificación</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Código</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Mostrar todo el código</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Ocultar todo el código</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">Ver el código fuente</a></li></ul></div></div>
-<p class="subtitle lead">Transformación de Quantity y Fee (ordinales) y de VideoAmt y total_faces (binarias) a partir de los diagnósticos del análisis univariado.</p>
+<p class="subtitle lead">Transformación de VideoAmt y total_faces en variables binarias a partir de los diagnósticos del análisis univariado.</p>
 </div>
 
 
@@ -637,30 +635,28 @@ window.Quarto = {
 </button>
 </div>
 </div>
-<p>El <a href="../entregas/analisis_univariado.html">Análisis Univariado Diagnóstico</a> mostró que <code>Quantity</code>, <code>Fee</code>, <code>VideoAmt</code> y <code>total_faces</code> tienen <span class="math inline">\(RIQ = 0\)</span>: sus cercas de Tukey colapsan y la escala de razón original es poco informativa. Aquí se fijan los cortes y la recodificación resultante.</p>
+<p>El <a href="../entregas/analisis_univariado.html">Análisis Univariado Diagnóstico</a> mostró que <code>VideoAmt</code> y <code>total_faces</code> tienen <span class="math inline">\(RIQ = 0\)</span>: sus cercas de Tukey colapsan en el valor nulo y la escala de razón original es poco informativa. Aquí se fija la recodificación resultante.</p>
 <section id="resumen-de-decisiones" class="level2">
 <h2 class="anchored" data-anchor-id="resumen-de-decisiones">Resumen de decisiones</h2>
 <div class="cell" data-tbl-cap="Decisiones de recodificación: escala original, decisión, niveles y evidencia univariada">
 <details class="code-fold">
 <summary>Ver código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Variable,      <span class="sc">~</span><span class="st">`</span><span class="at">Escala original</span><span class="st">`</span>, <span class="sc">~</span>Decisión,                    <span class="sc">~</span>Niveles,                                              <span class="sc">~</span><span class="st">`</span><span class="at">Evidencia (univariado)</span><span class="st">`</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Quantity"</span>,     <span class="st">"Entero (razón)"</span>,   <span class="st">"Cualitativa ordinal"</span>,        <span class="st">"Único (1) · Pocos (2–3) · Muchos (≥ 4)"</span>,               <span class="st">"RIQ = 0; 77,1 % en 1"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Fee"</span>,          <span class="st">"Entero (razón)"</span>,   <span class="st">"Cualitativa ordinal"</span>,        <span class="st">"Gratuita (0) · Tarifa baja (&lt; 100) · Tarifa alta (≥ 100)"</span>, <span class="st">"RIQ = 0; 84,5 % en 0"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VideoAmt"</span>,     <span class="st">"Entero (razón)"</span>,   <span class="st">"Binaria (dicotómica)"</span>,       <span class="st">"Sin video (0) · Con video (≥ 1)"</span>,                      <span class="st">"RIQ = 0; 96,2 % en 0"</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_faces"</span>,  <span class="st">"Entero (razón)"</span>,   <span class="st">"Binaria (dicotómica)"</span>,       <span class="st">"Sin rostros (0) · Con rostros (≥ 1)"</span>,                  <span class="st">"RIQ = 0; mediana = moda = Q1 = Q3 = 0; 96,4 % en 0"</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Variable,      <span class="sc">~</span><span class="st">`</span><span class="at">Escala original</span><span class="st">`</span>, <span class="sc">~</span>Decisión,               <span class="sc">~</span>Niveles,                                <span class="sc">~</span><span class="st">`</span><span class="at">Evidencia (univariado)</span><span class="st">`</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VideoAmt"</span>,     <span class="st">"Entero (razón)"</span>,   <span class="st">"Binaria (dicotómica)"</span>,  <span class="st">"Sin video (0) · Con video (≥ 1)"</span>,       <span class="st">"RIQ = 0; 96,2 % en 0"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_faces"</span>,  <span class="st">"Entero (razón)"</span>,   <span class="st">"Binaria (dicotómica)"</span>,  <span class="st">"Sin rostros (0) · Con rostros (≥ 1)"</span>,   <span class="st">"RIQ = 0; mediana = moda = Q1 = Q3 = 0; 96,4 % en 0"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Decisiones de recodificación: escala original, decisión, niveles y evidencia univariada</caption>
 <colgroup>
-<col style="width: 7%">
-<col style="width: 10%">
-<col style="width: 13%">
-<col style="width: 36%">
-<col style="width: 32%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 15%">
+<col style="width: 26%">
+<col style="width: 37%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -672,20 +668,6 @@ window.Quarto = {
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">Quantity</td>
-<td style="text-align: left;">Entero (razón)</td>
-<td style="text-align: left;">Cualitativa ordinal</td>
-<td style="text-align: left;">Único (1) · Pocos (2–3) · Muchos (≥ 4)</td>
-<td style="text-align: left;">RIQ = 0; 77,1 % en 1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Fee</td>
-<td style="text-align: left;">Entero (razón)</td>
-<td style="text-align: left;">Cualitativa ordinal</td>
-<td style="text-align: left;">Gratuita (0) · Tarifa baja (&lt; 100) · Tarifa alta (≥ 100)</td>
-<td style="text-align: left;">RIQ = 0; 84,5 % en 0</td>
-</tr>
 <tr class="odd">
 <td style="text-align: left;">VideoAmt</td>
 <td style="text-align: left;">Entero (razón)</td>
@@ -712,170 +694,40 @@ window.Quarto = {
 <summary>Ver código</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>datos_dec <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Quantity → ordinal de 3 niveles (orden creciente en el número de animales)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Quantity_ord =</span> <span class="fu">factor</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        Quantity <span class="sc">==</span> <span class="dv">1</span>     <span class="sc">~</span> <span class="st">"Único (1)"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        Quantity <span class="sc">%in%</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span> <span class="sc">~</span> <span class="st">"Pocos (2–3)"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        Quantity <span class="sc">&gt;=</span> <span class="dv">4</span>     <span class="sc">~</span> <span class="st">"Muchos (≥ 4)"</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels  =</span> <span class="fu">c</span>(<span class="st">"Único (1)"</span>, <span class="st">"Pocos (2–3)"</span>, <span class="st">"Muchos (≥ 4)"</span>),</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fee → ordinal de 3 niveles: gratuita vs. tarifa baja/alta (masa equilibrada)</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Fee_cat =</span> <span class="fu">factor</span>(</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        Fee <span class="sc">==</span> <span class="dv">0</span>    <span class="sc">~</span> <span class="st">"Gratuita (0)"</span>,</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        Fee <span class="sc">&lt;</span> <span class="dv">100</span>   <span class="sc">~</span> <span class="st">"Tarifa baja (&lt; 100)"</span>,</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        Fee <span class="sc">&gt;=</span> <span class="dv">100</span>  <span class="sc">~</span> <span class="st">"Tarifa alta (≥ 100)"</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels  =</span> <span class="fu">c</span>(<span class="st">"Gratuita (0)"</span>, <span class="st">"Tarifa baja (&lt; 100)"</span>, <span class="st">"Tarifa alta (≥ 100)"</span>),</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># VideoAmt → binaria: presencia/ausencia de video</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">VideoAmt_bin =</span> <span class="fu">factor</span>(</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(VideoAmt <span class="sc">==</span> <span class="dv">0</span>, <span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>),</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>)</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># total_faces → binaria: presencia/ausencia de rostros (los perdidos se conservan)</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_faces_bin =</span> <span class="fu">factor</span>(</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">is.na</span>(total_faces) <span class="sc">~</span> <span class="cn">NA_character_</span>,</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        total_faces <span class="sc">==</span> <span class="dv">0</span>   <span class="sc">~</span> <span class="st">"Sin rostros (0)"</span>,</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        total_faces <span class="sc">&gt;=</span> <span class="dv">1</span>   <span class="sc">~</span> <span class="st">"Con rostros (≥ 1)"</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sin rostros (0)"</span>, <span class="st">"Con rostros (≥ 1)"</span>)</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabla de frecuencias de una variable ya recodificada (respeta el orden de los niveles)</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>tabla_decision <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">etiqueta =</span> <span class="st">"Nivel"</span>) {</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.factor</span>(x)) x <span class="cf">else</span> <span class="fu">factor</span>(x)</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(f[<span class="sc">!</span><span class="fu">is.na</span>(f)])                        <span class="co"># conserva el orden de los niveles</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  tb <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Nivel =</span> <span class="fu">levels</span>(f), <span class="at">n =</span> <span class="fu">as.integer</span>(<span class="fu">table</span>(f))) <span class="sc">|&gt;</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n),</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">cumsum</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span>),</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n =</span> <span class="fu">ent</span>(n),</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span>),</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span>))</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">anyNA</span>(x)) {</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    tb <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(tb, tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Nivel =</span> <span class="st">"Valores perdidos"</span>, <span class="at">n =</span> <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(x))),</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"—"</span>, <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"—"</span>))</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tb, <span class="at">col.names =</span> <span class="fu">c</span>(etiqueta, <span class="st">"Frecuencia absoluta"</span>, <span class="st">"Frecuencia relativa"</span>,</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Frecuencia acumulada"</span>), <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># VideoAmt → binaria: presencia/ausencia de video</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">VideoAmt_bin =</span> <span class="fu">factor</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(VideoAmt <span class="sc">==</span> <span class="dv">0</span>, <span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># total_faces → binaria: presencia/ausencia de rostros (los perdidos se conservan)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_faces_bin =</span> <span class="fu">factor</span>(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">is.na</span>(total_faces) <span class="sc">~</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        total_faces <span class="sc">==</span> <span class="dv">0</span>   <span class="sc">~</span> <span class="st">"Sin rostros (0)"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        total_faces <span class="sc">&gt;=</span> <span class="dv">1</span>   <span class="sc">~</span> <span class="st">"Con rostros (≥ 1)"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sin rostros (0)"</span>, <span class="st">"Con rostros (≥ 1)"</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabla de frecuencias de una variable ya recodificada (respeta el orden de los niveles)</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>tabla_decision <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">etiqueta =</span> <span class="st">"Nivel"</span>) {</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.factor</span>(x)) x <span class="cf">else</span> <span class="fu">factor</span>(x)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(f[<span class="sc">!</span><span class="fu">is.na</span>(f)])                        <span class="co"># conserva el orden de los niveles</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  tb <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Nivel =</span> <span class="fu">levels</span>(f), <span class="at">n =</span> <span class="fu">as.integer</span>(<span class="fu">table</span>(f))) <span class="sc">|&gt;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n),</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">cumsum</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span>),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n =</span> <span class="fu">ent</span>(n),</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span>),</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span>))</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">anyNA</span>(x)) {</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    tb <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(tb, tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Nivel =</span> <span class="st">"Valores perdidos"</span>, <span class="at">n =</span> <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(x))),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"—"</span>, <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"—"</span>))</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tb, <span class="at">col.names =</span> <span class="fu">c</span>(etiqueta, <span class="st">"Frecuencia absoluta"</span>, <span class="st">"Frecuencia relativa"</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Frecuencia acumulada"</span>), <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-</div>
-</section>
-<section id="quantity-cualitativa-ordinal" class="level2">
-<h2 class="anchored" data-anchor-id="quantity-cualitativa-ordinal"><code>Quantity</code> → cualitativa ordinal</h2>
-<p><strong>Corte: 1 · 2–3 · ≥ 4.</strong></p>
-<p><span class="math inline">\(RIQ = 0\)</span> porque <span class="math inline">\(Q1 = Q3 = 1\)</span> (77,1 % ofrece un solo animal) y las cercas colapsan en <code>[1, 1]</code>. El corte agrupa por orden del conteo y conserva masa en cada nivel: el menos frecuente retiene el 8,5 % (1.280 casos), así que ninguno queda degenerado.</p>
-<ul>
-<li>1 → <strong>Único (1)</strong></li>
-<li>2–3 → <strong>Pocos (2–3)</strong></li>
-<li>≥ 4 → <strong>Muchos (≥ 4)</strong></li>
-</ul>
-<div class="cell" data-tbl-cap="Distribución de Quantity recodificada (ordinal)">
-<details class="code-fold">
-<summary>Ver código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>Quantity_ord, <span class="st">"Nivel de cantidad"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Distribución de Quantity recodificada (ordinal)</caption>
-<colgroup>
-<col style="width: 22%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 26%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Nivel de cantidad</th>
-<th style="text-align: right;">Frecuencia absoluta</th>
-<th style="text-align: right;">Frecuencia relativa</th>
-<th style="text-align: right;">Frecuencia acumulada</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Único (1)</td>
-<td style="text-align: right;">11.565</td>
-<td style="text-align: right;">77,1 %</td>
-<td style="text-align: right;">77,1 %</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Pocos (2–3)</td>
-<td style="text-align: right;">2.148</td>
-<td style="text-align: right;">14,3 %</td>
-<td style="text-align: right;">91,5 %</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Muchos (≥ 4)</td>
-<td style="text-align: right;">1.280</td>
-<td style="text-align: right;">8,5 %</td>
-<td style="text-align: right;">100,0 %</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<section id="fee-cualitativa-ordinal-3-niveles" class="level2">
-<h2 class="anchored" data-anchor-id="fee-cualitativa-ordinal-3-niveles"><code>Fee</code> → cualitativa ordinal (3 niveles)</h2>
-<p><strong>Corte: 0 · 1–99 · ≥ 100.</strong></p>
-<p><span class="math inline">\(RIQ = 0\)</span> con el 84,5 % en 0 (<code>Fee = 0</code>, adopciones gratuitas). Para dar resolución al 15,5 % que cobra se parte en dos usando el umbral cercano a la mediana de las tarifas positivas (100 MYR), buscando repartir su masa lo más equitativamente posible: quedan 1.062 y 1.268 anuncios (45,6 % y 54,4 % de los que cobran). Un 50/50 exacto no es alcanzable porque el valor 100 agrupa 408 anuncios.</p>
-<ul>
-<li>0 → <strong>Gratuita (0)</strong></li>
-<li>1–99 → <strong>Tarifa baja (&lt; 100)</strong></li>
-<li>≥ 100 → <strong>Tarifa alta (≥ 100)</strong></li>
-</ul>
-<div class="cell" data-tbl-cap="Distribución de Fee recodificada (ordinal)">
-<details class="code-fold">
-<summary>Ver código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>Fee_cat, <span class="st">"Tarifa de adopción"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Distribución de Fee recodificada (ordinal)</caption>
-<colgroup>
-<col style="width: 24%">
-<col style="width: 24%">
-<col style="width: 24%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Tarifa de adopción</th>
-<th style="text-align: right;">Frecuencia absoluta</th>
-<th style="text-align: right;">Frecuencia relativa</th>
-<th style="text-align: right;">Frecuencia acumulada</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Gratuita (0)</td>
-<td style="text-align: right;">12.663</td>
-<td style="text-align: right;">84,5 %</td>
-<td style="text-align: right;">84,5 %</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Tarifa baja (&lt; 100)</td>
-<td style="text-align: right;">1.062</td>
-<td style="text-align: right;">7,1 %</td>
-<td style="text-align: right;">91,5 %</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Tarifa alta (≥ 100)</td>
-<td style="text-align: right;">1.268</td>
-<td style="text-align: right;">8,5 %</td>
-<td style="text-align: right;">100,0 %</td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 </section>
 <section id="videoamt-binaria" class="level2">
@@ -889,7 +741,7 @@ window.Quarto = {
 <div class="cell" data-tbl-cap="Distribución de VideoAmt recodificada (binaria)">
 <details class="code-fold">
 <summary>Ver código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>VideoAmt_bin, <span class="st">"Presencia de video"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>VideoAmt_bin, <span class="st">"Presencia de video"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -937,7 +789,7 @@ window.Quarto = {
 <div class="cell" data-tbl-cap="Distribución de total_faces recodificada (binaria)">
 <details class="code-fold">
 <summary>Ver código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>total_faces_bin, <span class="st">"Presencia de rostros"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>total_faces_bin, <span class="st">"Presencia de rostros"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -985,22 +837,20 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Ver código</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">anyNA</span>(datos_dec<span class="sc">$</span>Quantity_ord),                                   <span class="co"># Quantity no tiene perdidos</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">anyNA</span>(datos_dec<span class="sc">$</span>Fee_cat),                                        <span class="co"># Fee no tiene perdidos</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">anyNA</span>(datos_dec<span class="sc">$</span>VideoAmt_bin),                                   <span class="co"># VideoAmt no tiene perdidos</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces_bin)) <span class="sc">==</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces)),  <span class="co"># sólo los 341 estructurales</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(<span class="fu">levels</span>(datos_dec<span class="sc">$</span>Quantity_ord), <span class="fu">c</span>(<span class="st">"Único (1)"</span>, <span class="st">"Pocos (2–3)"</span>, <span class="st">"Muchos (≥ 4)"</span>)),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(<span class="fu">levels</span>(datos_dec<span class="sc">$</span>Fee_cat), <span class="fu">c</span>(<span class="st">"Gratuita (0)"</span>, <span class="st">"Tarifa baja (&lt; 100)"</span>, <span class="st">"Tarifa alta (≥ 100)"</span>))</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Verificación superada: %s filas recodificadas; únicos perdidos = %s (total_faces, sin foto).</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ent</span>(<span class="fu">nrow</span>(datos_dec)), <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces_bin)))))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">anyNA</span>(datos_dec<span class="sc">$</span>VideoAmt_bin),                                    <span class="co"># VideoAmt no tiene perdidos</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces_bin)) <span class="sc">==</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces)),  <span class="co"># sólo los 341 estructurales</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(<span class="fu">levels</span>(datos_dec<span class="sc">$</span>VideoAmt_bin), <span class="fu">c</span>(<span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>)),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(<span class="fu">levels</span>(datos_dec<span class="sc">$</span>total_faces_bin), <span class="fu">c</span>(<span class="st">"Sin rostros (0)"</span>, <span class="st">"Con rostros (≥ 1)"</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Verificación superada: %s filas recodificadas; únicos perdidos = %s (total_faces, sin foto).</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ent</span>(<span class="fu">nrow</span>(datos_dec)), <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces_bin)))))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Verificación superada: 14.993 filas recodificadas; únicos perdidos = 341 (total_faces, sin foto).</code></pre>
 </div>
 </div>
-<p>Las cuatro variables recodificadas —<code>Quantity_ord</code>, <code>Fee_cat</code>, <code>VideoAmt_bin</code> y <code>total_faces_bin</code>— quedan en <code>datos_dec</code> para los análisis posteriores, sin pérdida de observaciones.</p>
+<p>Las dos variables recodificadas —<code>VideoAmt_bin</code> y <code>total_faces_bin</code>— quedan en <code>datos_dec</code> para los análisis posteriores, sin pérdida de observaciones.</p>
 
 
 <!-- -->
@@ -1491,193 +1341,137 @@ window.Quarto = {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Decisiones de recodificación"</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Transformación de Quantity y Fee (ordinales) y de VideoAmt y total_faces (binarias) a partir de los diagnósticos del análisis univariado."</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>::::: autor-pdf-row</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>::: autor-info</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>**AUTORES**</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>Jared Mijail Ramírez Escalante · María Paula Silva Capera</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>::: action-bar</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn-print"</span><span class="ot"> onclick</span><span class="op">=</span><span class="st">"window.print()"</span><span class="dt">&gt;</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>PDF</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>:::::</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>El <span class="co">[</span><span class="ot">Análisis Univariado Diagnóstico</span><span class="co">](analisis_univariado.qmd)</span> mostró que <span class="in">`Quantity`</span>, <span class="in">`Fee`</span>, <span class="in">`VideoAmt`</span> y <span class="in">`total_faces`</span> tienen $RIQ = 0$: sus cercas de Tukey colapsan y la escala de razón original es poco informativa. Aquí se fijan los cortes y la recodificación resultante.</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup-decisiones</span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"_setup.R"</span>))</span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Resumen de decisiones</span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-resumen</span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Decisiones de recodificación: escala original, decisión, niveles y evidencia univariada"</span></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Variable,      <span class="sc">~</span><span class="st">`</span><span class="at">Escala original</span><span class="st">`</span>, <span class="sc">~</span>Decisión,                    <span class="sc">~</span>Niveles,                                              <span class="sc">~</span><span class="st">`</span><span class="at">Evidencia (univariado)</span><span class="st">`</span>,</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Quantity"</span>,     <span class="st">"Entero (razón)"</span>,   <span class="st">"Cualitativa ordinal"</span>,        <span class="st">"Único (1) · Pocos (2–3) · Muchos (≥ 4)"</span>,               <span class="st">"RIQ = 0; 77,1 % en 1"</span>,</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Fee"</span>,          <span class="st">"Entero (razón)"</span>,   <span class="st">"Cualitativa ordinal"</span>,        <span class="st">"Gratuita (0) · Tarifa baja (&lt; 100) · Tarifa alta (≥ 100)"</span>, <span class="st">"RIQ = 0; 84,5 % en 0"</span>,</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VideoAmt"</span>,     <span class="st">"Entero (razón)"</span>,   <span class="st">"Binaria (dicotómica)"</span>,       <span class="st">"Sin video (0) · Con video (≥ 1)"</span>,                      <span class="st">"RIQ = 0; 96,2 % en 0"</span>,</span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_faces"</span>,  <span class="st">"Entero (razón)"</span>,   <span class="st">"Binaria (dicotómica)"</span>,       <span class="st">"Sin rostros (0) · Con rostros (≥ 1)"</span>,                  <span class="st">"RIQ = 0; mediana = moda = Q1 = Q3 = 0; 96,4 % en 0"</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>))</span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Recodificación</span></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-recodes</span></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>datos_dec <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Quantity → ordinal de 3 niveles (orden creciente en el número de animales)</span></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">Quantity_ord =</span> <span class="fu">factor</span>(</span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>        Quantity <span class="sc">==</span> <span class="dv">1</span>     <span class="sc">~</span> <span class="st">"Único (1)"</span>,</span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>        Quantity <span class="sc">%in%</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span> <span class="sc">~</span> <span class="st">"Pocos (2–3)"</span>,</span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>        Quantity <span class="sc">&gt;=</span> <span class="dv">4</span>     <span class="sc">~</span> <span class="st">"Muchos (≥ 4)"</span></span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels  =</span> <span class="fu">c</span>(<span class="st">"Único (1)"</span>, <span class="st">"Pocos (2–3)"</span>, <span class="st">"Muchos (≥ 4)"</span>),</span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>      <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fee → ordinal de 3 niveles: gratuita vs. tarifa baja/alta (masa equilibrada)</span></span>
-<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">Fee_cat =</span> <span class="fu">factor</span>(</span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>        Fee <span class="sc">==</span> <span class="dv">0</span>    <span class="sc">~</span> <span class="st">"Gratuita (0)"</span>,</span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>        Fee <span class="sc">&lt;</span> <span class="dv">100</span>   <span class="sc">~</span> <span class="st">"Tarifa baja (&lt; 100)"</span>,</span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>        Fee <span class="sc">&gt;=</span> <span class="dv">100</span>  <span class="sc">~</span> <span class="st">"Tarifa alta (≥ 100)"</span></span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels  =</span> <span class="fu">c</span>(<span class="st">"Gratuita (0)"</span>, <span class="st">"Tarifa baja (&lt; 100)"</span>, <span class="st">"Tarifa alta (≥ 100)"</span>),</span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>      <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>    <span class="co"># VideoAmt → binaria: presencia/ausencia de video</span></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">VideoAmt_bin =</span> <span class="fu">factor</span>(</span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(VideoAmt <span class="sc">==</span> <span class="dv">0</span>, <span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>),</span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>)</span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>    <span class="co"># total_faces → binaria: presencia/ausencia de rostros (los perdidos se conservan)</span></span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_faces_bin =</span> <span class="fu">factor</span>(</span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>        <span class="fu">is.na</span>(total_faces) <span class="sc">~</span> <span class="cn">NA_character_</span>,</span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>        total_faces <span class="sc">==</span> <span class="dv">0</span>   <span class="sc">~</span> <span class="st">"Sin rostros (0)"</span>,</span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>        total_faces <span class="sc">&gt;=</span> <span class="dv">1</span>   <span class="sc">~</span> <span class="st">"Con rostros (≥ 1)"</span></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sin rostros (0)"</span>, <span class="st">"Con rostros (≥ 1)"</span>)</span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabla de frecuencias de una variable ya recodificada (respeta el orden de los niveles)</span></span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>tabla_decision <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">etiqueta =</span> <span class="st">"Nivel"</span>) {</span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.factor</span>(x)) x <span class="cf">else</span> <span class="fu">factor</span>(x)</span>
-<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(f[<span class="sc">!</span><span class="fu">is.na</span>(f)])                        <span class="co"># conserva el orden de los niveles</span></span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>  tb <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Nivel =</span> <span class="fu">levels</span>(f), <span class="at">n =</span> <span class="fu">as.integer</span>(<span class="fu">table</span>(f))) <span class="sc">|&gt;</span></span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n),</span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">cumsum</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span>),</span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n =</span> <span class="fu">ent</span>(n),</span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span>),</span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span>))</span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">anyNA</span>(x)) {</span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>    tb <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(tb, tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Nivel =</span> <span class="st">"Valores perdidos"</span>, <span class="at">n =</span> <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(x))),</span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"—"</span>, <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"—"</span>))</span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tb, <span class="at">col.names =</span> <span class="fu">c</span>(etiqueta, <span class="st">"Frecuencia absoluta"</span>, <span class="st">"Frecuencia relativa"</span>,</span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Frecuencia acumulada"</span>), <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a><span class="fu">## `Quantity` → cualitativa ordinal</span></span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>**Corte: 1 · 2–3 · ≥ 4.**</span>
-<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a>$RIQ = 0$ porque $Q1 = Q3 = 1$ (77,1 % ofrece un solo animal) y las cercas colapsan en <span class="in">`[1, 1]`</span>. El corte agrupa por orden del conteo y conserva masa en cada nivel: el menos frecuente retiene el 8,5 % (1.280 casos), así que ninguno queda degenerado.</span>
-<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>1 → **Único (1)**</span>
-<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2–3 → **Pocos (2–3)**</span>
-<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>≥ 4 → **Muchos (≥ 4)**</span>
-<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-Quantity</span></span>
-<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Distribución de Quantity recodificada (ordinal)"</span></span>
-<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>Quantity_ord, <span class="st">"Nivel de cantidad"</span>)</span>
-<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## `Fee` → cualitativa ordinal (3 niveles)</span></span>
-<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>**Corte: 0 · 1–99 · ≥ 100.**</span>
-<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>$RIQ = 0$ con el 84,5 % en 0 (<span class="in">`Fee = 0`</span>, adopciones gratuitas). Para dar resolución al 15,5 % que cobra se parte en dos usando el umbral cercano a la mediana de las tarifas positivas (100 MYR), buscando repartir su masa lo más equitativamente posible: quedan 1.062 y 1.268 anuncios (45,6 % y 54,4 % de los que cobran). Un 50/50 exacto no es alcanzable porque el valor 100 agrupa 408 anuncios.</span>
-<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>0 → **Gratuita (0)**</span>
-<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>1–99 → **Tarifa baja (&lt; 100)**</span>
-<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>≥ 100 → **Tarifa alta (≥ 100)**</span>
-<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-Fee</span></span>
-<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Distribución de Fee recodificada (ordinal)"</span></span>
-<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>Fee_cat, <span class="st">"Tarifa de adopción"</span>)</span>
-<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a><span class="fu">## `VideoAmt` → binaria</span></span>
-<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a>**Corte: 0 · ≥ 1.**</span>
-<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a>$RIQ = 0$ con ambos límites en 0 y 96,2 % sin video; los conteos solo llegan a 8 y el 99,6 % está en 0 o 1. La única señal con masa es presencia/ausencia.</span>
-<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>0 → **Sin video (0)**</span>
-<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>≥ 1 → **Con video (≥ 1)**</span>
-<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-VideoAmt</span></span>
-<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Distribución de VideoAmt recodificada (binaria)"</span></span>
-<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>VideoAmt_bin, <span class="st">"Presencia de video"</span>)</span>
-<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## `total_faces` → binaria</span></span>
-<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a>**Corte: 0 · ≥ 1 (perdidos = NA).**</span>
-<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a>Mediana = moda = $Q1$ = $Q3$ = 0 y 96,4 % sin rostros. Los 341 perdidos se conservan como NA porque son los anuncios sin foto (<span class="in">`PhotoAmt = 0`</span>): faltante estructural, no categoría.</span>
-<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>0 → **Sin rostros (0)**</span>
-<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>≥ 1 → **Con rostros (≥ 1)**</span>
-<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-total-faces</span></span>
-<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Distribución de total_faces recodificada (binaria)"</span></span>
-<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>total_faces_bin, <span class="st">"Presencia de rostros"</span>)</span>
-<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verificación</span></span>
-<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-verificacion</span></span>
-<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
-<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">anyNA</span>(datos_dec<span class="sc">$</span>Quantity_ord),                                   <span class="co"># Quantity no tiene perdidos</span></span>
-<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">anyNA</span>(datos_dec<span class="sc">$</span>Fee_cat),                                        <span class="co"># Fee no tiene perdidos</span></span>
-<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">anyNA</span>(datos_dec<span class="sc">$</span>VideoAmt_bin),                                   <span class="co"># VideoAmt no tiene perdidos</span></span>
-<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces_bin)) <span class="sc">==</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces)),  <span class="co"># sólo los 341 estructurales</span></span>
-<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(<span class="fu">levels</span>(datos_dec<span class="sc">$</span>Quantity_ord), <span class="fu">c</span>(<span class="st">"Único (1)"</span>, <span class="st">"Pocos (2–3)"</span>, <span class="st">"Muchos (≥ 4)"</span>)),</span>
-<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(<span class="fu">levels</span>(datos_dec<span class="sc">$</span>Fee_cat), <span class="fu">c</span>(<span class="st">"Gratuita (0)"</span>, <span class="st">"Tarifa baja (&lt; 100)"</span>, <span class="st">"Tarifa alta (≥ 100)"</span>))</span>
-<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Verificación superada: %s filas recodificadas; únicos perdidos = %s (total_faces, sin foto).</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ent</span>(<span class="fu">nrow</span>(datos_dec)), <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces_bin)))))</span>
-<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a>Las cuatro variables recodificadas —<span class="in">`Quantity_ord`</span>, <span class="in">`Fee_cat`</span>, <span class="in">`VideoAmt_bin`</span> y <span class="in">`total_faces_bin`</span>— quedan en <span class="in">`datos_dec`</span> para los análisis posteriores, sin pérdida de observaciones.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Decisiones de recodificación"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Transformación de VideoAmt y total_faces en variables binarias a partir de los diagnósticos del análisis univariado."</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>::::: autor-pdf-row</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>::: autor-info</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>**AUTORES**</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>Jared Mijail Ramírez Escalante · María Paula Silva Capera</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>::: action-bar</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn-print"</span><span class="ot"> onclick</span><span class="op">=</span><span class="st">"window.print()"</span><span class="dt">&gt;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>PDF</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>El <span class="co">[</span><span class="ot">Análisis Univariado Diagnóstico</span><span class="co">](analisis_univariado.qmd)</span> mostró que <span class="in">`VideoAmt`</span> y <span class="in">`total_faces`</span> tienen $RIQ = 0$: sus cercas de Tukey colapsan en el valor nulo y la escala de razón original es poco informativa. Aquí se fija la recodificación resultante.</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup-decisiones</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"_setup.R"</span>))</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Resumen de decisiones</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-resumen</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Decisiones de recodificación: escala original, decisión, niveles y evidencia univariada"</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>Variable,      <span class="sc">~</span><span class="st">`</span><span class="at">Escala original</span><span class="st">`</span>, <span class="sc">~</span>Decisión,               <span class="sc">~</span>Niveles,                                <span class="sc">~</span><span class="st">`</span><span class="at">Evidencia (univariado)</span><span class="st">`</span>,</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VideoAmt"</span>,     <span class="st">"Entero (razón)"</span>,   <span class="st">"Binaria (dicotómica)"</span>,  <span class="st">"Sin video (0) · Con video (≥ 1)"</span>,       <span class="st">"RIQ = 0; 96,2 % en 0"</span>,</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="st">"total_faces"</span>,  <span class="st">"Entero (razón)"</span>,   <span class="st">"Binaria (dicotómica)"</span>,  <span class="st">"Sin rostros (0) · Con rostros (≥ 1)"</span>,   <span class="st">"RIQ = 0; mediana = moda = Q1 = Q3 = 0; 96,4 % en 0"</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"l"</span>))</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Recodificación</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-recodes</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>datos_dec <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># VideoAmt → binaria: presencia/ausencia de video</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">VideoAmt_bin =</span> <span class="fu">factor</span>(</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(VideoAmt <span class="sc">==</span> <span class="dv">0</span>, <span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>),</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>)</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    <span class="co"># total_faces → binaria: presencia/ausencia de rostros (los perdidos se conservan)</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_faces_bin =</span> <span class="fu">factor</span>(</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>        <span class="fu">is.na</span>(total_faces) <span class="sc">~</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>        total_faces <span class="sc">==</span> <span class="dv">0</span>   <span class="sc">~</span> <span class="st">"Sin rostros (0)"</span>,</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>        total_faces <span class="sc">&gt;=</span> <span class="dv">1</span>   <span class="sc">~</span> <span class="st">"Con rostros (≥ 1)"</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Sin rostros (0)"</span>, <span class="st">"Con rostros (≥ 1)"</span>)</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabla de frecuencias de una variable ya recodificada (respeta el orden de los niveles)</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>tabla_decision <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">etiqueta =</span> <span class="st">"Nivel"</span>) {</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.factor</span>(x)) x <span class="cf">else</span> <span class="fu">factor</span>(x)</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(f[<span class="sc">!</span><span class="fu">is.na</span>(f)])                        <span class="co"># conserva el orden de los niveles</span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>  tb <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Nivel =</span> <span class="fu">levels</span>(f), <span class="at">n =</span> <span class="fu">as.integer</span>(<span class="fu">table</span>(f))) <span class="sc">|&gt;</span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n),</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">cumsum</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span>),</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n =</span> <span class="fu">ent</span>(n),</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span>),</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">pct</span>(<span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span>))</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">anyNA</span>(x)) {</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    tb <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(tb, tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">Nivel =</span> <span class="st">"Valores perdidos"</span>, <span class="at">n =</span> <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(x))),</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">`</span><span class="at">Frecuencia relativa</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"—"</span>, <span class="st">`</span><span class="at">Frecuencia acumulada</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"—"</span>))</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tb, <span class="at">col.names =</span> <span class="fu">c</span>(etiqueta, <span class="st">"Frecuencia absoluta"</span>, <span class="st">"Frecuencia relativa"</span>,</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Frecuencia acumulada"</span>), <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## `VideoAmt` → binaria</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>**Corte: 0 · ≥ 1.**</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>$RIQ = 0$ con ambos límites en 0 y 96,2 % sin video; los conteos solo llegan a 8 y el 99,6 % está en 0 o 1. La única señal con masa es presencia/ausencia.</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>0 → **Sin video (0)**</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>≥ 1 → **Con video (≥ 1)**</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-VideoAmt</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Distribución de VideoAmt recodificada (binaria)"</span></span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>VideoAmt_bin, <span class="st">"Presencia de video"</span>)</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a><span class="fu">## `total_faces` → binaria</span></span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>**Corte: 0 · ≥ 1 (perdidos = NA).**</span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>Mediana = moda = $Q1$ = $Q3$ = 0 y 96,4 % sin rostros. Los 341 perdidos se conservan como NA porque son los anuncios sin foto (<span class="in">`PhotoAmt = 0`</span>): faltante estructural, no categoría.</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>0 → **Sin rostros (0)**</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>≥ 1 → **Con rostros (≥ 1)**</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-total-faces</span></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Distribución de total_faces recodificada (binaria)"</span></span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a><span class="fu">tabla_decision</span>(datos_dec<span class="sc">$</span>total_faces_bin, <span class="st">"Presencia de rostros"</span>)</span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verificación</span></span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: dec-verificacion</span></span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">anyNA</span>(datos_dec<span class="sc">$</span>VideoAmt_bin),                                    <span class="co"># VideoAmt no tiene perdidos</span></span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces_bin)) <span class="sc">==</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces)),  <span class="co"># sólo los 341 estructurales</span></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(<span class="fu">levels</span>(datos_dec<span class="sc">$</span>VideoAmt_bin), <span class="fu">c</span>(<span class="st">"Sin video (0)"</span>, <span class="st">"Con video (≥ 1)"</span>)),</span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identical</span>(<span class="fu">levels</span>(datos_dec<span class="sc">$</span>total_faces_bin), <span class="fu">c</span>(<span class="st">"Sin rostros (0)"</span>, <span class="st">"Con rostros (≥ 1)"</span>))</span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Verificación superada: %s filas recodificadas; únicos perdidos = %s (total_faces, sin foto).</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ent</span>(<span class="fu">nrow</span>(datos_dec)), <span class="fu">ent</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(datos_dec<span class="sc">$</span>total_faces_bin)))))</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>Las dos variables recodificadas —<span class="in">`VideoAmt_bin`</span> y <span class="in">`total_faces_bin`</span>— quedan en <span class="in">`datos_dec`</span> para los análisis posteriores, sin pérdida de observaciones.</span>
 </code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
