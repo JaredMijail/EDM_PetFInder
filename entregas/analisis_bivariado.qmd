@@ -259,7 +259,7 @@ tabla_decision_cc <- function(tab, st, agrupada) {
     `Descripción` = c(
       "Pares completos",
       if (agrupada) "Categorías de la variable (tras agrupar)" else "Categorías de la variable",
-      "Ffrecuencia mínima",
+      "Frecuencia mínima",
       "p-valor de la prueba χ²"),
     Valor = c(
       ent(sum(tab)),
@@ -269,7 +269,7 @@ tabla_decision_cc <- function(tab, st, agrupada) {
       ),
       
   ) |>
-    knitr::kable(align = c("l", "l"), format = "html")
+    knitr::kable(align = c("l", "l"), format = "html", caption = "Tabla resumen de cruce con la variable velocidad de adopción")
 }
 
 tabla_contingencia_cc <- function(tab, nombre_x) {
@@ -360,13 +360,12 @@ texto_cc <- function(tab, st, nombre_x, agrupada) {
   }
 
   paste0(
-    "Se cruza ", nombre_x, " (", ent(nrow(tab)), " categorías",
+    "Tras cruzar ", nombre_x, " (", ent(nrow(tab)), " categorías",
     if (agrupada) ", tras agrupar las minoritarias" else "",
-    ") con la velocidad de adopción sobre ", ent(sum(tab)), " anuncios. ",
-    "La prueba χ² de independencia arroja χ²(", ent(st$chi$parameter), ") = ",
+    ") con la velocidad de adopción sobre ", ent(sum(tab)), " anuncios, ",
+    "se tiene que la prueba χ² de independencia arroja χ²(", ent(st$chi$parameter), ") = ",
     fmt(st$chi$statistic, 1), " (", pval(st$chi$p.value), "), y la V de Cramér ",
-    "corregida es ", fmt(st$v, 3), ", una asociación ", fuerza_v(st$v), ". ",
-    "Lectura: ", lectura, "."
+    "corregida es ", fmt(st$v, 3), ", esto sugiere una asociación ", fuerza_v(st$v), ". "
   )
 }
 
@@ -444,7 +443,7 @@ analisis_bivar_cuali_vs_cuali <- function(x,
   #             id  = paste0(id, "_residuos"),
   #             alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
   print(tablas$estadisticos)
-  cat("\n\n**Interpretación.** ", texto, "\n\n", sep = "")
+  cat("\n\n", texto, "\n\n", sep = "")
 
   invisible(list(estadisticos = resumen, tablas = tablas,
                  graficos = graficos, texto = texto))
