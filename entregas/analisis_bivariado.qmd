@@ -76,6 +76,7 @@ library(knitr)
 library(plotly)
 library(FactoClass)
 library(tidyverse)
+library(here)
 
 # ---------------------------------------------------------------------
 # 1. Constantes del proyecto
