@@ -123,12 +123,6 @@ pal_clases2 <- unname(colorRampPalette(pal_clases, space = "Lab")(11))
 # =====================================================================
 # Análisis bivariado cualitativa vs. cualitativa frente a AdoptionSpeed
 # =====================================================================
-# Uso:
-#   analisis_bivar_cuali_vs_cuali(datos$Gender)
-#   analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
-#
-# Requiere: ggplot2, dplyr, tibble, forcats, knitr (R >= 4.1 por el uso de |>).
-# Requiere en el entorno global: `datos` (con la columna AdoptionSpeed como factor).
 
 # ---------------------------------------------------------------------
 # 2. Utilidades de formato (coma decimal, punto de miles)
@@ -259,7 +253,7 @@ tabla_decision_cc <- function(tab, st, agrupada) {
     `Descripción` = c(
       "Pares completos",
       if (agrupada) "Categorías de la variable (tras agrupar)" else "Categorías de la variable",
-      "Ffrecuencia mínima",
+      "Frecuencia mínima",
       "p-valor de la prueba χ²"),
     Valor = c(
       ent(sum(tab)),
@@ -267,9 +261,9 @@ tabla_decision_cc <- function(tab, st, agrupada) {
             ent(min(rowSums(tab))),
       pval(st$chi$p.value)
       ),
-      caption = sprintf("Tabla resumen: %s × velocidad de adopción", nombre_x)
+      
   ) |>
-    knitr::kable(align = c("l", "l"), format = "html")
+    knitr::kable(align = c("l", "l"), format = "html", caption = "Tabla resumen de cruce con la variable velocidad de adopción")
 }
 
 tabla_contingencia_cc <- function(tab, nombre_x) {
@@ -294,27 +288,49 @@ tabla_estadisticos_cc <- function(st) {
 # 6. Gráficos (devuelven objetos ggplot; no imprimen)
 # ---------------------------------------------------------------------
 # Barras apiladas al 100 % (perfil fila)
-grafico_perfil_cc <- function(x, y, nombre_x, paleta) {
-  d <- tibble::tibble(cat = x, resp = y) |>
+grafico_perfil_cc <- function(x, y, nombre_x, paleta,
+                              etiqueta_marginal = "Perfil marginal") {
+  base <- tibble::tibble(cat = as.character(x), resp = y)
+
+  # Perfiles condicionales: distribución de resp dentro de cada categoría
+  d_cat <- base |>
     dplyr::count(cat, resp) |>
     dplyr::group_by(cat) |>
     dplyr::mutate(pct = 100 * n / sum(n), total = sum(n)) |>
-    dplyr::ungroup() |>
-    dplyr::mutate(cat = forcats::fct_reorder(cat, total))
+    dplyr::ungroup()
+
+  # Perfil marginal: distribución de resp en toda la muestra
+  d_marg <- base |>
+    dplyr::count(resp) |>
+    dplyr::mutate(cat = etiqueta_marginal, pct = 100 * n / sum(n), total = sum(n))
+
+  # Categorías ordenadas por tamaño; el perfil marginal queda de primero (abajo)
+  orden <- d_cat |>
+    dplyr::distinct(cat, total) |>
+    dplyr::arrange(total) |>
+    dplyr::pull(cat)
+  niveles <- c(etiqueta_marginal, orden)
+
+  d <- dplyr::bind_rows(d_cat, d_marg) |>
+    dplyr::mutate(cat = factor(cat, levels = niveles))
 
   ggplot(d, aes(x = pct, y = cat, fill = resp)) +
     geom_col(width = 0.72) +
     geom_text(aes(label = ifelse(pct >= 7, sprintf("%.0f %%", pct), "")),
               position = position_stack(vjust = 0.5), size = 3, colour = "white") +
+    # Separador entre el perfil marginal y los perfiles condicionales
+    geom_hline(yintercept = 1.5, linetype = "dashed",
+               colour = "grey50", linewidth = 0.3) +
     scale_fill_manual(values = paleta, name = NULL) +
     scale_x_continuous(expand = expansion(mult = c(0, 0.01))) +
     labs(title    = envolver(sprintf(
            "Distribución de la velocidad de adopción dentro de cada categoría de %s",
            nombre_x)),
-         subtitle = "Cada barra suma 100 %; las etiquetas muestran los porcentajes ≥ 7 %",
+         subtitle = "Cada barra suma 100 %; la barra inferior es el perfil marginal (toda la muestra). Etiquetas ≥ 7 %",
          x = "Porcentaje de anuncios", y = NULL) +
     tema_u() +
-    theme(legend.position = "bottom")
+    theme(legend.position = "bottom",
+          axis.text.y = element_text(face = c("bold", rep("plain", length(niveles) - 1))))
 }
 
 # Mapa de calor de residuos de Pearson
@@ -360,20 +376,12 @@ texto_cc <- function(tab, st, nombre_x, agrupada) {
   }
 
   paste0(
-    "La tabla cruza ", nombre_x, " (", ent(nrow(tab)), " categorías",
+    "Tras cruzar ", nombre_x, " (", ent(nrow(tab)), " categorías",
     if (agrupada) ", tras agrupar las minoritarias" else "",
-    ") con la velocidad de adopción sobre ", ent(sum(tab)), " anuncios. ",
-    "La prueba χ² de independencia arroja χ²(", ent(st$chi$parameter), ") = ",
+    ") con la velocidad de adopción sobre ", ent(sum(tab)), " anuncios, ",
+    "se tiene que la prueba χ² de independencia arroja χ²(", ent(st$chi$parameter), ") = ",
     fmt(st$chi$statistic, 1), " (", pval(st$chi$p.value), "), y la V de Cramér ",
-    "corregida es ", fmt(st$v, 3), ", una asociación ", fuerza_v(st$v), ". ",
-    "La celda que más se aparta de la independencia es ", celda_max,
-    " (residuo de Pearson = ", fmt(res_max, 1), "), es decir, ",
-    if (res_max > 0) "hay más" else "hay menos",
-    " casos de los esperados si ambas variables fueran independientes. ",
-    "La categoría con el perfil más desigual es «", rownames(tab)[i_cat],
-    "»: en ella la proporción de adopción va de ", pct(min(st$perfil[i_cat, ])),
-    " a ", pct(max(st$perfil[i_cat, ])), " según la clase. ",
-    "Lectura: ", lectura, "."
+    "corregida es ", fmt(st$v, 3), ", esto sugiere una asociación ", fuerza_v(st$v), ". "
   )
 }
 
@@ -442,16 +450,17 @@ analisis_bivar_cuali_vs_cuali <- function(x,
   if (encabezado) cat(sprintf("\n\n**%s**\n\n", nombre_x))
   print(tablas$decision)
   print(tablas$contingencia)
+  #mostrar_figura(graficos$residuos, alto_figura(k, base = 2.2),
+  #             id  = paste0(id, "_residuos"),
+  #             alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
+  print(tablas$estadisticos)
+  cat("\n\n", texto, "\n\n", sep = "")
+
   k  <- nlevels(x)
   id <- gsub("[^A-Za-z0-9_]", "_", nombre_var)
   mostrar_figura(graficos$perfil, alto_figura(k, base = 2.4),
                id  = paste0(id, "_perfil"),
                alt = sprintf("Perfil fila de la velocidad de adopción por %s", nombre_x))
-  #mostrar_figura(graficos$residuos, alto_figura(k, base = 2.2),
-  #             id  = paste0(id, "_residuos"),
-  #             alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
-  print(tablas$estadisticos)
-  cat("\n\n**Interpretación.** ", texto, "\n\n", sep = "")
 
   invisible(list(estadisticos = resumen, tablas = tablas,
                  graficos = graficos, texto = texto))
@@ -490,9 +499,13 @@ analisis_bivar_cuali_vs_cuali(datos$Gender)
 #
 #
 #
+#
+#
 #| label: bivar-maturitysize
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$MaturitySize)
+#
+#
 #
 #
 #
@@ -506,9 +519,13 @@ analisis_bivar_cuali_vs_cuali(datos$FurLength)
 #
 #
 #
+#
+#
 #| label: bivar-vaccinated
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Vaccinated)
+#
+#
 #
 #
 #
@@ -522,9 +539,13 @@ analisis_bivar_cuali_vs_cuali(datos$Dewormed)
 #
 #
 #
+#
+#
 #| label: bivar-sterilized
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Sterilized)
+#
+#
 #
 #
 #
@@ -538,9 +559,13 @@ analisis_bivar_cuali_vs_cuali(datos$Health)
 #
 #
 #
+#
+#
 #| label: bivar-color1
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Color1)
+#
+#
 #
 #
 #
@@ -554,9 +579,13 @@ analisis_bivar_cuali_vs_cuali(datos$Color2)
 #
 #
 #
+#
+#
 #| label: bivar-color3
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Color3)
+#
+#
 #
 #
 #
@@ -570,9 +599,13 @@ analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
 #
 #
 #
+#
+#
 #| label: bivar-breed2
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Breed2, alta_cardinalidad = TRUE)
+#
+#
 #
 #
 #
@@ -585,19 +618,6 @@ analisis_bivar_cuali_vs_cuali(datos$State, alta_cardinalidad = TRUE)
 #
 #
 #
-#
-#| label: bivar-name
-#| results: asis
-analisis_bivar_cuali_vs_cuali(datos$Name, alta_cardinalidad = TRUE)
-#
-#
-#
-#
-#
-#| label: bivar-rescuerid
-#| results: asis
-analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
-````
 #
 #
 #
@@ -656,7 +676,7 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 
   # Razón de correlación
   X    <- data.frame(x = x) |> setNames(variable)
-  corr <- centroids(X, f)$cr * 100
+  corr <- centroids(f, X)$cr * 100
 
   corr_html <- htmltools::tagList(
     htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
@@ -681,13 +701,19 @@ analisis_bivar_cuali_vs_cuanti('Age', datos = datos)
 #
 #
 #
+#
+#
 analisis_bivar_cuali_vs_cuanti('Quantity', datos = datos)
 #
 #
 #
 #
 #
+#
+#
 analisis_bivar_cuali_vs_cuanti('Fee', datos = datos)
+#
+#
 #
 #
 #

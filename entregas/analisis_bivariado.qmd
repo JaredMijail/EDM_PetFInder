@@ -676,7 +676,7 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 
   # Razón de correlación
   #X    <- data.frame(x = x) |> setNames(variable)
-  corr <- centroids(X, f)$cr * 100
+  #corr <- centroids(X, f)$cr * 100
 
   #corr_html <- htmltools::tagList(
   #  htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
@@ -698,7 +698,7 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 analisis_bivar_cuali_vs_cuanti('Age', datos = datos)
 ````
 
-De acuerdo con el diagrama de cajas y el diagrama de violines de la edad según la velocidad de adopción es claro que para todas las velocidades se tienen distribuciones asimétricas hacia la izquierda y con cola pesada a la derecha. Esto sugiere que para todas las velocidades son más comunes las edades bajas que las edades altas. Se puede destacar que los animales que fueron adoptados el mismo día conforman el grupo más jóven de animales respecto a las demás velocidades de adopción. Por otro lado se observa que dentro de los animales que fueron adoptados en un plazo de 31-90 días o que no fueron adoptados hay más presencia de animales adultos y adultos mayores. Una razón de correlación del 1.34% sugiere que las medias de los grupos por velocidad de adopción son iguales luego la variable velocidad de adopción no explica la edad de los animales.
+De acuerdo con el diagrama de cajas y el diagrama de violines de la edad según la velocidad de adopción es claro que para todas las velocidades se tienen distribuciones asimétricas hacia la izquierda y con cola pesada a la derecha. Esto sugiere que para todas las velocidades son más comunes las edades bajas que las edades altas. Se puede destacar que los animales que fueron adoptados el mismo día conforman el grupo más jóven de animales respecto a las demás velocidades de adopción. Por otro lado se observa que dentro de los animales que fueron adoptados en un plazo de 31-90 días o que no fueron adoptados hay más presencia de animales adultos y adultos mayores. 
 
 ## Quantity
 **Cantidad de animales en el anuncio**
@@ -706,7 +706,7 @@ De acuerdo con el diagrama de cajas y el diagrama de violines de la edad según 
 analisis_bivar_cuali_vs_cuanti('Quantity', datos = datos)
 ````
 
-Según lo que se puede apreciar en el diagrama de cajas y el diagrama de violines de la cantidad de animales en el anuncio según la velocidad de adopción, es destacable que las distribuciones de los grupos de animales a sociados a los periodos de adopción mismo día, 1-7 días, 8-30 días y 31-90 días están comprimidas en el valor 1 mientras que el grupo de animales que no fueron adoptados tiene una distribución asimétrica a la izquierda. Esto sugiere que cuando hay más de un animal presentado en el anuncio es poco probable que los adopten en el corto plazo. Una razón de correlación del 0.48% sugiere que las medias de los grupos por velocidad de adopción son iguales luego la variable velocidad de adopción no explica la cantidad de animales en los anuncios.
+Según lo que se puede apreciar en el diagrama de cajas y el diagrama de violines de la cantidad de animales en el anuncio según la velocidad de adopción, es destacable que las distribuciones de los grupos de animales a sociados a los periodos de adopción mismo día, 1-7 días, 8-30 días y 31-90 días están comprimidas en el valor 1 mientras que el grupo de animales que no fueron adoptados tiene una distribución asimétrica a la izquierda. Esto sugiere que cuando hay más de un animal presentado en el anuncio es poco probable que los adopten en el corto plazo.
 
 ## Fee
 **Tarifa de adopción**
@@ -714,7 +714,7 @@ Según lo que se puede apreciar en el diagrama de cajas y el diagrama de violine
 analisis_bivar_cuali_vs_cuanti('Fee', datos = datos)
 ````
 
-
+Según lo que se puede apreciar en el diagrama de cajas y el diagrama de violines de la tarifa de adopción según la velocidad de adopción, se aprecia que las distribuciones de todos los periodos de adopción son asimétricas a la izquierda con cola pesada a la derecha. También se observa que la tarifa de adopción máxima está asociada a un animal que fue adoptado en un periodo de 31-90 días. La segunda tarifa de adopción más alta corresponde a un animal que fue adoptado en un periodo de 1-7 días. Para el resto de los periodos la tarifa de adopción más común es 0. Las velocidades de adopción 8-30 días, 1-7 días y mismo día comparten una tarifa anormalmente alta de 1000 dólares.
 
 ## VideoAmt
 **Cantidad de videos**
@@ -722,11 +722,14 @@ analisis_bivar_cuali_vs_cuanti('Fee', datos = datos)
 analisis_bivar_cuali_vs_cuanti('VideoAmt', datos = datos)
 ````
 
+
 ## PhotoAmt
 **Cantidad de fotos**
 ````{r bivar-photoamt}
 analisis_bivar_cuali_vs_cuanti('PhotoAmt', datos = datos)
 ````
+
+De acuerdo con el diagrama de cajas y el diagrama de violines de la cantidad de fotos en el anuncio según la velocidad de adopción, se observa que las distribuciones son platicúrticas y asimétricas a la izquierda con cola pesada a la derecha. Esto sugiere que para todas las velocidades de adopción, lo más común es que se hayan subido pocas fotos en la publicación del anuncio del animal. Es destacable que para el grupo de animales que fueron adoptados el mismo día de la publicación del anuncio se tenían menos fotos relacionadas respecto a los otros grupos con diferente periodo de adopción.
 
 ## sentiment_score
 **Puntaje de sentimiento**
@@ -734,11 +737,15 @@ analisis_bivar_cuali_vs_cuanti('PhotoAmt', datos = datos)
 analisis_bivar_cuali_vs_cuanti('sentiment_score', datos = datos)
 ````
 
+Por lo que se puede observar en el diagrama de cajas y el diagrama de violines del puntaje de sentimiento en el anuncio según la velocidad de adopción, se tienen distribuciones platicúrticas con colas pesadas tanto a izquierda como a derecha, pero es más pesada la cola a izquierda. Esto sugiere que los puntajes por debajo de cero son menos comunes que los puntajes por encima de cero para todas las velocidades de adopción. Los puntajes iguales o más bajos que -0.5 son muy poco comunes para todos los periodos de adopción. Por otro lado los puntajes cercanos a 1 son muy poco comunes para todas las velocidades de adopción excepto para los animales que fueron adoptados el mismo día y para los animales que no fueron adoptados. Los anuncios neutrales no son comunes para ninguna de las velocidades de adopción.
+
 ## sentiment_magnitude
 **Magnitud de sentimiento**
 ````{r bivar-sentiment-magnitude}
 analisis_bivar_cuali_vs_cuanti('sentiment_magnitude', datos = datos)
 ````
+
+De acuerdo con el diagrama de cajas y el diagrama de violines de la magnitud de sentimiento en el anuncio según la velocidad de adopción, se tiene que las distribuciones de todas las velocidades de adopción son mesocúrticas asimétricas a las izquierda y con cola pesada a la derecha. Esto sugiere que para todos los anuncios es más común una magnitud de sentimiento baja. Es destacable que para el grupo de anuncios de los animales que fueron adoptados el mismo día la magnitud de sentimiento solía ser más baja en comparación a los otros periodos de adopción. Por otra parte se observa que los anuncios asociados a animales adoptados en periodos de mediano plazo (1-7 días y 8-30 días) tienen una cota máxima de 25 puntos mientras que los anuncios correspondientes a nimales con periodos de largo plazo (31-90 días y sin adopción) presentan magnitudes aún más extremas con una cota que supera los 30 puntos. Esto parece indicar que los anuncios de loa animales que llevaban más tiempo de ser publicados podían llegar a tener más intesidad en la emoción que deseaban transmitir.
 
 ## total_labels
 **Total de etiquetas**
@@ -746,17 +753,22 @@ analisis_bivar_cuali_vs_cuanti('sentiment_magnitude', datos = datos)
 analisis_bivar_cuali_vs_cuanti('total_labels', datos = datos)
 ````
 
+Según lo que se puede apreciar en el diagrama de cajas y el diagrama de violines del total de etiquetas en el anuncio según la velocidad de adopción, se tienen distribuciones platicúrticas asimétricas a la izquierda y con cola pesada a la derecha. Por los datos atípicos y extremos que se visualizan parece que para los anuncios en general es muy poco común tener más de 100 etiquetas. Es apreciable que para los anuncios de los animales que fueron adoptados el mismo día en que fueron publicados no se tienen tantos valores anormales como para el resto de periodos de adopción. Esto sugiere que como los animales son adoptados el mismo día, no hay el medio ni la necesidad para agregar más información al anuncio ya que se cumplió el objetivo.
+
 ## total_faces
 **Total de rostros detectados**
 ````{r bivar-total-faces}
 analisis_bivar_cuali_vs_cuanti('total_faces', datos = datos)
 ````
 
+
 ## total_colors
 **Total de colores detectados**
 ````{r bivar-total-colors}
 analisis_bivar_cuali_vs_cuanti('total_colors', datos = datos)
 ````
+
+Respecto al diagrama de cajas y el diagrama de violines del total de colores detectados en el anuncio según la velocidad de adopción, se tienen distribuciones platicúrticas asimétricas a la izquierda con cola pesada a la derecha. Los periodos de adopción 8-30 días, 1-7 días y mismo día tienen una distribucón similar ssalvo que para mismo día los valores atípicos son menos dendos y frecuentes. Por otro lado se aprecia que para los anuncios asociados a los animales que no fueron adoptados, hay una asimetría más marcada a la izquierda lo que puede indicar que en esta categoría son más comunes los anuncios con menos colroes en relación los demás periodos de adopción. Por último, para los anuncios cuyos animales fueron adoptados en un periodo de 31-90 días se tiene que no son tan raros los anuncios con una cantidad de colores entre 100 y 120, lo que sugiere que es más probable encontrar un anuncio más coloridos para esta categoría.
 
 ## desc_char_len
 **Longitud de la descripción en caracteres**
