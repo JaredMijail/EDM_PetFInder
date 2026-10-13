@@ -1,6 +1,6 @@
 ---
 title: "Metodología"
-subtitle: "Diseño, datos, variables, procesamiento, técnicas, controles y limitaciones"
+subtitle: "Diseño, datos, variables, procesamiento, técnicas y limitaciones"
 author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
 
@@ -23,7 +23,7 @@ una plantilla que no le corresponde.
 | Población y unidades estadísticas | **Redefinido:** la unidad es el anuncio publicado, no una persona; no hay población que muestrear |
 | Diseño muestral | **No aplica:** se trabaja con el **censo** de la base (14 993 anuncios), no con una muestra |
 | Instrumentos de recolección | **Redefinido:** no hay cuestionario ni escala; los instrumentos son el **protocolo de extracción** de las APIs y el **diccionario de variables** |
-| Plan de trabajo de campo | **Redefinido:** se sustituye por un **plan de procesamiento y control de calidad de datos** |
+| Plan de trabajo de campo | **No aplica:** no hay salida a campo; se reemplaza por el procesamiento descrito más abajo |
 | Procesamiento de la información | Se aplica (R, auditoría de faltantes, partición estratificada, validación cruzada) |
 | Técnicas y métodos | Se aplica: clasificación ordinal supervisada + interpretabilidad |
 | Bibliografía | Se aplica (referencias verificables en formato BibTeX) |
@@ -46,11 +46,10 @@ una descripción del mercado local.
   los registros disponibles, sin muestreo. La distinción es importante: no se estima un
   parámetro de una población mayor, se evalúa la capacidad predictiva del modelo en registros
   no vistos, lo que exige **partición y validación cruzada**, no cálculo de tamaño de muestra.
-* **Fuentes:** (i) archivo tabular de la competencia [@kaggle2019petfinder]; (ii) anotaciones
-  de sentimiento por anuncio; (iii) anotaciones de imagen por fotografía; ambas generadas con
-  los servicios de Google Cloud y consolidadas en la base enriquecida
-  ([Dataset](../entregas/dataset.qmd)). El detalle de la construcción está en el script
-  [`scripts/01_dataset_enriquecido.R`](https://github.com/JaredMijail/EDM_PetFInder/blob/main/scripts/01_dataset_enriquecido.R).
+* **Fuentes:** el archivo tabular de la competencia [@kaggle2019petfinder] y sus anotaciones
+  de sentimiento e imagen, consolidadas en la base enriquecida. El origen de los datos y el
+  proceso de construcción se detallan en la Entrega 1
+  ([Dataset y enriquecimiento](../entregas/dataset.qmd)).
 
 ## Criterios de inclusión, exclusión y depuración {.unnumbered}
 
@@ -64,18 +63,11 @@ una descripción del mercado local.
 ## Instrumentos y variables {.unnumbered}
 
 No se aplican instrumentos primarios (cuestionarios, escalas, guías de observación). El papel
-del instrumento lo cumplen el **protocolo de extracción automática** y el
-**diccionario de variables**:
-
-| Instrumento / operación | Variables que produce | Nivel de medición |
-|:------------------------------------------------|:----------------------------------------------------|:--------------------------|
-| Ficha del anuncio publicada por el rescatista | 24 variables originales del archivo tabular | Nominal, ordinal, de razón |
-| Extracción de sentimiento (Natural Language API) [@googlenl2026] | `sentiment_score`, `sentiment_magnitude` | De intervalo, de razón |
-| Extracción de anotaciones visuales (Vision API) [@googlevision2026] | `total_labels`, `total_faces`, `total_colors` | De razón (conteos) |
-| Cálculo propio sobre el texto | `desc_char_len`, `desc_word_count` | De razón (conteos) |
-
-El diccionario completo con la descripción y los valores de cada variable está en la página
-del [Dataset](../entregas/dataset.qmd#diccionario-de-variables). En términos del modelo:
+del instrumento lo cumplen el **protocolo de extracción automática** —ficha del anuncio,
+anotaciones de sentimiento [@googlenl2026] y anotaciones visuales [@googlevision2026]— y el
+**diccionario de variables**. La descripción de las 31 variables, con su escala y sus valores,
+está en la Entrega 1 ([Descripción](../entregas/descripcion.qmd) y
+[Diccionario](../entregas/dataset.qmd#diccionario-de-variables)). En términos del modelo:
 
 * **Variable respuesta:** `AdoptionSpeed` (ordinal, 5 categorías).
 * **Predictores:** bloques tabular, textual y visual, más `Type` y `State` como controles.
@@ -121,33 +113,6 @@ del [Dataset](../entregas/dataset.qmd#diccionario-de-variables). En términos de
 | Explicación | Importancia por permutación y valores SHAP [-@lundberg2017shap] | Identificar qué variables explican las predicciones, en la línea de los objetivos 4 y 5 |
 | Robustez | Análisis de sensibilidad (con y sin atípicos; con y sin imputación) | Verificar que los resultados no dependan de una decisión arbitraria de procesamiento |
 
-## Plan de control de calidad (sustituto del trabajo de campo) {.unnumbered}
-
-Como no hay salida a campo, se define un **plan de control de calidad de datos y de
-resultados**, con verificaciones en cada fase:
-
-| Fase | Control de calidad | Evidencia |
-|:--------------------|:----------------------------------------------------------------------------------------------------|:-------------------------------------------|
-| Construcción de la base | Conteo de filas antes y después de cada unión; verificación de unicidad de `PetID`; lectura tolerante a fallos de JSON | Script de construcción y auditoría |
-| Procesamiento | Revisión de distribuciones antes y después de cada transformación; verificación de que ninguna transformación introduce faltantes | Bitácora de decisiones (`README`) |
-| Modelado | Semillas fijadas; verificación de que el conjunto de prueba no participó en el ajuste; revisión de que la partición respeta la estratificación | Código versionado |
-| Resultados | Contraprueba manual de una muestra de predicciones y de los cálculos del informe; replicación independiente del informe en un equipo distinto | Sitio renderizado y `_freeze` |
-| Interpretación | Revisión crítica de las asociaciones identificadas frente a la literatura y frente a la lógica sustantiva (evitar lecturas causales) | Bitácora de decisiones del proyecto |
-
-## Consideraciones éticas y de datos {.unnumbered}
-
-* Los datos son **públicos**; el identificador del rescatista es seudónimo y no se usa en el
-  modelo ni se intenta reidentificar a personas.
-* No se recogen datos nuevos: **no hay consentimiento informado** que gestionar, pero sí
-  responsabilidad en el uso secundario de la base.
-* Se reconoce el **sesgo de la fuente**: una plataforma malaya, en dos idiomas, con prácticas
-  de reporte propias. Los resultados no se presentan como válidos para Colombia.
-* **Riesgo de recomendaciones sesgadas:** si el modelo identifica, por ejemplo, que ciertos
-  colores o razas (o los animales mixtos) tardan más en adoptarse, ese hallazgo describe un
-  sesgo del mercado —y posiblemente de los adoptantes— y **no** una justificación para
-  descartar animales. Cualquier recomendación práctica se formulará en términos de mejorar el
-  anuncio, no de despriorizar animales.
-
 ## Limitaciones del estudio {#limitaciones}
 
 1. **Validez externa:** los datos son de Malasia (2019); extrapolar a otro país o a hoy es una
@@ -162,14 +127,3 @@ resultados**, con verificaciones en cada fase:
    esterilizar a un animal acelere su adopción, solo que se asocia con adopciones más rápidas.
 6. **Variables no observadas:** temperamento del animal, trato del rescatista, difusión del
    anuncio, demanda estacional: nada de eso está en la base.
-
-## Viabilidad y riesgos {.unnumbered}
-
-| Riesgo | Probabilidad | Impacto | Mitigación |
-|:-----------------------------------|:---|:---|:--------------------------------------------------------------------------------|
-| Desempeño por debajo de lo esperado | Alta | Medio | Reformular el aporte como explicativo; reportar honestamente el techo alcanzado |
-| Faltantes no aleatorios (foto, relato) | Media | Medio | Indicadores de ausencia + análisis de sensibilidad |
-| Fuga de información por variables de alta cardinalidad | Media | Alto | Excluir identificadores; codificación calculada solo con entrenamiento; validación agrupada por rescatista |
-| Tiempo de cómputo en equipo propio | Media | Bajo | Modelos tabulares (no redes profundas); búsqueda de hiperparámetros acotada |
-| Dependencia de cuotas de servicios en la nube | Baja | Bajo | Las anotaciones ya están consolidadas en la base enriquecida; no se re-consultan |
-| Sobrecarga académica | Media | Medio | Alcance mínimo declarado y priorización de las etapas críticas |

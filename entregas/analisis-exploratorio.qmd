@@ -5,7 +5,7 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 ---
 
 ::: action-bar
-[Dataset y enriquecimiento](dataset.qmd){.btn-ghost} [Metodología](../proyecto/metodologia.qmd){.btn-ghost} <button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
+[Dataset y enriquecimiento](dataset.qmd){.btn-ghost} <button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
 :::
 
 Esta entrega corresponde al **análisis univariado** de la base enriquecida: se describe cada variable **por separado** (distribución, tendencia central, dispersión, forma, valores atípicos y frecuencias, según su tipo). Por el alcance de esta entrega **no** se incluyen cruces entre variables, medidas de asociación, correlaciones, reducción de dimensionalidad ni modelos; esos análisis corresponden a las entregas siguientes.

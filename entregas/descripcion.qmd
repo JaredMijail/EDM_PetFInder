@@ -56,26 +56,26 @@ Las 31 variables se clasifican por su naturaleza y su escala de medición. La co
 #| tbl-cap: "Clasificación de las variables cualitativas por tipo, escala y origen"
 
 clasificacion_cuali <- tibble::tribble(
-  ~Variable, ~`Tipo`, ~Escala, ~Fuente,
-  "PetID",              "Caracter",  "Nominal",   "Original",
-  "Name",               "Caracter",  "Nominal",   "Original",
-  "Type",               "Factor",    "Nominal",   "Original",
-  "Breed1",             "Factor",    "Nominal",   "Original",
-  "Breed2",             "Factor",    "Nominal",   "Original",
-  "Gender",             "Factor",    "Nominal",   "Original",
-  "Color1",             "Factor",    "Nominal",   "Original",
-  "Color2",             "Factor",    "Nominal",   "Original",
-  "Color3",             "Factor",    "Nominal",   "Original",
-  "Vaccinated",         "Factor",    "Nominal",   "Original",
-  "Dewormed",           "Factor",    "Nominal",   "Original",
-  "Sterilized",         "Factor",    "Nominal",   "Original",
-  "State",              "Factor",    "Nominal",   "Original",
-  "RescuerID",          "Caracter",  "Nominal",   "Original",
-  "Description",        "Texto",     "Nominal",   "Original",
-  "MaturitySize",       "Factor",    "Ordinal",   "Original",
-  "FurLength",          "Factor",    "Ordinal",   "Original",
-  "Health",             "Factor",    "Ordinal",   "Original",
-  "AdoptionSpeed",      "Factor",    "Ordinal",   "Original"
+  ~Variable, ~`Descripción`, ~`Tipo`, ~Escala, ~Fuente,
+  "PetID",              "Identificador único del anuncio",                     "Caracter",  "Nominal",   "Original",
+  "Name",               "Nombre con el que se publica al animal",             "Caracter",  "Nominal",   "Original",
+  "Type",               "Especie (perro o gato)",                             "Factor",    "Nominal",   "Original",
+  "Breed1",             "Raza principal del animal",                          "Factor",    "Nominal",   "Original",
+  "Breed2",             "Segunda raza (0 si no aplica)",                      "Factor",    "Nominal",   "Original",
+  "Gender",             "Género (macho, hembra o mixto)",                     "Factor",    "Nominal",   "Original",
+  "Color1",             "Color principal",                                    "Factor",    "Nominal",   "Original",
+  "Color2",             "Segundo color",                                      "Factor",    "Nominal",   "Original",
+  "Color3",             "Tercer color",                                       "Factor",    "Nominal",   "Original",
+  "Vaccinated",         "Estado de vacunación (sí, no, no está seguro)",      "Factor",    "Nominal",   "Original",
+  "Dewormed",           "Estado de desparasitación (sí, no, no está seguro)", "Factor",    "Nominal",   "Original",
+  "Sterilized",         "Estado de esterilización (sí, no, no está seguro)",  "Factor",    "Nominal",   "Original",
+  "State",              "Estado o territorio de Malasia donde se publica",    "Factor",    "Nominal",   "Original",
+  "RescuerID",          "Identificador del rescatista que publica",           "Caracter",  "Nominal",   "Original",
+  "Description",        "Relato libre del rescatista sobre el animal",        "Texto",     "Nominal",   "Original",
+  "MaturitySize",       "Tamaño de madurez (pequeño a extra grande)",         "Factor",    "Ordinal",   "Original",
+  "FurLength",          "Longitud del pelaje (corto, mediano, largo)",        "Factor",    "Ordinal",   "Original",
+  "Health",             "Estado de salud (sano, lesión leve, lesión grave)",  "Factor",    "Ordinal",   "Original",
+  "AdoptionSpeed",      "Velocidad de adopción (5 categorías; respuesta)",    "Factor",    "Ordinal",   "Original"
 ) |>
   dplyr::arrange(Escala)
 
@@ -111,19 +111,19 @@ De las 19 variables cualitativas se tiene que 15 de ellas son nominales frente a
 #| tbl-cap: "Clasificación de las variables cuantitativas por tipo, escala y origen"
 
 clasificacion_cuanti <- tibble::tribble(
-  ~Variable, ~`Tipo`, ~Escala, ~Fuente,
-  "Age",                "Entero",    "Razón",  "Original",
-  "Quantity",           "Entero",    "Razón",  "Original",
-  "Fee",                "Entero",    "Razón",  "Original",
-  "VideoAmt",           "Entero",    "Razón",  "Original",
-  "PhotoAmt",           "Entero",    "Razón",  "Original",
-  "sentiment_score",    "Numérico",  "Intervalo", "Enriquecimiento (texto)",
-  "sentiment_magnitude","Numérico",  "Razón",  "Enriquecimiento (texto)",
-  "total_labels",       "Entero",    "Razón",  "Enriquecimiento (imagen)",
-  "total_faces",        "Entero",    "Razón",  "Enriquecimiento (imagen)",
-  "total_colors",       "Entero",    "Razón",  "Enriquecimiento (imagen)",
-  "desc_char_len",      "Entero",    "Razón",  "Derivada del texto",
-  "desc_word_count",    "Entero",    "Razón",  "Derivada del texto"
+  ~Variable, ~`Descripción`, ~`Tipo`, ~Escala, ~Fuente,
+  "Age",                "Edad en meses",                                             "Entero",    "Razón",  "Original",
+  "Quantity",           "Número de animales en el anuncio",                          "Entero",    "Razón",  "Original",
+  "Fee",                "Tarifa de adopción en ringgit malayo (MYR)",                "Entero",    "Razón",  "Original",
+  "VideoAmt",           "Número de videos del anuncio",                             "Entero",    "Razón",  "Original",
+  "PhotoAmt",           "Número de fotos del anuncio",                              "Entero",    "Razón",  "Original",
+  "sentiment_score",    "Polaridad del relato, de -1 a 1 (Google Natural Language API)", "Numérico",  "Intervalo", "Enriquecimiento (texto)",
+  "sentiment_magnitude","Intensidad emocional del relato (Google Natural Language API)", "Numérico",  "Razón",  "Enriquecimiento (texto)",
+  "total_labels",       "Etiquetas de contenido detectadas en las fotos (Vision API)", "Entero",    "Razón",  "Enriquecimiento (imagen)",
+  "total_faces",        "Rostros humanos detectados en las fotos (Vision API)",     "Entero",    "Razón",  "Enriquecimiento (imagen)",
+  "total_colors",       "Colores dominantes detectados en las fotos (Vision API)",  "Entero",    "Razón",  "Enriquecimiento (imagen)",
+  "desc_char_len",      "Longitud del relato en caracteres",                        "Entero",    "Razón",  "Derivada del texto",
+  "desc_word_count",    "Longitud del relato en palabras",                          "Entero",    "Razón",  "Derivada del texto"
 ) |>
   dplyr::arrange(Escala)
 

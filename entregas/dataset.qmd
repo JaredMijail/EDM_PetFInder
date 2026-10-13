@@ -251,5 +251,5 @@ Las claves de este procesamiento:
    Google entrenados para otros fines; son medidas *proxy*, con su propio error.
 :::
 
-Las consecuencias de estas limitaciones para el diseño y para lo que se puede concluir se
-desarrollan en la [Metodología](../proyecto/metodologia.qmd#limitaciones).
+Las consecuencias de estas limitaciones condicionan el alcance de las conclusiones: el estudio
+describe asociaciones, no relaciones causales.
