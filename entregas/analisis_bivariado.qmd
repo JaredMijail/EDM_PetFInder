@@ -741,11 +741,15 @@ analisis_bivar_cuali_vs_cuanti('total_labels', datos = datos)
 analisis_bivar_cuali_vs_cuanti('total_faces', datos = datos)
 ````
 
+**Lectura.** La razón de correlación entre el total de rostros y la velocidad de adopción es de apenas 0,11 %: prácticamente nula. Las cajas y los violines de las cinco clases coinciden casi por completo (mediana 0 en todas) y los anuncios con rostros son minoría, así que el número de rostros no distingue unas velocidades de otras.
+
 ## total_colors
 **Total de colores detectados**
 ````{r bivar-total-colors}
 analisis_bivar_cuali_vs_cuanti('total_colors', datos = datos)
 ````
+
+**Lectura.** Razón de correlación de 1,55 %, la mayor de las cuatro, aunque todavía débil. Los diagramas muestran una tendencia leve y ordenada: las clases más lentas (sobre todo «31–90 días») tienden a presentar más colores detectados que «Sin adopción» y «Mismo día». Más variedad cromática se asocia levemente con adopciones más lentas.
 
 ## desc_char_len
 **Longitud de la descripción en caracteres**
@@ -753,11 +757,15 @@ analisis_bivar_cuali_vs_cuanti('total_colors', datos = datos)
 analisis_bivar_cuali_vs_cuanti('desc_char_len', datos = datos)
 ````
 
+**Lectura.** Razón de correlación de 0,26 %, asociación débil. En las cajas y violines, «Mismo día» y «Sin adopción» son las clases con relatos más cortos y «31–90 días» la de relatos más largos: a descripciones más extensas, adopciones algo más lentas. El solapamiento entre clases es alto.
+
 ## desc_word_count
 **Longitud de la descripción en palabras**
 ````{r bivar-desc-word-count}
 analisis_bivar_cuali_vs_cuanti('desc_word_count', datos = datos)
 ````
+
+**Lectura.** Razón de correlación de 0,22 %, asociación débil. Repite el patrón de los caracteres: las medianas de palabras son menores en «Mismo día» y «Sin adopción» y mayores en los grupos intermedios. La dirección es la esperada (textos más largos, adopciones más lentas), pero el efecto es mínimo.
 :::
 
 ## `sentiment_score` VS variables cualitativas
