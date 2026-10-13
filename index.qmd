@@ -4,24 +4,18 @@ subtitle: "Predicción de la velocidad de adopción de mascotas a partir de dato
 toc: false
 ---
 
-::: {.hero}
+:::: hero
 ### Un anuncio, cinco velocidades de adopción {.unnumbered}
 
-Investigación cuantitativa sobre **datos secundarios**: 14 993 anuncios de mascotas de la
-plataforma malaya PetFinder.my. Al anuncio original (datos tabulares, texto y fotografía) le
-añadimos señales **textuales** y **visuales** para describir, predecir y explicar cuánto tarda
-una mascota en ser adoptada.
+Investigación cuantitativa sobre **datos secundarios**: 14 993 anuncios de mascotas de la plataforma malaya PetFinder.my. Al anuncio original (datos tabulares, texto y fotografía) le añadimos señales **textuales** y **visuales** para describir, predecir y explicar cuánto tarda una mascota en ser adoptada.
 
-<span class="chip">EDM · Estadística descriptiva multivariada</span>
-<span class="chip">Datos secundarios</span>
-<span class="chip">Clasificación ordinal · 5 clases</span>
-<span class="chip">R · tidyverse · Quarto</span>
+[EDM · Estadística descriptiva multivariada]{.chip} [Datos secundarios]{.chip} [Clasificación ordinal · 5 clases]{.chip} [R · tidyverse · Quarto]{.chip}
 
-<div class="chip-group">
-
-[Antecedentes y contexto](proyecto/antecedentes-contexto.qmd){.btn-print}
-[Revisión de literatura](proyecto/revision-literatura.qmd){.btn-ghost}
-[Repositorio](https://github.com/JaredMijail/EDM_PetFInder){.btn-ghost}
-
-</div>
+::: chip-group
+[Antecedentes y contexto](proyecto/antecedentes-contexto.qmd){.btn-print} [Revisión de literatura](proyecto/revision-literatura.qmd){.btn-ghost} [Repositorio](https://github.com/JaredMijail/EDM_PetFInder){.btn-ghost}
 :::
+::::
+
+Enlace documento quarto: <https://01a133b3-a5ec-aac6-ea0d-f07aa664c22c.share.connect.posit.cloud/>
+
+Enlace video:
