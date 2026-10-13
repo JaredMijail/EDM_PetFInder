@@ -971,6 +971,7 @@ figcaption,
 
 button.btn-print,
 a.btn-print {
+  display: inline-block;
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   color: #ffffff !important;
   font-family: var(--font-sans);
@@ -993,6 +994,7 @@ a.btn-print:hover {
 }
 
 .btn-ghost {
+  display: inline-block;
   background: transparent;
   color: var(--color-secondary) !important;
   border: 1px solid var(--color-border) !important;
