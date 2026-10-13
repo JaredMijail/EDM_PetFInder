@@ -676,7 +676,7 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 
   # Razón de correlación
   X    <- data.frame(x = x) |> setNames(variable)
-  corr <- centroids(X, f)$cr * 100
+  corr <- centroids(f, X)$cr * 100
 
   corr_html <- htmltools::tagList(
     htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
@@ -698,17 +698,23 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
 analisis_bivar_cuali_vs_cuanti('Age', datos = datos)
 ````
 
+De acuerdo con el diagrama de cajas y el diagrama de violines de la edad según la velocidad de adopción es claro que para todas las velocidades se tienen distribuciones asimétricas hacia la izquierda y con cola pesada a la derecha. Esto sugiere que para todas las velocidades son más comunes las edades bajas que las edades altas. Se puede destacar que los animales que fueron adoptados el mismo día conforman el grupo más jóven de animales respecto a las demás velocidades de adopción. Por otro lado se observa que dentro de los animales que fueron adoptados en un plazo de 31-90 días o que no fueron adoptados hay más presencia de animales adultos y adultos mayores. Una razón de correlación del 1.34% sugiere que las medias de los grupos por velocidad de adopción son iguales luego la variable velocidad de adopción no explica la edad de los animales.
+
 ## Quantity
 **Cantidad de animales en el anuncio**
 ````{r bivar-quantity}
 analisis_bivar_cuali_vs_cuanti('Quantity', datos = datos)
 ````
 
+Según lo que se puede apreciar en el diagrama de cajas y el diagrama de violines de la cantidad de animales en el anuncio según la velocidad de adopción, es destacable que las distribuciones de los grupos de animales a sociados a los periodos de adopción mismo día, 1-7 días, 8-30 días y 31-90 días están comprimidas en el valor 1 mientras que el grupo de animales que no fueron adoptados tiene una distribución asimétrica a la izquierda. Esto sugiere que cuando hay más de un animal presentado en el anuncio es poco probable que los adopten en el corto plazo. Una razón de correlación del 0.48% sugiere que las medias de los grupos por velocidad de adopción son iguales luego la variable velocidad de adopción no explica la cantidad de animales en los anuncios.
+
 ## Fee
 **Tarifa de adopción**
 ````{r bivar-fee}
 analisis_bivar_cuali_vs_cuanti('Fee', datos = datos)
 ````
+
+
 
 ## VideoAmt
 **Cantidad de videos**
