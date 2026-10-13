@@ -123,12 +123,6 @@ En esta primera subsección se presenta el contraste de la variable velocidad de
 # =====================================================================
 # Análisis bivariado cualitativa vs. cualitativa frente a AdoptionSpeed
 # =====================================================================
-# Uso:
-#   analisis_bivar_cuali_vs_cuali(datos$Gender)
-#   analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
-#
-# Requiere: ggplot2, dplyr, tibble, forcats, knitr (R >= 4.1 por el uso de |>).
-# Requiere en el entorno global: `datos` (con la columna AdoptionSpeed como factor).
 
 # ---------------------------------------------------------------------
 # 2. Utilidades de formato (coma decimal, punto de miles)
@@ -434,17 +428,18 @@ analisis_bivar_cuali_vs_cuali <- function(x,
   if (encabezado) cat(sprintf("\n\n**%s**\n\n", nombre_x))
   print(tablas$decision)
   print(tablas$contingencia)
-  k  <- nlevels(x)
-  id <- gsub("[^A-Za-z0-9_]", "_", nombre_var)
-  mostrar_figura(graficos$perfil, alto_figura(k, base = 2.4),
-               id  = paste0(id, "_perfil"),
-               alt = sprintf("Perfil fila de la velocidad de adopción por %s", nombre_x))
   #mostrar_figura(graficos$residuos, alto_figura(k, base = 2.2),
   #             id  = paste0(id, "_residuos"),
   #             alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
   print(tablas$estadisticos)
   cat("\n\n", texto, "\n\n", sep = "")
 
+  k  <- nlevels(x)
+  id <- gsub("[^A-Za-z0-9_]", "_", nombre_var)
+  mostrar_figura(graficos$perfil, alto_figura(k, base = 2.4),
+               id  = paste0(id, "_perfil"),
+               alt = sprintf("Perfil fila de la velocidad de adopción por %s", nombre_x))
+               
   invisible(list(estadisticos = resumen, tablas = tablas,
                  graficos = graficos, texto = texto))
 }
