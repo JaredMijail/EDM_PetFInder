@@ -466,7 +466,6 @@ analisis_bivar_cuali_vs_cuali <- function(x,
                id  = paste0(id, "_residuos"),
                alt = sprintf("Mapa de residuos de Pearson: %s y velocidad de adopción", nombre_x))
   print(tablas$estadisticos)
-  cat("\n\n**Interpretación.** ", texto, "\n\n", sep = "")
 
   invisible(list(estadisticos = resumen, tablas = tablas,
                  graficos = graficos, texto = texto))
@@ -613,6 +612,26 @@ analisis_bivar_cuali_vs_cuali(datos$Name, alta_cardinalidad = TRUE)
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
 ````
+
+## `VideoAmt_bin`
+
+````{r}
+#| label: bivar-videoamt-bin
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$VideoAmt_bin)
+````
+
+**Lectura.** La presencia de video no es independiente de la velocidad de adopción (χ²(4) = 25,7; p < 0,001), pero la V de Cramér (0,038) indica una asociación despreciable. En el perfil de barras, los anuncios CON video concentran más porcentaje en «8–30 días» (31 % frente a 27 %) y en «31–90 días» (27 % frente a 21 %) y menos en «Sin adopción» (21 % frente a 28 %); el mapa de residuos lo respalda («Con video» × «31–90 días» = +2,7; «Con video» × «Sin adopción» = −3,1). El patrón es coherente —tener video acompaña adopciones algo más rápidas— pero el efecto es mínimo y el grupo con video es pequeño (574 de 14.993).
+
+## `total_faces_bin`
+
+````{r}
+#| label: bivar-faces-bin
+#| results: asis
+analisis_bivar_cuali_vs_cuali(datos$total_faces_bin)
+````
+
+**Lectura.** La presencia de rostros también se asocia con la velocidad de adopción (χ²(4) = 16,5; p = 0,002), pero la V de Cramér (0,029) es despreciable. En el perfil, los anuncios CON rostros se concentran más en «8–30 días» (34 % frente a 27 %) y menos en «Sin adopción» (22 % frente a 27 %); el mapa de residuos confirma la celda «Con rostros» × «8–30 días» con más casos de los esperados (+2,9) y «Con rostros» × «Sin adopción» con menos (−2,2). Igual que el video, es una asociación muy débil y el grupo con rostros es minoritario (523).
 :::
 
 ## `AdoptionSpeed` VS variables cuantitativas
@@ -710,6 +729,8 @@ analisis_bivar_cuali_vs_cuanti('Fee', datos = datos)
 ````{r bivar-videoamt}
 analisis_bivar_cuali_vs_cuanti('VideoAmt', datos = datos)
 ````
+
+**Lectura.** Razón de correlación de 0,11 %, prácticamente nula. Las cinco clases de velocidad de adopción tienen la misma distribución casi degenerada en 0 videos —la mayoría de los anuncios no tiene video— y solo unos pocos casos aislados llegan a 8; la cantidad de videos no distingue unas velocidades de otras.
 
 ## PhotoAmt
 **Cantidad de fotos**
