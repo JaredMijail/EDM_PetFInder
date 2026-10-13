@@ -1258,10 +1258,14 @@ html[data-bs-theme="dark"] thead {
 }
 
 /* ------------------------------------------- 11. Impresión / exportar a PDF */
+/* ------------------------------------------- 11. Impresión / exportar a PDF */
 @media print {
   /* Fuera los elementos de navegación: el PDF debe leerse como documento */
   .navbar,
   .sidebar,
+  #quarto-sidebar,
+  #quarto-margin-sidebar,
+  #quarto-header,
   #TOC,
   .quarto-title-banner,
   .page-navigation,
@@ -1275,6 +1279,50 @@ html[data-bs-theme="dark"] thead {
     display: none !important;
   }
 
+  /* ===== Ancho completo: deshacer la rejilla de columnas de Quarto ===== */
+  .page-columns,
+  body.docked .page-columns,
+  body.docked.fullcontent .page-columns,
+  body.docked.slimcontent .page-columns,
+  body.docked.listing .page-columns {
+    display: block !important;
+    grid-template-columns: none !important;
+  }
+
+  .page-columns > *,
+  .page-columns > main,
+  .page-columns .column-body,
+  .page-columns .column-page,
+  .page-columns .column-screen-inset {
+    grid-column: auto !important;
+  }
+
+  body.nav-fixed,
+  body.docked {
+    padding-top: 0 !important;
+    margin: 0 !important;
+  }
+
+  #quarto-content,
+  .content,
+  main.content,
+  main,
+  #quarto-document-content {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Figuras y widgets (plotly) al ancho de la página */
+  .html-widget,
+  .plotly.html-widget,
+  .js-plotly-plot,
+  .cell-output-display {
+    max-width: 100% !important;
+  }
+
+  /* ============================ Base de impresión ====================== */
   body {
     background: #ffffff !important;
     color: #000000 !important;
@@ -1286,11 +1334,8 @@ html[data-bs-theme="dark"] thead {
     display: none;
   }
 
-  main,
-  #quarto-document-content {
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  main {
+    animation: none;
   }
 
   h1, h2, h3, h4 {
@@ -1339,6 +1384,7 @@ html[data-bs-theme="dark"] thead {
     content: "";
   }
 
+  /* ================================ Código ============================= */
   pre {
     background: #f6f8fa !important;
     color: #111111 !important;
@@ -1359,6 +1405,7 @@ html[data-bs-theme="dark"] thead {
     color: #111111 !important;
   }
 
+  /* ======================== Callouts, tablas, figuras ================== */
   .callout,
   table,
   figure,
@@ -1386,6 +1433,7 @@ html[data-bs-theme="dark"] thead {
     border: 1px solid #cccccc;
   }
 
+  /* ============================ Componentes ============================ */
   .hero {
     background: #ffffff !important;
     color: #000000 !important;
@@ -1425,7 +1473,7 @@ html[data-bs-theme="dark"] thead {
     print-color-adjust: exact;
   }
 
-  /* ================== NUEVO: panel-tabset en el PDF ================== */
+  /* ======================= panel-tabset en el PDF ====================== */
   /* Mostrar TODOS los paneles, no solo el activo */
   .panel-tabset .tab-content > .tab-pane {
     display: block !important;
@@ -1447,7 +1495,7 @@ html[data-bs-theme="dark"] thead {
     display: none !important;
   }
 
-  /* Mostrar el primer h3 dentro de cada panel como título de la variable.
+  /* Mostrar el primer h3 de cada panel como título de la variable.
      En pantalla está oculto; al imprimir aparece. */
   .panel-tabset .tab-pane > h3:first-child {
     display: block !important;
@@ -1463,6 +1511,11 @@ html[data-bs-theme="dark"] thead {
   @page {
     margin: 1.8cm 1.6cm;
   }
+}
+
+/* El primer h3 de cada panel solo sirve para el PDF: en pantalla se oculta */
+.panel-tabset .tab-pane > h3:first-child {
+  display: none;
 }
 
 /* El primer h3 de cada panel solo sirve para el PDF: en pantalla se oculta */
