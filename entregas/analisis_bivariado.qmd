@@ -116,7 +116,7 @@ pal_clases2 <- unname(colorRampPalette(pal_clases, space = "Lab")(11))
 ````
 
 ## `AdoptionSpeed` VS variables cualitativas
-En esta primera subsección se presenta el contraste de la variable velocidad de adopción frente a 16 variables cualitativas del conjunto de datos PetFinder.
+En esta primera subsección se presenta el contraste de la variable velocidad de adopción frente a 14 variables cualitativas del conjunto de datos PetFinder.
 
 
 ````{r}
@@ -486,7 +486,7 @@ extraer_nombre <- function(expr) {
 analisis_bivar_cuali_vs_cuali(datos$Type)
 ````
 
-Por lo que se observa en el diagrama de distribución de la velcidad de adopción dentro de las categorías Perro y Gato, es destacable que 
+Por lo que se observa en el diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías de especie, es destacable que en los perros hay una mayor proprción de animales que no fueron adoptados o que fueron adoptados en un intervalo de 31-90 días en comparación a los gatos y el perfil marginal. Por otro lado, en los gatos existe una mayor proporción de animales que fueron adoptados el mismo día o en un intervalo de 1-7 días respecto a los perros y el perfil marginal. Para ambas especies, la proporción de animales que fueron adoptados en un intervalo de 8-30 días es la misma. Esto sugiere que en general los gatos tienen un periodo de adopción más bajo que los perros.
 
 ## `Gender`
 
@@ -496,6 +496,8 @@ Por lo que se observa en el diagrama de distribución de la velcidad de adopció
 analisis_bivar_cuali_vs_cuali(datos$Gender)
 ````
 
+En cuanto al diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías de género, es notable que en los anuncios que contenían género mixto de animales la proporción de animales que no fueron adoptados es mayor respecto a la proporción de aquellos que relacionaban animales hembras y esta última es mayor a la proporción de anuncios relacionados con machos. El resto de periodos de adopción tienen proporciones similares para los tres géneros excepto el mismo día, donde la proporción menor corresponde a los anuncios que refieren género mixto. Esto parece indicar que es menos probable que se tomen en adopción los animales asociados a anuncios con género mixto el mismo día pero es más probable que no sean adoptados.
+
 ## `MaturitySize`
 
 ````{r}
@@ -503,6 +505,8 @@ analisis_bivar_cuali_vs_cuali(datos$Gender)
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$MaturitySize)
 ````
+
+Respecto al diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías de tamaño de madurez, los animales extra grandes tienen una proporción notablemente mayor en los periodos de adopción de mismo día, 8-30 días y 31-90 días. Por otro lado esta categoría tiene una proporción mucho menor de animales que o fueron adoptados. Esto sugiere que podría existir una preferencia hacia los animales extra grandes que se ofrecen en adopción.
 
 ## `FurLength`
 
@@ -512,6 +516,8 @@ analisis_bivar_cuali_vs_cuali(datos$MaturitySize)
 analisis_bivar_cuali_vs_cuali(datos$FurLength)
 ````
 
+Por lo que se observa en el diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías de la longitud del pelaje, es apreciable que para los animales de pelaje largo las proporciones de animales son inversamente proporcionales al periodo de adopción. Los animales de pelaje corto y mediano presentan proporciones de animales similares para todas las velocidades de adopción. Esto sugiere que los aniamles de pelaje largo son mayormente apetecidos cuando se ofrecen en adopción respecto a los animales con pelaje corto o mediano.
+
 ## `Vaccinated`
 
 ````{r}
@@ -519,6 +525,8 @@ analisis_bivar_cuali_vs_cuali(datos$FurLength)
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Vaccinated)
 ````
+
+Por lo que se observa en el diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías del estado de vacunación, para los animales que no estaban vacunados la proporción de los que no fueron adoptados es menor respecto a los animales que estaban vacunados o cuyo estado de vacunación era incierto. Por otro lado la proporción de animales que fueron adoptados en un intervalo de 1-7 días es mayor para esta primera categoría con relación a las otras dos. Para el caso de las velocidades de adopción restantes, la proporción de animales es similar para los animales que estaban vacunados, lo que no y los que no se sabía. Esto sugiere que para un animal que no está vacunado, es más menos probable que no sea adoptado nunca y es más probable que sea adoptado en un periodo de 1-7 días.
 
 ## `Dewormed`
 
@@ -528,6 +536,8 @@ analisis_bivar_cuali_vs_cuali(datos$Vaccinated)
 analisis_bivar_cuali_vs_cuali(datos$Dewormed)
 ````
 
+En cuanto a lo que se observa en el diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías del estado de desparacitación, es destacable que para los animales cuyo estado de desparacitación era incierto la proporción de animales que no fueron adoptados es mayor con relación a los que si estaban desparacitados y los que no. Por otra parte, para los animales que no estaban desparacitados, la proporción de animales que fueron adoptados en un periodo de 1-7 días es mayor respecto a los animales que si estaban desparacitos y los que no se sabía. Esto sugiere que un factor que desincentiva la adopción es la no certeza sobre el estado de desparacitación del animal.
+
 ## `Sterilized`
 
 ````{r}
@@ -535,6 +545,8 @@ analisis_bivar_cuali_vs_cuali(datos$Dewormed)
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Sterilized)
 ````
+
+Respecto a lo que es visible en el diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías del estado de esterilización, en los animales que no están esterilizados la proporción de los que no fueron adoptados es notablemente menor respecto a los animales que sí están esterilizados o cuyo estado de esterilización es incierto. Para los animales que sí están esterilizados, las proporciones son directamente proporcionales al periodo de adopción. Por otro lado para los animales cuyo estado de esterilización es incierto, la proporción que fueron adoptados en un periodo de 32-90 días es menor en relación con las otras dos categorías y la proporción de los que fueron adoptados el mismo día es mayor. Lo anterior sugiere que es más probable que a un animal que no estaba esterilizado no lo adopten nunca, a que un animal cuyo estado de esterilización es incierto lo adopten el mismo día.
 
 ## `Health`
 
@@ -544,6 +556,8 @@ analisis_bivar_cuali_vs_cuali(datos$Sterilized)
 analisis_bivar_cuali_vs_cuali(datos$Health)
 ````
 
+En cuanto al diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías del estado de salud, se observa que los animales que presentan alguna lesión grave están desfavorecidos en los periodos cortos de adopción (mismo días, 1-7 días y 8-30 días) mientras que sus proporciones son altamente prevalentes en los largos periodos de adopción (31-90 días y sin adopción) respecto a los animales sanos o que presentan lesiones leves. Esto parece indicar que podría existir más resistencia para la adopción de los animales que presentan lesiones graves.
+
 ## `Color1`
 
 ````{r}
@@ -551,6 +565,8 @@ analisis_bivar_cuali_vs_cuali(datos$Health)
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Color1)
 ````
+
+Dado lo observable en el diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías del color principal, se aprecia que para los colores 3, 5, 6 y 7 las proporciones para todas las velocidades de adopción -excepto el mismo día- son similares. Para los colores 1, 2 y 4 se tiene esta misma propiedad.  La diferencia entre estos grupos de colores radica en que las proporciones de los colores 3, 5, 6 y 7 predominan en los cortos periodos de adopción (1-7 días y 8-30 días) respecto a los demás. Por otra parte los colores 1, 2 y 4 predominan en los largos periodos de adopción (31-90 días y sin adopción).
 
 ## `Color2`
 
@@ -560,6 +576,8 @@ analisis_bivar_cuali_vs_cuali(datos$Color1)
 analisis_bivar_cuali_vs_cuali(datos$Color2)
 ````
 
+Respecto al diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías del color secundario, se observa una predominancia de las proporciones de los colores 0, 2, 3 y 4 en la caotegoría sin adopción. Todos los colores parecen tener una distribución aproximadamente uniforme en los periodos de adopción 1-7 días, 8-30 días y 31-90 días. Los colores 5 y 6 tienen proporciones ligeramente más altas respecto al resto en el mismo día de adopción. Lo anterior sugiere que existe una preferencia por los colores secundarios 5 y 6 en el pelaje de los animales ofrecidos en adopción.
+
 ## `Color3`
 
 ````{r}
@@ -567,6 +585,8 @@ analisis_bivar_cuali_vs_cuali(datos$Color2)
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Color3)
 ````
+
+En cuanto a lo que se observa en el diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías del color terciario, es notoria la prevalencia de las proporciones de los animales que presentan los colores terciarios 3 y 4 en los que no fueron adoptados. Así mismo la proporción de los animales que presentan el color terciario 4 tienen la proporción más baja de los que fueron adoptados en el intervalo de 1-7 días. Los animales cuyo periodo de adopción se encuentra en el intervalo de 31-90 días tienen una distribución aproximadamente uniforme para todos los colores terciarios. 
 
 ## `Breed1`
 
@@ -576,6 +596,8 @@ analisis_bivar_cuali_vs_cuali(datos$Color3)
 analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
 ````
 
+Respecto al diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías de raza principal, es apreciable que las razas 285 y 179 tienes las proporciones más grandes de los animales que fueron adoptados el mismo día y así mismo, presentan de las proporciones más bajas de los animales que no fueron adoptados. Por otro lado, la raza 307 tiene la mayor proporción de los animales que no fueron adoptados y también la proporción más baja de aquellos que fueron adoptados en un periodo de 1-7 días. Lo anterior sugiere que las razas 285 y 179 pueden ser más atractivas para quienes buscan adopatar un animal, mientras que la raza 307 puede ser menos apetecida.
+
 ## `Breed2`
 
 ````{r}
@@ -583,6 +605,8 @@ analisis_bivar_cuali_vs_cuali(datos$Breed1, alta_cardinalidad = TRUE)
 #| results: asis
 analisis_bivar_cuali_vs_cuali(datos$Breed2, alta_cardinalidad = TRUE)
 ````
+
+Dado lo que se observa en el diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías de raza secundaria, se aprecia que las razas 0 y 307 presentan una prevalencia de la proporción de animales que no fueron adoptados y también tienen las proporciones más bajas de los animales que fueron adoptados el mismo día. Por otra parte, las razas 266, 265 y otras tienen las mayores proporciones de animales que fueron adoptados el mismo día, siendo 265 la más favorecida. 
 
 ## `State`
 
@@ -592,21 +616,8 @@ analisis_bivar_cuali_vs_cuali(datos$Breed2, alta_cardinalidad = TRUE)
 analisis_bivar_cuali_vs_cuali(datos$State, alta_cardinalidad = TRUE)
 ````
 
-## `Name`
+Respecto al diagrama de distribución de las categorías de velocidad de adopción condicionadas a las categorías de estados o regiones, se observa que los anuncios publicados desde los estados o regiones 41326 y 41336 tienen una distribución muy similar de las proporciones para todas las velocidades de adopción para los animales. Por otra parte es notorio que los estados o regiones 41332 y otras presentan las mayores porporciones de animales que no fueron adoptados, sin embargo las otras parecen estar más favorecidas en los periodos más cortos de adopción (mismo día y 1-7 días). 
 
-````{r}
-#| label: bivar-name
-#| results: asis
-analisis_bivar_cuali_vs_cuali(datos$Name, alta_cardinalidad = TRUE)
-````
-
-## `RescuerID`
-
-````{r}
-#| label: bivar-rescuerid
-#| results: asis
-analisis_bivar_cuali_vs_cuali(datos$RescuerID, alta_cardinalidad = TRUE)
-````
 :::
 
 ## `AdoptionSpeed` VS variables cuantitativas
