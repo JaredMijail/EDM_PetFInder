@@ -675,18 +675,18 @@ analisis_bivar_cuali_vs_cuanti <- function(variable,
            showlegend = FALSE)
 
   # Razón de correlación
-  X    <- data.frame(x = x) |> setNames(variable)
-  corr <- centroids(f, X)$cr * 100
+  #X    <- data.frame(x = x) |> setNames(variable)
+  corr <- centroids(X, f)$cr * 100
 
-  corr_html <- htmltools::tagList(
-    htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
-                              " con ", lab_f)),
-    htmltools::tags$pre(
-      paste(capture.output(print(corr)), collapse = "\n")
-    )
-  )
+  #corr_html <- htmltools::tagList(
+  #  htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
+  #                            " con ", lab_f)),
+  #  htmltools::tags$pre(
+  #    paste(capture.output(print(corr)), collapse = "\n")
+  #  )
+  #)
 
-  htmltools::tagList(compactar_y(fig1), compactar_y(fig2), corr_html)
+  htmltools::tagList(compactar_y(fig1), compactar_y(fig2))
 }
 ````
 
