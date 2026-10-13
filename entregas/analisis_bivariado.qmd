@@ -288,27 +288,49 @@ tabla_estadisticos_cc <- function(st) {
 # 6. Gráficos (devuelven objetos ggplot; no imprimen)
 # ---------------------------------------------------------------------
 # Barras apiladas al 100 % (perfil fila)
-grafico_perfil_cc <- function(x, y, nombre_x, paleta) {
-  d <- tibble::tibble(cat = x, resp = y) |>
+grafico_perfil_cc <- function(x, y, nombre_x, paleta,
+                              etiqueta_marginal = "Perfil marginal") {
+  base <- tibble::tibble(cat = as.character(x), resp = y)
+
+  # Perfiles condicionales: distribución de resp dentro de cada categoría
+  d_cat <- base |>
     dplyr::count(cat, resp) |>
     dplyr::group_by(cat) |>
     dplyr::mutate(pct = 100 * n / sum(n), total = sum(n)) |>
-    dplyr::ungroup() |>
-    dplyr::mutate(cat = forcats::fct_reorder(cat, total))
+    dplyr::ungroup()
+
+  # Perfil marginal: distribución de resp en toda la muestra
+  d_marg <- base |>
+    dplyr::count(resp) |>
+    dplyr::mutate(cat = etiqueta_marginal, pct = 100 * n / sum(n), total = sum(n))
+
+  # Categorías ordenadas por tamaño; el perfil marginal queda de primero (abajo)
+  orden <- d_cat |>
+    dplyr::distinct(cat, total) |>
+    dplyr::arrange(total) |>
+    dplyr::pull(cat)
+  niveles <- c(etiqueta_marginal, orden)
+
+  d <- dplyr::bind_rows(d_cat, d_marg) |>
+    dplyr::mutate(cat = factor(cat, levels = niveles))
 
   ggplot(d, aes(x = pct, y = cat, fill = resp)) +
     geom_col(width = 0.72) +
     geom_text(aes(label = ifelse(pct >= 7, sprintf("%.0f %%", pct), "")),
               position = position_stack(vjust = 0.5), size = 3, colour = "white") +
+    # Separador entre el perfil marginal y los perfiles condicionales
+    geom_hline(yintercept = 1.5, linetype = "dashed",
+               colour = "grey50", linewidth = 0.3) +
     scale_fill_manual(values = paleta, name = NULL) +
     scale_x_continuous(expand = expansion(mult = c(0, 0.01))) +
     labs(title    = envolver(sprintf(
            "Distribución de la velocidad de adopción dentro de cada categoría de %s",
            nombre_x)),
-         subtitle = "Cada barra suma 100 %; las etiquetas muestran los porcentajes ≥ 7 %",
+         subtitle = "Cada barra suma 100 %; la barra inferior es el perfil marginal (toda la muestra). Etiquetas ≥ 7 %",
          x = "Porcentaje de anuncios", y = NULL) +
     tema_u() +
-    theme(legend.position = "bottom")
+    theme(legend.position = "bottom",
+          axis.text.y = element_text(face = c("bold", rep("plain", length(niveles) - 1))))
 }
 
 # Mapa de calor de residuos de Pearson
@@ -439,7 +461,7 @@ analisis_bivar_cuali_vs_cuali <- function(x,
   mostrar_figura(graficos$perfil, alto_figura(k, base = 2.4),
                id  = paste0(id, "_perfil"),
                alt = sprintf("Perfil fila de la velocidad de adopción por %s", nombre_x))
-               
+
   invisible(list(estadisticos = resumen, tablas = tablas,
                  graficos = graficos, texto = texto))
 }
@@ -464,7 +486,7 @@ extraer_nombre <- function(expr) {
 analisis_bivar_cuali_vs_cuali(datos$Type)
 ````
 
-
+Por lo que se observa en el diagrama de distribución de la velcidad de adopción dentro de las categorías Perro y Gato, es destacable que 
 
 ## `Gender`
 
