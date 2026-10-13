@@ -776,11 +776,16 @@ Respecto al diagrama de cajas y el diagrama de violines del total de colores det
 analisis_bivar_cuali_vs_cuanti('desc_char_len', datos = datos)
 ````
 
+Por lo que se puede observar en el diagrama de cajas y el diagrama de violines de la longitud de la descripción en caracteres del anuncio según la velocidad de adopción, se tienen distribuciones mesocúrticas con asimetría a la izquierda y cola pesada a la derecha. Es notorio que para los anuncios cuyos animales fueron adoptados el mismo día se tiene una cota entre 2000 y 2500 caracteres; para los anuncios cuyos animales fueron adoptados en un periodo de 8-30 días esta cota es de 5000 caracteres; aquellos anuncios que refieren animales que fueron adoptados en 1-7 días o 31-90 días tienen una cota de 6000 caracteres y el periodo de adopción con la cota más alta y extrema es de los animales que no fueron adoptados con un valor de 7000 caracteres. Lo anterior podría indicar que a medida que pasa más tiempo desde que es publicado el anuncio, más información se le agrega para hacerlo más atractivo.
+
 ## desc_word_count
 **Longitud de la descripción en palabras**
 ````{r bivar-desc-word-count}
 analisis_bivar_cuali_vs_cuanti('desc_word_count', datos = datos)
 ````
+
+Según el diagrama de cajas y el diagrama de violines de la longitud de la descripción en palabras del anuncio según la velocidad de adopción, se tiene que las distribuciones para todos los periodos de adopción con mesocúrticas asimétricas a la izquierda con cola pesada a la derecha. Esto indica que en general, son más comunes los anuncios con menos palabras. Se observa que los anuncios que tienen menos cantidad de palabras son aquellos que relacionan animales que fueron adoptados el mismo día seguido de aquellos que fueron adoptados en un periodo de 8-30 días días.  Aquellos anuncios que tienen una cantidad anormalmente alta de palabras corresponden a animales adoptados en periodos de 1-7 días, 31-90 días y sin adopción con el valor más extremo que supera las 1200 palabras.
+
 :::
 
 ## `sentiment_score` VS variables cualitativas
