@@ -56,17 +56,17 @@ bibliografía) y los productos de la Entrega 1 (dataset enriquecido y análisis 
 ```
 EDM_PetFinder/
 ├── index.qmd                        # Portada del sitio
-├── proyecto/                        # Proyecto de investigación (componentes de Briones)
-│   ├── planteamiento.qmd            # Problema, preguntas, hipótesis y propósito
-│   ├── marco-conceptual.qmd         # Antecedentes, teoría y marco propio
-│   ├── objetivos.qmd                # Objetivo general y específicos
-│   ├── justificacion.qmd            # Aporte social, científico, metodológico, institucional, personal
-│   ├── metodologia.qmd              # Diseño, variables, procesamiento y técnicas
-│   ├── productos.qmd                # Entregables y estructura del informe final
+├── proyecto/                        # Proyecto de investigación
+│   ├── antecedentes-contexto.qmd    # Origen, recolección y descripción de las variables
+│   ├── revision-literatura.qmd      # Estudios previos sobre la base
 │   └── bibliografia.qmd             # Bibliografía completa (desde referencias.bib)
-├── entregas/
-│   ├── analisis-exploratorio.qmd    # Entrega 1 — análisis exploratorio (en construcción)
-│   └── dataset.qmd                  # Entrega 1 — dataset y enriquecimiento
+├── entregas/                        # Entrega 1
+│   ├── descripcion.qmd              # Descripción del conjunto de datos
+│   ├── analisis_univariado.qmd      # Análisis univariado diagnóstico
+│   ├── decisiones_univariado.qmd    # Decisiones de recodificación
+│   ├── analisis_bivariado.qmd       # Análisis bivariado diagnóstico
+│   ├── analisis-exploratorio.qmd    # Análisis exploratorio
+│   └── dataset.qmd                  # Dataset y enriquecimiento
 ├── scripts/
 │   └── 01_dataset_enriquecido.R     # Construcción de la base enriquecida
 ├── data/                            # Datos (no versionados: ~550 MB)

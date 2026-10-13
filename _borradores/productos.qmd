@@ -1,0 +1,14 @@
+---
+title: "Productos esperados"
+subtitle: "Entregables del proyecto"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
+
+**Productos del proyecto:**
+
+1. Base de datos enriquecida y reproducible (14 993 anuncios × 31 variables) con su script de
+   construcción y su diccionario.
+2. Sitio web metodológico (este repositorio) con contexto, dataset, análisis exploratorio y
+   protocolo.
+3. Modelos entrenados, código de evaluación e informe de resultados con interpretabilidad.
+4. Informe final y sustentación.

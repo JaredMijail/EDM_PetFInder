@@ -8,10 +8,9 @@ author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
 
 Cada año millones de animales entran a refugios y plataformas de adopción. Cuando el tiempo
 de permanencia se alarga, aumentan los costos del refugio y el riesgo de eutanasia, y la
-capacidad se agota para los animales que llegan después. En Colombia, la Ley 1774 de 2016
-declaró a los animales seres sintientes y estableció deberes de protección, pero la
-sobrepoblación y el abandono siguen dependiendo, en la práctica, de la capacidad de las
-organizaciones y de la información disponible para colocar cada animal.
+capacidad se agota para los animales que llegan después: la sobrepoblación y el abandono
+siguen dependiendo, en la práctica, de la capacidad de las organizaciones y de la información
+disponible para colocar cada animal.
 
 La información disponible es, precisamente, el punto de entrada de esta investigación: una
 ficha de adopción es un **conjunto de señales** —raza, edad, estado de salud, precio, fotos,

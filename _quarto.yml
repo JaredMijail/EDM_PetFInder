@@ -30,18 +30,10 @@ website:
         href: index.qmd
       - text: "El proyecto"
         menu:
-          - text: "Planteamiento del problema"
-            href: proyecto/planteamiento.qmd
-          - text: "Marco conceptual"
-            href: proyecto/marco-conceptual.qmd
-          - text: "Objetivos"
-            href: proyecto/objetivos.qmd
-          - text: "Justificación"
-            href: proyecto/justificacion.qmd
-          - text: "Metodología"
-            href: proyecto/metodologia.qmd
-          - text: "Productos esperados"
-            href: proyecto/productos.qmd
+          - text: "Antecedentes y contexto"
+            href: proyecto/antecedentes-contexto.qmd
+          - text: "Revisión de literatura"
+            href: proyecto/revision-literatura.qmd
           - text: "Bibliografía"
             href: proyecto/bibliografia.qmd
       - text: "Entrega 01"
@@ -54,10 +46,6 @@ website:
             href: entregas/decisiones_univariado.qmd
           - text: "Análisis Bivariado"
             href: entregas/analisis_bivariado.qmd
-          - text: "Análisis exploratorio"
-            href: entregas/analisis-exploratorio.qmd
-          - text: "Dataset y enriquecimiento"
-            href: entregas/dataset.qmd
       - text: "Acerca de"
         href: about.qmd
     right:
@@ -74,12 +62,8 @@ website:
           - index.qmd
       - section: "El proyecto"
         contents:
-          - proyecto/planteamiento.qmd
-          - proyecto/marco-conceptual.qmd
-          - proyecto/objetivos.qmd
-          - proyecto/justificacion.qmd
-          - proyecto/metodologia.qmd
-          - proyecto/productos.qmd
+          - proyecto/antecedentes-contexto.qmd
+          - proyecto/revision-literatura.qmd
           - proyecto/bibliografia.qmd
       - section: "Entrega 01"
         contents:
@@ -87,8 +71,6 @@ website:
           - entregas/analisis_univariado.qmd
           - entregas/decisiones_univariado.qmd
           - entregas/analisis_bivariado.qmd
-          - entregas/analisis-exploratorio.qmd
-          - entregas/dataset.qmd
       - section: "Información"
         contents:
           - about.qmd

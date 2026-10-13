@@ -25,6 +25,20 @@ En esta sección se presentan las posibles asociaciones entre pares de variables
 #| include: false
 # Carga y traducción de las categorías del conjunto de datos
 source(here::here("_setup.R"))
+
+# Derivadas cualitativas binarias (misma recodificación que en decisiones_univariado.qmd):
+# se contrastan como variables cualitativas frente a sentiment_score sin quitarlas de su
+# versión cuantitativa.
+datos <- datos |>
+  dplyr::mutate(
+    VideoAmt_bin = factor(ifelse(VideoAmt == 0, "Sin video (0)", "Con video (≥ 1)"),
+                          levels = c("Sin video (0)", "Con video (≥ 1)")),
+    total_faces_bin = factor(dplyr::case_when(
+        is.na(total_faces) ~ NA_character_,
+        total_faces == 0   ~ "Sin rostros (0)",
+        total_faces >= 1   ~ "Con rostros (≥ 1)"),
+      levels = c("Sin rostros (0)", "Con rostros (≥ 1)"))
+  )
 ````
 
 ````{r}
@@ -93,12 +107,14 @@ ETIQUETAS <- c(
   PhotoAmt = 'Cantidad de fotos',
   sentiment_score = 'Puntaje de sentimiento',
   sentiment_magnitude = 'Magnitud de sentimiento',
-  total_labes = 'Total de etiquetas',
+  total_labels = 'Total de etiquetas',
   total_faces = 'Total de rostros detectados',
   total_colors = 'Total de colores detectados',
   desc_char_len = 'Longitud de la descripción en caracteres',
   desc_word_count = 'Longitud de la descripción en palabras',
-  AdoptionSpeed = 'Velocidad de adopción'
+  AdoptionSpeed = 'Velocidad de adopción',
+  VideoAmt_bin = 'Presencia de video',
+  total_faces_bin = 'Presencia de rostros'
 )
 
 
@@ -775,10 +791,49 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
   nota <- if (agrupado)
     paste0(" [", K, " niveles agrupados en ", nlevels(f_g), "]") else ""
 
-  # Razón de correlación: con todos los niveles y, si aplica, con los agrupados
-  X      <- data.frame(x = x) |> setNames(cuantitativa)
-  corr   <- centroids(X, f)$cr * 100
-  corr_g <- if (agrupado) centroids(X, f_g)$cr * 100 else NULL
+  # ---- Datos numéricos descriptivos ----
+  # η²: proporción de la varianza de la cuantitativa que explican los grupos
+  eta2 <- function(x, g) {
+    mg <- tapply(x, g, mean); ng <- tapply(x, g, length)
+    sum(ng * (mg - mean(x))^2) / sum((x - mean(x))^2)
+  }
+  eta2_g <- eta2(x, f_g)   # con niveles agrupados
+  eta2_K <- eta2(x, f)     # con todos los niveles (referencia)
+  kw     <- stats::kruskal.test(x, f_g)
+
+  # Tabla descriptiva por nivel (ordenada por mediana) + fila global
+  desc_g <- tibble::tibble(Nivel = as.character(f_g), v = x) |>
+    dplyr::group_by(Nivel) |>
+    dplyr::summarise(n = dplyr::n(),
+                     Media = mean(v), DE = stats::sd(v),
+                     Minimo = min(v), Q1 = stats::quantile(v, .25),
+                     Mediana = stats::median(v), Q3 = stats::quantile(v, .75),
+                     Maximo = max(v), .groups = "drop") |>
+    dplyr::arrange(Mediana)
+  desc_tot <- tibble::tibble(Nivel = "Global", n = length(x),
+                             Media = mean(x), DE = stats::sd(x),
+                             Minimo = min(x), Q1 = stats::quantile(x, .25),
+                             Mediana = stats::median(x), Q3 = stats::quantile(x, .75),
+                             Maximo = max(x))
+  desc <- dplyr::bind_rows(desc_g, desc_tot) |>
+    dplyr::mutate(n = ent(n)) |>
+    dplyr::mutate(dplyr::across(c(Media, DE, Minimo, Q1, Mediana, Q3, Maximo), ~ fmt(.x, 3)))
+  tabla_desc <- htmltools::HTML(as.character(knitr::kable(
+    desc, format = "html", align = "lrrrrrrrr",
+    col.names = c(lab_f, "n", "Media", "Desv. estándar", "Mínimo", "Q1", "Mediana", "Q3", "Máximo"),
+    caption = sprintf("Estadísticos descriptivos de %s por %s%s", lab_x, lab_f, nota))))
+
+  # Síntesis de la asociación (más diciente que la razón de correlación cruda)
+  f_max <- desc_g |> dplyr::slice_max(Media, n = 1, with_ties = FALSE)
+  f_min <- desc_g |> dplyr::slice_min(Media, n = 1, with_ties = FALSE)
+  txt_asoc <- paste(c(
+    sprintf("Varianza explicada (η²): %s con niveles agrupados; %s con todos los niveles (%d)",
+            pct(100 * eta2_g, 2), pct(100 * eta2_K, 2), K),
+    sprintf("Kruskal-Wallis: H = %s, gl = %d, %s",
+            fmt(unname(kw$statistic), 2), unname(kw$parameter), pval(kw$p.value)),
+    sprintf("Media más alta: %s (%s); más baja: %s (%s)",
+            f_max$Nivel, fmt(f_max$Media, 3), f_min$Nivel, fmt(f_min$Media, 3))
+  ), collapse = "\n")
 
   # Paleta: la dada si cubre todos los niveles; si no, una generada,
   # con color propio para la categoría agrupada
@@ -819,22 +874,13 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
            yaxis = list(title = paste0(lab_f, " (ordenada por media)", nota)),
            showlegend = FALSE)
 
-  corr_html <- htmltools::tagList(
-    htmltools::tags$h4(paste0("Razón de correlación (%) de ", lab_x,
-                              " con ", lab_f, " (", K, " niveles)")),
-    htmltools::tags$pre(
-      paste(capture.output(print(corr)), collapse = "\n")
-    ),
-    if (agrupado) htmltools::tagList(
-      htmltools::tags$h4(paste0("Razón de correlación (%) con niveles agrupados (",
-                                nlevels(f_g), " niveles)")),
-      htmltools::tags$pre(
-        paste(capture.output(print(corr_g)), collapse = "\n")
-      )
-    )
+  stats_html <- htmltools::tagList(
+    htmltools::tags$h4(paste0("Datos numéricos de ", lab_x, " frente a ", lab_f)),
+    tabla_desc,
+    htmltools::tags$pre(txt_asoc)
   )
 
-  htmltools::tagList(compactar_y(fig1), compactar_y(fig2), corr_html)
+  htmltools::tagList(compactar_y(fig1), compactar_y(fig2), stats_html)
 }
 ````
 
@@ -847,11 +893,15 @@ analisis_bivar_cuanti_vs_cuali <- function(variable,
 analisis_bivar_cuanti_vs_cuali('Type', datos = datos)
 ````
 
+**Lectura.** Los gatos tienen un puntaje de sentimiento apenas mayor que los perros (media 0,298 vs 0,268; mediana 0,300 vs 0,200), con dispersión casi idéntica (DE 0,281 vs 0,273). La diferencia es significativa (Kruskal-Wallis: H = 43,24, gl = 1, p < 0,001) pero explica solo el 0,29 % de la varianza del sentimiento (η²): asociación muy débil. Las cajas y los violines se solapan casi por completo y ambas especies comparten el mismo perfil —cola derecha hasta 0,90 y valores negativos atípicos—, de modo que la especie apenas discrimina el tono del anuncio.
+
 ## Name
 **Nombre del animal**
 ````{r sentiment-name}
 analisis_bivar_cuanti_vs_cuali('Name', datos = datos)
 ````
+
+**Lectura.** Con 8.725 nombres distintos, el η² sin agrupar (65,14 %) es un artefacto de la cardinalidad, no señal: al quedarse con los 10 nombres más frecuentes + «Otras», la varianza explicada se derrumba a 0,07 % y Kruskal-Wallis no resulta significativa (H = 7,39, gl = 10, p = 0,689). El grupo «Otras» concentra 12.738 de 13.215 anuncios (96,4 %) y reproduce el perfil global (media 0,284; mediana 0,300); entre los nombres frecuentes las medias apenas se mueven entre 0,210 (Max) y 0,339 (Brownie/Kitty). El nombre del animal no discrimina el sentimiento.
 
 ## Breed1
 **Raza principal**
@@ -859,11 +909,15 @@ analisis_bivar_cuanti_vs_cuali('Name', datos = datos)
 analisis_bivar_cuanti_vs_cuali('Breed1', datos = datos)
 ````
 
+**Lectura.** La raza principal apenas se relaciona con el sentimiento: η² = 0,41 % con los niveles agrupados (1,89 % usando los 176 niveles) y, aunque Kruskal-Wallis es significativa (H = 66,01, gl = 12, p < 0,001), la magnitud es muy débil. Las medias por raza van de 0,239 (raza 179) a 0,352 (raza 292) en torno a la global (0,281); la raza más frecuente, la 307 (5.886 anuncios), queda en 0,265, por debajo de la media. Cajas y violines vuelven a solaparse de forma masiva.
+
 ## Breed2
 **Segunda raza**
 ````{r sentiment-breed2}
 analisis_bivar_cuanti_vs_cuali('Breed2', datos = datos)
 ````
+
+**Lectura.** Igual que Breed1, la segunda raza discrimina muy poco: η² = 0,38 % con los niveles agrupados (1,34 % con los 135) y Kruskal-Wallis significativa pero de efecto despreciable (H = 67,26, gl = 4, p < 0,001). La categoría 0 (sin segunda raza, 10.357 anuncios, 71,7 % del total) replica el perfil global (media 0,284 vs 0,281); la media más alta es «Otras» (0,311) y la más baja la raza 307 (0,241). La segunda raza no aporta al tono del anuncio.
 
 ## Gender
 **Género**
@@ -871,11 +925,15 @@ analisis_bivar_cuanti_vs_cuali('Breed2', datos = datos)
 analisis_bivar_cuanti_vs_cuali('Gender', datos = datos)
 ````
 
+**Lectura.** El género es, hasta aquí, la cualitativa que más mueve el sentimiento, aunque el efecto sigue siendo débil: η² = 0,70 % y Kruskal-Wallis significativa (H = 104,51, gl = 2, p < 0,001). Los anuncios de animales mixtos (machos y hembras) tienen la media más baja (0,225; mediana 0,200) frente a machos (0,295) y hembras (0,286), que casi empatan. Los violines de macho y hembra se solapan mientras el de mixto se desplaza claramente hacia valores menores.
+
 ## Color1
 **Color principal**
 ````{r sentiment-color1}
 analisis_bivar_cuanti_vs_cuali('Color1', datos = datos)
 ````
+
+**Lectura.** El color principal apenas discrimina: η² = 0,15 % y, aunque Kruskal-Wallis resulta significativa (H = 23,46, gl = 6, p < 0,001), la magnitud es despreciable. Las medias por color van de 0,272 (color 1, el más frecuente con 7.121 anuncios) a 0,308 (color 4), todas muy cerca de la global (0,281); las cajas y los violines se solapan casi por completo.
 
 ## Color2
 **Segundo color**
@@ -883,11 +941,15 @@ analisis_bivar_cuanti_vs_cuali('Color1', datos = datos)
 analisis_bivar_cuanti_vs_cuali('Color2', datos = datos)
 ````
 
+**Lectura.** Asociación muy débil: η² = 0,15 %; Kruskal-Wallis significativa pero despreciable (H = 21,31, gl = 6, p = 0,002). Las medias oscilan entre 0,265 (color 2) y 0,296 (color 3) alrededor de la global (0,281), y la categoría 0 (sin segundo color, 4.347 anuncios) queda en 0,279, en línea con el promedio. El segundo color no discrimina el tono del anuncio.
+
 ## Color3
 **Tercer color**
 ````{r sentiment-color3}
 analisis_bivar_cuanti_vs_cuali('Color3', datos = datos)
 ````
+
+**Lectura.** Sin asociación: η² = 0,02 % y Kruskal-Wallis no significativa (H = 2,10, gl = 5, p = 0,835). La categoría 0 (sin tercer color) agrupa 10.260 de 14.442 anuncios (71 %) con media 0,282, igual a la global; los demás colores se mueven entre 0,262 (color 4) y 0,291 (color 6) sin patrón. El tercer color es irrelevante para el sentimiento.
 
 ## MaturitySize
 **Tamaño**
@@ -895,11 +957,15 @@ analisis_bivar_cuanti_vs_cuali('Color3', datos = datos)
 analisis_bivar_cuanti_vs_cuali('MaturitySize', datos = datos)
 ````
 
+**Lectura.** Asociación prácticamente nula: η² = 0,09 % y Kruskal-Wallis apenas significativa (H = 14,86, gl = 3, p = 0,002). La media más alta es «Mediano» (0,286) y la más baja «Extra grande» (0,242), pero este último grupo solo reúne 33 anuncios; «Pequeño» (0,266) y «Grande» (0,282) quedan pegados a la global (0,281). Cajas y violines se solapan casi por completo: el tamaño no explica el sentimiento.
+
 ## FurLength
 **Longitud del pelo**
 ````{r sentiment-furlength}
 analisis_bivar_cuanti_vs_cuali('FurLength', datos = datos)
 ````
+
+**Lectura.** Sin asociación de interés: η² = 0,04 %; Kruskal-Wallis sale significativa solo por el tamaño muestral (H = 9,31, gl = 2, p = 0,009). La media va de 0,263 (pelo largo) a 0,285 (pelo corto), con la global en 0,281 y el pelo mediano (0,277) también pegado al promedio. Las tres distribuciones son casi idénticas.
 
 ## Vaccinated
 **Vacunado**
@@ -907,11 +973,15 @@ analisis_bivar_cuanti_vs_cuali('FurLength', datos = datos)
 analisis_bivar_cuanti_vs_cuali('Vaccinated', datos = datos)
 ````
 
+**Lectura.** Asociación débil: η² = 0,47 % y Kruskal-Wallis significativa (H = 81,72, gl = 2, p < 0,001). Los animales vacunados («Sí») tienen la media más alta (0,303; mediana 0,300) frente a «No» (0,271) y, sobre todo, «No está seguro» (0,250; mediana 0,200). Declarar al animal vacunado acompaña descripciones algo más positivas, pero la magnitud del efecto es pequeña.
+
 ## Dewormed
 **Desparasitado**
 ````{r sentiment-dewormed}
 analisis_bivar_cuanti_vs_cuali('Dewormed', datos = datos)
 ````
+
+**Lectura.** Muy débil: η² = 0,34 %; Kruskal-Wallis significativa (H = 56,31, gl = 2, p < 0,001). Se repite el patrón de «Vacunado»: «Sí» (desparasitado) con la media más alta (0,294; mediana 0,300) y «No está seguro» con la más baja (0,251), mientras «No» queda en 0,268. La desparasitación apenas mueve el tono del anuncio.
 
 ## Sterilized
 **Esterilizado**
@@ -919,11 +989,15 @@ analisis_bivar_cuanti_vs_cuali('Dewormed', datos = datos)
 analisis_bivar_cuanti_vs_cuali('Sterilized', datos = datos)
 ````
 
+**Lectura.** La más fuerte del bloque sanitario, aunque todavía débil: η² = 0,52 % y Kruskal-Wallis significativa (H = 93,11, gl = 2, p < 0,001). «Sí» (esterilizado) tiene la media más alta (0,319; mediana 0,300) frente a «No» (0,273) y «No está seguro» (0,260). Igual que vacunado y desparasitado, el estado afirmativo acompaña descripciones más positivas.
+
 ## Health
 **Estado de salud**
 ````{r sentiment-health}
 analisis_bivar_cuanti_vs_cuali('Health', datos = datos)
 ````
+
+**Lectura.** η² = 0,69 % (Kruskal-Wallis: H = 110,08, gl = 2, p < 0,001), el efecto más claro de este bloque. Hay un gradiente nítido: sano (0,285; mediana 0,300) > lesión leve (0,175; mediana 0,200) > lesión grave (0,022; mediana 0,000). Los anuncios de animales con lesión —sobre todo «Lesión grave», con solo 32 casos y valores entre -0,20 y 0,10— tienen tono casi neutro; aun así, casi todos los datos están en «Sano» (13.951) y el efecto global sigue siendo pequeño.
 
 ## State
 **Estado o territorio**
@@ -931,17 +1005,37 @@ analisis_bivar_cuanti_vs_cuali('Health', datos = datos)
 analisis_bivar_cuanti_vs_cuali('State', datos = datos)
 ````
 
+**Lectura.** Asociación débil: η² = 0,38 % con los niveles agrupados (0,56 % con todos) y Kruskal-Wallis significativa (H = 73,78, gl = 6, p < 0,001). Las medias por región van de 0,219 (región 41327, 827 anuncios) a 0,301 («Otras»); la región dominante, la 41326 (8.417 anuncios), queda en 0,283, pegada a la global (0,281). Existen diferencias regionales leves pero sin efecto relevante.
+
 ## RescuerID
 **Identificador del rescatista**
 ````{r sentiment-rescuerid}
 analisis_bivar_cuanti_vs_cuali('RescuerID', datos = datos)
 ````
 
+**Lectura.** Como en «Nombre», el η² crudo (56,84 % con 5.400 niveles) es un artefacto de la altísima cardinalidad: al agrupar cae a 1,68 % —el mayor de las cualitativas agrupadas— pero sigue siendo débil (Kruskal-Wallis: H = 397,70, gl = 4, p < 0,001). Destaca un rescatista (b53c3447…, 228 anuncios) con media casi neutra (0,008) frente al más positivo (fa90fa5b…, 459 anuncios; 0,332); el grupo «Otras» (13.209 anuncios, 91,5 %) replica el promedio (0,283). La identidad del rescatista influye poco, salvo casos concretos.
+
 ## AdoptionSpeed
 **Velocidad de adopción**
 ````{r sentiment-adoptionspeed}
 analisis_bivar_cuanti_vs_cuali('AdoptionSpeed', datos = datos)
 ````
+
+## VideoAmt_bin
+**Presencia de video**
+````{r sentiment-videoamt-bin}
+analisis_bivar_cuanti_vs_cuali('VideoAmt_bin', datos = datos)
+````
+
+**Lectura.** Prácticamente nula: η² = 0,04 % y Kruskal-Wallis no significativa (H = 3,06, gl = 1, p = 0,080). Los anuncios con video tienen medias apenas menores (0,253 vs 0,282) y menor dispersión (DE 0,225 vs 0,279), pero solo son 563 frente a 13.879 sin video. Tener video no se traduce en un tono distinto.
+
+## total_faces_bin
+**Presencia de rostros**
+````{r sentiment-faces-bin}
+analisis_bivar_cuanti_vs_cuali('total_faces_bin', datos = datos)
+````
+
+**Lectura.** Sin asociación: η² = 0,01 % y Kruskal-Wallis no significativa (H = 1,30, gl = 1, p = 0,254). Los anuncios con rostros tienen una media casi idéntica a los que no (0,293 vs 0,281; misma mediana 0,300), y el grupo «Con rostros» es minoritario (516 de 14.111). La presencia de rostros no cambia el sentimiento.
 :::
 
 ## `sentiment_score` VS variables cuantitativas
@@ -1052,11 +1146,15 @@ analisis_bivar_cuanti_vs_cuanti <- function(variable,
 analisis_bivar_cuanti_vs_cuanti('Age', datos = datos)
 ````
 
+**Lectura.** Sin relación: r = -0,0025 y R² ≈ 0,0000; la pendiente no es significativa (β = -3,7e-05; p = 0,768). La edad no se asocia con el sentimiento.
+
 ## Quantity
 **Cantidad de animales en el anuncio**
 ````{r cuanti-cuanti-quantity}
 analisis_bivar_cuanti_vs_cuanti('Quantity', datos = datos)
 ````
+
+**Lectura.** Relación negativa muy débil pero significativa: r = -0,080, R² = 0,0064 (p < 0,001). A más animales en el anuncio, sentimiento apenas menor (pendiente -0,0151 por animal); explica menos del 1 % de la varianza.
 
 ## Fee
 **Tarifa de adopción**
@@ -1064,11 +1162,15 @@ analisis_bivar_cuanti_vs_cuanti('Quantity', datos = datos)
 analisis_bivar_cuanti_vs_cuanti('Fee', datos = datos)
 ````
 
+**Lectura.** Positiva muy débil aunque significativa: r = 0,0238, R² = 0,0006 (p = 0,004). Cada unidad de tarifa apenas sube el sentimiento (β = 8,3e-05); efecto despreciable.
+
 ## VideoAmt
 **Cantidad de videos**
 ````{r cuanti-cuanti-videoamt}
 analisis_bivar_cuanti_vs_cuanti('VideoAmt', datos = datos)
 ````
+
+**Lectura.** Negativa muy débil pero significativa: r = -0,0214, R² = 0,0005 (p = 0,010). Más videos se asocian con un sentimiento mínimamente menor; R² irrelevante.
 
 ## PhotoAmt
 **Cantidad de fotos**
@@ -1076,11 +1178,15 @@ analisis_bivar_cuanti_vs_cuanti('VideoAmt', datos = datos)
 analisis_bivar_cuanti_vs_cuanti('PhotoAmt', datos = datos)
 ````
 
+**Lectura.** Negativa muy débil pero significativa: r = -0,0258, R² = 0,0007 (p = 0,002). Más fotos, sentimiento apenas menor; sin efecto práctico.
+
 ## sentiment_magnitude
 **Magnitud de sentimiento**
 ````{r cuanti-cuanti-sentiment-magnitude}
 analisis_bivar_cuanti_vs_cuanti('sentiment_magnitude', datos = datos)
 ````
+
+**Lectura.** Positiva muy débil pero significativa: r = 0,0301, R² = 0,0009 (p < 0,001). Mayor magnitud (intensidad del texto) va con un sentimiento apenas mayor; como ambas miden el mismo texto, el vínculo es marginal.
 
 ## total_labels
 **Total de etiquetas**
@@ -1088,11 +1194,15 @@ analisis_bivar_cuanti_vs_cuanti('sentiment_magnitude', datos = datos)
 analisis_bivar_cuanti_vs_cuanti('total_labels', datos = datos)
 ````
 
+**Lectura.** Negativa muy débil pero significativa: r = -0,0240, R² = 0,0006 (p = 0,004). Más etiquetas detectadas en las fotos, sentimiento apenas menor; no es un efecto relevante.
+
 ## total_faces
 **Total de rostros detectados**
 ````{r cuanti-cuanti-total-faces}
 analisis_bivar_cuanti_vs_cuanti('total_faces', datos = datos)
 ````
+
+**Lectura.** Sin relación significativa: r = 0,0151, R² = 0,0002, y la pendiente no alcanza significancia (β = 0,0142; p ≈ 0,07). El número de rostros no se asocia con el sentimiento.
 
 ## total_colors
 **Total de colores detectados**
@@ -1100,17 +1210,23 @@ analisis_bivar_cuanti_vs_cuanti('total_faces', datos = datos)
 analisis_bivar_cuanti_vs_cuanti('total_colors', datos = datos)
 ````
 
+**Lectura.** Negativa muy débil pero significativa: r = -0,0278, R² = 0,0008 (p ≈ 0,001). Más colores, sentimiento apenas menor; efecto despreciable.
+
 ## desc_char_len
 **Longitud de la descripción en caracteres**
 ````{r cuanti-cuanti-desc-char-len}
 analisis_bivar_cuanti_vs_cuanti('desc_char_len', datos = datos)
 ````
 
+**Lectura.** La asociación más clara del bloque, aunque aún débil: r = -0,167, R² = 0,028 (p < 0,001). Las descripciones más largas van con un sentimiento más bajo (pendiente -1,25e-04 por carácter); solo el 2,8 % de la varianza, pero es la única relación con algo de señal.
+
 ## desc_word_count
 **Longitud de la descripción en palabras**
 ````{r cuanti-cuanti-desc-word-count}
 analisis_bivar_cuanti_vs_cuanti('desc_word_count', datos = datos)
 ````
+
+**Lectura.** Igual que en caracteres y la más fuerte de todas: r = -0,170, R² = 0,029 (p < 0,001). Más palabras en la descripción, sentimiento más bajo (pendiente -6,8e-04 por palabra). Efecto pequeño pero consistente.
 :::
 
 ````{=html}
