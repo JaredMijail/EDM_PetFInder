@@ -20,12 +20,11 @@ script, está documentado en la Entrega 1 ([Dataset y enriquecimiento](../entreg
 
 ## Justificación de la selección de la base
 
-Se eligió esta base porque: (i) la variable respuesta es **ordinal de cinco categorías**, lo que
-exige clasificación ordinal y no binaria; (ii) reúne en un mismo registro señales **tabular,
-textual y visual**, lo que permite estudiar su aporte relativo; y (iii) la pregunta práctica
-(anticipar qué anuncios tardan más en adoptarse) es directamente útil para refugios y
-plataformas. Es una base de Malasia (2019): el aporte es un método replicable, no una
-descripción del mercado local.
+La base se eligió porque cumple los requisitos del curso: 14 993 anuncios y una combinación amplia
+de variables cualitativas y cuantitativas, suficientes para aplicar las técnicas de estadística
+descriptiva multivariada sobre un caso real. Además, su origen y contexto —una plataforma de
+adopción de mascotas en Malasia— es un tema novedoso frente a los que suelen trabajarse en el curso,
+y las mascotas despertaron un interés genuino en el equipo.
 
 ## Descripción general de las variables
 
