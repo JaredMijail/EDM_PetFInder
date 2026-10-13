@@ -17,7 +17,7 @@ Jared Mijail Ramírez Escalante · María Paula Silva Capera
 </div>
 :::
 
-En esta sección se presentan las posibles asociaciones entre pares de variables pertenecientes al conjunto de datos [PetFinder](dataset.qmd) enriquecido. Con fines de cumplir lo solicitado para esta primera entrega, se hacen dos conjuntos de contrastes principales. En primer lugar se toma como referencia la variable cualitativa `AdoptionSpeed` (velocidad de adopción) para contrastarla con el resto de variables cualitativas y cuantitativas del conjunto de datos [PetFinder](dataset.qmd) enriquecido. Posteriormente se realiza el mismo ejercicio tomando como referencia la variable cuantitativa `Age`.
+En esta sección se presentan las posibles asociaciones entre pares de variables pertenecientes al conjunto de datos [PetFinder](dataset.qmd) enriquecido. Con fines de cumplir lo solicitado para esta primera entrega, se hacen dos conjuntos de contrastes principales. En primer lugar se toma como referencia la variable cualitativa `AdoptionSpeed` (velocidad de adopción) para contrastarla con el resto de variables cualitativas y cuantitativas del conjunto de datos [PetFinder](dataset.qmd) enriquecido. Posteriormente se realiza el mismo ejercicio tomando como referencia la variable cuantitativa `sentiment_score`.
 
 ````{r}
 #| label: setup-comun
