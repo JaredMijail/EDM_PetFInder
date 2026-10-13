@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -98,14 +98,14 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-6453f418aeef366c23116eb9cb0b6816.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-5a1953863e1f72ef3b996ef827f01ca7.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-74d19e79992467fccd1882236d97e988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-070e54764458ee5734a9f7e2965ee2d2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-74d19e79992467fccd1882236d97e988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8398234f745cab2ff1d3e5c5891a9e61.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-d3563fbecff4384cabf838e9ab5114ab.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8398234f745cab2ff1d3e5c5891a9e61.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -566,7 +566,7 @@ div.csl-indent {
 </section>
 <section id="justificación-de-la-selección-de-la-base" class="level2">
 <h2 class="anchored" data-anchor-id="justificación-de-la-selección-de-la-base">Justificación de la selección de la base</h2>
-<p>Se eligió esta base porque: (i) la variable respuesta es <strong>ordinal de cinco categorías</strong>, lo que exige clasificación ordinal y no binaria; (ii) reúne en un mismo registro señales <strong>tabular, textual y visual</strong>, lo que permite estudiar su aporte relativo; y (iii) la pregunta práctica (anticipar qué anuncios tardan más en adoptarse) es directamente útil para refugios y plataformas. Es una base de Malasia (2019): el aporte es un método replicable, no una descripción del mercado local.</p>
+<p>La base se eligió porque cumple los requisitos del curso: 14 993 anuncios y una combinación amplia de variables cualitativas y cuantitativas, suficientes para aplicar las técnicas de estadística descriptiva multivariada sobre un caso real. Además, su origen y contexto —una plataforma de adopción de mascotas en Malasia— es un tema novedoso frente a los que suelen trabajarse en el curso, y las mascotas despertaron un interés genuino en el equipo.</p>
 </section>
 <section id="descripción-general-de-las-variables" class="level2">
 <h2 class="anchored" data-anchor-id="descripción-general-de-las-variables">Descripción general de las variables</h2>
@@ -1102,28 +1102,27 @@ PetFinder.my. 2019. <em>PetFinder.my Adoption Prediction</em>. Competencia de Ka
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Justificación de la selección de la base</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>Se eligió esta base porque: (i) la variable respuesta es **ordinal de cinco categorías**, lo que</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>exige clasificación ordinal y no binaria; (ii) reúne en un mismo registro señales **tabular,</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>textual y visual**, lo que permite estudiar su aporte relativo; y (iii) la pregunta práctica</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>(anticipar qué anuncios tardan más en adoptarse) es directamente útil para refugios y</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>plataformas. Es una base de Malasia (2019): el aporte es un método replicable, no una</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>descripción del mercado local.</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Descripción general de las variables</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>La base enriquecida tiene **14 993 anuncios × 31 variables**, organizadas en:</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Tabulares del anuncio** (originales): <span class="in">`Type`</span>, <span class="in">`Age`</span>, <span class="in">`Breed1`</span>, <span class="in">`Breed2`</span>, <span class="in">`Gender`</span>, <span class="in">`Color1`</span>,</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="in">`Color2`</span>, <span class="in">`Color3`</span>, <span class="in">`MaturitySize`</span>, <span class="in">`FurLength`</span>, <span class="in">`Vaccinated`</span>, <span class="in">`Dewormed`</span>, <span class="in">`Sterilized`</span>,</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="in">`Health`</span>, <span class="in">`Quantity`</span>, <span class="in">`Fee`</span>, <span class="in">`State`</span>, <span class="in">`VideoAmt`</span>, <span class="in">`PhotoAmt`</span>, <span class="in">`Name`</span>, <span class="in">`Description`</span>.</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Textuales** (derivadas del relato del rescatista): <span class="in">`sentiment_score`</span>,</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="in">`sentiment_magnitude`</span>, <span class="in">`desc_char_len`</span>, <span class="in">`desc_word_count`</span>.</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Visuales** (derivadas de la fotografía): <span class="in">`total_labels`</span>, <span class="in">`total_faces`</span>, <span class="in">`total_colors`</span>.</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Variable respuesta:** <span class="in">`AdoptionSpeed`</span> (ordinal, cinco categorías).</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Identificadores:** <span class="in">`PetID`</span>, <span class="in">`RescuerID`</span>.</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>La descripción detallada de cada variable —escala, valores y valores faltantes— está en la</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>Entrega 1 (<span class="co">[</span><span class="ot">Descripción del conjunto de datos</span><span class="co">](../entregas/descripcion.qmd)</span>).</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>La base se eligió porque cumple los requisitos del curso: 14 993 anuncios y una combinación amplia</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>de variables cualitativas y cuantitativas, suficientes para aplicar las técnicas de estadística</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>descriptiva multivariada sobre un caso real. Además, su origen y contexto —una plataforma de</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>adopción de mascotas en Malasia— es un tema novedoso frente a los que suelen trabajarse en el curso,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>y las mascotas despertaron un interés genuino en el equipo.</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Descripción general de las variables</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>La base enriquecida tiene **14 993 anuncios × 31 variables**, organizadas en:</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Tabulares del anuncio** (originales): <span class="in">`Type`</span>, <span class="in">`Age`</span>, <span class="in">`Breed1`</span>, <span class="in">`Breed2`</span>, <span class="in">`Gender`</span>, <span class="in">`Color1`</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="in">`Color2`</span>, <span class="in">`Color3`</span>, <span class="in">`MaturitySize`</span>, <span class="in">`FurLength`</span>, <span class="in">`Vaccinated`</span>, <span class="in">`Dewormed`</span>, <span class="in">`Sterilized`</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="in">`Health`</span>, <span class="in">`Quantity`</span>, <span class="in">`Fee`</span>, <span class="in">`State`</span>, <span class="in">`VideoAmt`</span>, <span class="in">`PhotoAmt`</span>, <span class="in">`Name`</span>, <span class="in">`Description`</span>.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Textuales** (derivadas del relato del rescatista): <span class="in">`sentiment_score`</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="in">`sentiment_magnitude`</span>, <span class="in">`desc_char_len`</span>, <span class="in">`desc_word_count`</span>.</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Visuales** (derivadas de la fotografía): <span class="in">`total_labels`</span>, <span class="in">`total_faces`</span>, <span class="in">`total_colors`</span>.</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Variable respuesta:** <span class="in">`AdoptionSpeed`</span> (ordinal, cinco categorías).</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Identificadores:** <span class="in">`PetID`</span>, <span class="in">`RescuerID`</span>.</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>La descripción detallada de cada variable —escala, valores y valores faltantes— está en la</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Entrega 1 (<span class="co">[</span><span class="ot">Descripción del conjunto de datos</span><span class="co">](../entregas/descripcion.qmd)</span>).</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

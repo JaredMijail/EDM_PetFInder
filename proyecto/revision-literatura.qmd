@@ -1,0 +1,50 @@
+---
+title: "Revisión de literatura"
+subtitle: "Estudios previos sobre esta base y sobre conjuntos de datos similares"
+author: "Jared Mijail Ramírez Escalante · María Paula Silva Capera"
+---
+
+La predicción de la adopción de mascotas se ha abordado tanto sobre esta misma base como
+sobre conjuntos de datos similares. Los trabajos más relacionados con este proyecto se resumen
+a continuación:
+
+```{r}
+#| label: tabla-antecedentes
+#| echo: false
+#| tbl-cap: "Trabajos previos sobre predicción de adopción de mascotas y su relación con este proyecto"
+
+tibble::tribble(
+  ~`Estudio`, ~`Datos y enfoque`, ~`Hallazgos principales`, ~`Qué deja abierto`, ~`Enlace`,
+  "Zadeh et al. (2022)",
+  "14 993 anuncios de PetFinder.my; regresión, árboles, bosques aleatorios, boosting y redes neuronales con minería de texto",
+  "Edad, raza, cantidad de animales y estado de esterilización son los factores con mayor asociación; los modelos de boosting y de regresión son los que más se benefician de las variables textuales",
+  "No integra las variables visuales del anuncio ni interpreta el modelo; reporta el aporte del texto, no el de la foto",
+  "<a href=\"https://doi.org/10.1016/j.eswa.2022.117596\" target=\"_blank\" rel=\"noopener\">DOI</a>",
+  "Sivakumar y Selvam (2024)",
+  "Fotografías de la plataforma; redes neuronales convolucionales sobre el puntaje de atractivo visual (pawpularity)",
+  "La apariencia de la fotografía es predecible y se asocia con la atracción del anuncio",
+  "Predice el atractivo de la foto, no la velocidad de adopción; no lo conecta con las variables tabulares",
+  "<a href=\"https://doi.org/10.1109/ICITEICS61368.2024.10625079\" target=\"_blank\" rel=\"noopener\">DOI</a>",
+  "Wang y Liu (2022)",
+  "Redes neuronales con imágenes y metadatos en la competencia de 2021",
+  "La combinación de imagen y metadatos supera a cada fuente por separado",
+  "Optimiza un puntaje de competencia; sin discusión sustantiva ni interpretabilidad",
+  "<a href=\"https://arxiv.org/abs/2201.06061\" target=\"_blank\" rel=\"noopener\">arXiv</a>",
+  "Competencia Kaggle (2019)",
+  "Miles de soluciones publicadas; evaluación con kappa cuadrático ponderado",
+  "Los modelos de boosting con ingeniería de variables dominan la tabla de posiciones",
+  "El desempeño predictivo no se traduce en explicación del fenómeno: es un torneo, no una investigación",
+  "<a href=\"https://www.kaggle.com/competitions/petfinder-adoption-prediction\" target=\"_blank\" rel=\"noopener\">Kaggle</a>",
+  "Versiones del conjunto en Zenodo (2019)",
+  "Replicaciones con ingeniería de variables detallada",
+  "Confirman la dificultad del problema: el techo de desempeño es moderado",
+  "Sin discusión de validez externa ni de sesgos de la etiqueta",
+  "<a href=\"https://zenodo.org/records/2654452\" target=\"_blank\" rel=\"noopener\">Zenodo</a>"
+) |>
+  knitr::kable(align = c("l", "l", "l", "l", "l"), format = "html", escape = FALSE)
+```
+
+En conjunto, la literatura trabaja el texto o la imagen por separado, rara vez las tres
+fuentes bajo un mismo protocolo, y reporta sobre todo métricas de competencia y no una
+explicación de qué señales del anuncio pesan más. Esos puntos abiertos son los que aborda este
+proyecto.
